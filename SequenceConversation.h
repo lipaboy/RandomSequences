@@ -21,10 +21,12 @@ namespace PseudoRandomSequences {
 	typedef vector<AlphabetType> Sequence;
 	//input: sequence {0, 1} ^ n with P(1) = 0.1 (possibility of 1)
 	//output: sequence {0, 1} ^ n  with P(1) = 0.5
-	class SequenceConversation {
+
+	//TODO: make template <type, int dimensionSize>, might be without first parameter
+	class SequenceConverter {
 	public:
-		SequenceConversation(uint32 k);		//k - matrix dimension
-		SequenceConversation(const string& filename);
+		SequenceConverter(uint32 matrixLength);		//k - matrix dimension, matrix length
+		SequenceConverter(const string& filename);
 
 		Sequence converse(const Sequence&) const;
 
@@ -54,7 +56,7 @@ namespace PseudoRandomSequences {
 
 	void printBits(ostream & o, uint32, uint32 count = 32);
 
-	ostream& operator<< (ostream & o, const SequenceConversation& seq);
+	ostream& operator<< (ostream & o, const SequenceConverter& seq);
 
 	ostream& operator<< (ostream & o, const Sequence& seq);
 }

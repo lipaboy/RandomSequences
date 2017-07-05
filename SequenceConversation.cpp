@@ -3,12 +3,12 @@
 #include <fstream>
 
 namespace PseudoRandomSequences {
-	SequenceConversation::SequenceConversation(uint32 k) : dimension(k) {		//k - matrix dimension
-		if (k == 0)
+	SequenceConverter::SequenceConverter(uint32 matrixLength) : dimension(matrixLength) {
+		if (matrixLength == 0)
 			throw BadArgumentException();
 
 		//<0, 1> - columns, <00..00, 00..01, ..., 11..10, 11..11> - rows
-		resize(k);
+		resize(matrixLength);
 		//1 0
 		//0 1
 		set(0, 0, 1);
@@ -25,12 +25,12 @@ namespace PseudoRandomSequences {
 		}
 	}
 
-	SequenceConversation::SequenceConversation(const string& filename) {
+	SequenceConverter::SequenceConverter(const string& filename) {
 		load(filename);
 	}
 
 
-	Sequence SequenceConversation::converse(const Sequence& seq) const {
+	Sequence SequenceConverter::converse(const Sequence& seq) const {
 		Sequence newSeq(seq.size());
 		uint32 rowNum = 0;	//row number (not row count)
 					//00...00
@@ -52,7 +52,7 @@ namespace PseudoRandomSequences {
 	}
 
 
-	ostream& operator<< (ostream & o, const SequenceConversation& seq) {
+	ostream& operator<< (ostream & o, const SequenceConverter& seq) {
 		for (uint32 j = 0; j < seq.rows(); j++) {
 			for (uint32 i = 0; i < seq.columns(); i++) {
 				o << seq.get(j, i) << " ";
@@ -62,7 +62,7 @@ namespace PseudoRandomSequences {
 		return o;
 	}
 
-	void SequenceConversation::resize(uint32 dimension1) {
+	void SequenceConverter::resize(uint32 dimension1) {
 		if (dimension > 0) {
 			dimension = dimension1;
 			rowCount = 1 << dimension1;
@@ -70,7 +70,7 @@ namespace PseudoRandomSequences {
 		}
 	}
 
-	void SequenceConversation::load(const string& filename) {
+	void SequenceConverter::load(const string& filename) {
 		ifstream inFile;
 
 		inFile.open(filename, ios::in);
@@ -89,7 +89,7 @@ namespace PseudoRandomSequences {
 		inFile.close();
 	}
 
-	void SequenceConversation::save(const string& filename, char separator) {
+	void SequenceConverter::save(const string& filename, char separator) {
 		ofstream outFile;
 
 		outFile.open(filename, ios::out | ios::trunc);
