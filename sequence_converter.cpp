@@ -1,4 +1,4 @@
-#include "SequenceConverter.h"
+#include "sequence_converter.h"
 
 #include <fstream>
 
