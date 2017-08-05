@@ -33,16 +33,16 @@ namespace PseudoRandomSequences {
 			if (prevPos == currSymbol)
 				freq[currSymbol]++;
 
-			std::cout << "(" << stack[0] << ", " << stack[1] << ") ";
-			stack[currSymbol] = 0;		//move to stack peek (up)
+			//std::cout << "(" << stack[0] << ", " << stack[1] << ") ";
 			if (prevPos > 0)		//not necessary
 				for (uint32_t i = 0; i < stack.size(); i++)
 					if (stack[i] < prevPos)
 						++stack[i];				//move down
+			stack[currSymbol] = 0;		//move to stack peek (up)
 
 			//new stack state (t)
 		}
-		std::cout << std::endl;
+		//std::cout << std::endl;
 
 		//Meaning: symbols with equal possibility can be (turn out to be) on any stack position
 
