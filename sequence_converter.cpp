@@ -14,7 +14,7 @@ namespace PseudoRandomSequences {
 		//map: alphabet -> stack position
 		vector<uint32_t> stack(alphabetSize);
 		const uint32_t plentyCounts = alphabetSize;
-		//map: { {0}, {1} } -> frequency of meeting symbol into {0} or {1} before
+		//map: { stack position } -> frequency of meeting symbol onto this position
 		//moving this symbol to stack peek
 		vector<uint32_t> freq(plentyCounts);
 
@@ -23,15 +23,13 @@ namespace PseudoRandomSequences {
 			freq[i] = 0;
 		}
 
-		std::copy(seq.cbegin(), seq.cend(), std::ostream_iterator<AlphabetType>(std::cout, " "));
-		std::cout << std::endl;
 		for (uint32_t t = 1; t <= seq.size(); t++) {
 			const uint32_t currSymbol = seq[t - 1];
 			const uint32_t prevPos = stack[currSymbol];
 
 			//old stack state (t - 1)
-			if (prevPos == currSymbol)
-				freq[currSymbol]++;
+							//if (prevPos == currSymbol)	--wrong
+			freq[prevPos]++;
 
 			//std::cout << "(" << stack[0] << ", " << stack[1] << ") ";
 			if (prevPos > 0)		//not necessary
@@ -42,7 +40,7 @@ namespace PseudoRandomSequences {
 
 			//new stack state (t)
 		}
-		//std::cout << std::endl;
+		//std::cout << std::endl << freq[0] << " " << freq[1] << std::endl;
 
 		//Meaning: symbols with equal possibility can be (turn out to be) on any stack position
 

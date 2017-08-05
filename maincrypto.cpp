@@ -32,20 +32,26 @@ int main(void) {
 
 	for (; k <= 12; k++) {
 		converter.setDimension(k);
-		const uint32_t N = static_cast<uint32_t>(50);
-		Sequence seq(N);
+		Sequence seq(39);
 
 		//possibility(1) = 1 / 10
 		std::generate(seq.begin(), seq.end(),
 			[]() -> AlphabetType { return ((0 == std::rand() % 10) ? 1 : 0); }
 		);
-		/*std::copy(seq.cbegin(), seq.cend(), std::ostream_iterator<AlphabetType>(std::cout, " "));
-		cout << endl;*/
 		Sequence newSeq = converter.converse(seq);
 		//cout << newSeq << endl;
-
 		bookStackTest(newSeq);
 	}
+
+	cout << "My test:" << endl;
+	//My test sequence
+	Sequence gap(40);		//~loophole
+	std::generate(gap.begin(), gap.end(), 
+		[]() -> AlphabetType { static int i = 0; return (((i++) % 4 < 2) ? 1 : 0); }
+	);
+	std::copy(gap.cbegin(), gap.cend(), std::ostream_iterator<AlphabetType>(cout, " "));
+	std::cout << std::endl;
+	bookStackTest(gap);
 
 
 	//boost::any_range anyRange;
