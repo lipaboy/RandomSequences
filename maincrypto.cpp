@@ -20,47 +20,59 @@ using namespace LipaboyMaths;
 
 //TODO: try to use GoogleTests
 
+#include <boost/range/algorithm/copy.hpp>
+#include <boost/range/adaptor/filtered.hpp>
+
 int main(void) {
 	time_t t;
 	srand((unsigned)time(&t));
 
 	/*--------------Crypto----------------*/
 
+	std::vector<int> vec({ 0, 1, 2 });
+	UIntAnyRange anyRange = vec;
+	
+		//Useful funcs
+	//boost::copy(anyRange, std::ostream_iterator<int>(std::cout, " "));
+	//double d[] = { 1,2,3,4 };
+	//std::vector<double> x(d, d + 4);
+	//std::vector<double> y;
+	//boost::copy(x | boost::adaptors::filtered([](double xx) -> bool { return xx > 2.0; }), 
+	//	std::back_inserter(y));
+	//boost::copy(y, std::ostream_iterator<double>(std::cout, " "));
+
 	string filename = "BinaryMatrixGenerator.txt";
 
 	//for all the converters the same sequence
 
-	std::vector<SequenceConverter> converters;
-	std::vector<double> statistics;
-	for (uint32_t i = 4; i <= 4; i += 4) {
-		converters.push_back(SequenceConverter(i));
-		statistics.push_back(0.0);
-	}
-	converters.push_back(SequenceConverter(filename));
-	statistics.push_back(0.0);
+	//std::vector<SequenceConverter> converters;
+	//std::vector<double> statistics;
+	//for (uint32_t i = 4; i <= 4; i += 4) {
+	//	converters.push_back(SequenceConverter(i));
+	//	statistics.push_back(0.0);
+	//}
+	////converters.push_back(SequenceConverter(filename));
+	////statistics.push_back(0.0);
 
-	Sequence seq(1e4);
-	uint32_t testSize = 5;
-	for (uint32_t i = 0; i < testSize; i++) {
-		std::generate(seq.begin(), seq.end(),
-			[]() -> AlphabetType { return ((0 == std::rand() % 10) ? 1 : 0); }
-		);
-		Sequence result(seq.size());
-		for (uint32_t j = 0; j < converters.size(); j++) {
-			converters[j].converse(result, seq);
-			statistics[j] += bookStackTest(result);
-		}
-	}
-	
-	std::transform(statistics.begin(), statistics.end(), std::ostream_iterator<string>(std::cout),
-		[&testSize, &converters](double elem) -> string {
-		static int i = 0; 
-		return std::to_string(converters[i++].getDimension()) + std::string(": ") 
-			+ std::to_string(elem / testSize) + string("\n");
-	});
-	/*for (uint32_t i = 0; i < statistics.size(); i++) {
-		std::cout << converters[i].getDimension() << ": " << statistics[i] / testSize << std::endl;
-	}*/
+	//Sequence seq(1e4);
+	//uint32_t testSize = 5;
+	//for (uint32_t i = 0; i < testSize; i++) {
+	//	std::generate(seq.begin(), seq.end(),
+	//		[]() -> AlphabetType { return ((0 == std::rand() % 10) ? 1 : 0); }
+	//	);
+	//	Sequence result(seq.size());
+	//	for (uint32_t j = 0; j < converters.size(); j++) {
+	//		converters[j].converse(result, seq);
+	//		statistics[j] += bookStackTest(result);
+	//	}
+	//}
+	//
+	//std::transform(statistics.begin(), statistics.end(), std::ostream_iterator<string>(std::cout),
+	//	[&testSize, &converters](double elem) -> string {
+	//	static int i = 0; 
+	//	return std::to_string(converters[i++].getDimension()) + std::string(": ") 
+	//		+ std::to_string(elem / testSize) + string("\n");
+	//});
 
 	//cout << "My test:" << endl;
 	////My test sequence

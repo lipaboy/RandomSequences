@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <iterator>
 
-//#include "isequence.h"
+using namespace std;
 
 namespace PseudoRandomSequences {
 	
