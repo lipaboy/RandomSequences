@@ -27,12 +27,12 @@ int main(void) {
 
 	string filename = "BinaryMatrixGenerator.txt";
 
-	uint32_t k = 8;
+	uint32_t k = 4;
 	SequenceConverter converter(k);
 
 	for (; k <= 12; k++) {
 		converter.setDimension(k);
-		Sequence seq(39);
+		Sequence seq(1e3);		//TODO: test on sequence size and Dimension (2D test)
 
 		//possibility(1) = 1 / 10
 		std::generate(seq.begin(), seq.end(),
@@ -40,6 +40,7 @@ int main(void) {
 		);
 		Sequence newSeq = converter.converse(seq);
 		//cout << newSeq << endl;
+		std::cout << "Dim = " << k << std::endl;
 		bookStackTest(newSeq);
 	}
 

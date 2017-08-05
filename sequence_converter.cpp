@@ -57,8 +57,8 @@ namespace PseudoRandomSequences {
 			statisticX2Correction += std::pow(std::abs(freq[j] - (N / 2.0)) - 0.5, 2) / (N / 2.0);
 		}
 
-		std::cout << "StatisticX^2 = " << statisticX2 << endl;
-		std::cout << "StatisticX^2 with Yates's correction = " << statisticX2Correction << endl;
+		std::cout << "StatisticX^2 = " << statisticX2 << "\t Yates = " << statisticX2Correction << endl;
+		//std::cout << "StatisticX^2 with Yates's correction = " << statisticX2Correction << endl;
 		//statisticX2 *= N / 2.0;
 		//std::cout << "StatisticX^2 = " << statisticX2 << endl;
 
