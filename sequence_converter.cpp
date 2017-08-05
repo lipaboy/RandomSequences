@@ -8,7 +8,7 @@
 
 namespace PseudoRandomSequences {
 	
-	bool bookStackTest(const Sequence & seq) {
+	double bookStackTest(const Sequence & seq) {
 
 		const uint32_t alphabetSize = 2;
 		//map: alphabet -> stack position
@@ -31,7 +31,6 @@ namespace PseudoRandomSequences {
 							//if (prevPos == currSymbol)	--wrong
 			freq[prevPos]++;
 
-			//std::cout << "(" << stack[0] << ", " << stack[1] << ") ";
 			if (prevPos > 0)		//not necessary
 				for (uint32_t i = 0; i < stack.size(); i++)
 					if (stack[i] < prevPos)
@@ -40,39 +39,43 @@ namespace PseudoRandomSequences {
 
 			//new stack state (t)
 		}
-		//std::cout << std::endl << freq[0] << " " << freq[1] << std::endl;
 
 		//Meaning: symbols with equal possibility can be (turn out to be) on any stack position
 
 		//TODO: replace (N / 2) on (N / alphabetSize)
 
-		double statisticX2 = 0;
 		const uint32_t N = seq.size();
+
+		/*double statisticX2 = 0;
+		
 		for (uint32_t j = 0; j < freq.size(); j++) {
 			statisticX2 += std::pow(freq[j] - (N / 2.0), 2) / (N / 2.0);
-		}
+		}*/
 
 		double statisticX2Correction = 0;	//Yates's correction
 		for (uint32_t j = 0; j < freq.size(); j++) {
 			statisticX2Correction += std::pow(std::abs(freq[j] - (N / 2.0)) - 0.5, 2) / (N / 2.0);
 		}
 
-		std::cout << "StatisticX^2 = " << statisticX2 << "\t Yates = " << statisticX2Correction << endl;
-		//std::cout << "StatisticX^2 with Yates's correction = " << statisticX2Correction << endl;
-		//statisticX2 *= N / 2.0;
-		//std::cout << "StatisticX^2 = " << statisticX2 << endl;
+		//std::cout << "StatisticX^2 = " << statisticX2 << "\t Yates = " << statisticX2Correction << endl;
 
-		return false;
+		return statisticX2Correction;
 	}
 
-	Sequence SequenceConverter::converse(const Sequence& seq) const {
-		Sequence newSeq(seq.size());
+	Sequence SequenceConverter::converse(const Sequence& source) const {
+		Sequence newSeq(source.size());
+		converse(newSeq, source);
+		return newSeq;
+	}
+
+	void SequenceConverter::converse(Sequence& dest, const Sequence& source) const {
+		//dest.resize(source);		//for just in case
 		uint32_t row = 0;	//row number (not row count)
 					//00...00
 
-		for (size_t i = 0; i < seq.size(); i++) {
-			AlphabetType val = get(row, seq[i]);
-			newSeq[i] = val;
+		for (size_t i = 0; i < source.size(); i++) {
+			AlphabetType val = get(row, source[i]);
+			dest[i] = val;
 			//erase bit k (== dim)
 			row &= ~(1 << (dimension - 1));		//what for??
 			//shift left
@@ -81,52 +84,45 @@ namespace PseudoRandomSequences {
 			row |= val;
 
 			//Result: we change 'row' variable by shifting binary number to left 
-			//			and writing into zero bit the value of newSeq[i]
+			//			and writing into zero bit the value of dest[i]
 		}
+	}
 
-		return newSeq;
+	void swap(SequenceConverter& first, SequenceConverter& second) {
+		using std::swap;
+		swap(first.matrix, second.matrix);
+		swap(first.rowCount, second.rowCount);
+		swap(first.dimension, second.dimension);
 	}
 
 	//-------------------Configuring---------------------//
 
-	ostream& operator<< (ostream & o, const SequenceConverter& seq) {
-		for (uint32_t j = 0; j < seq.rows(); j++) {
-			for (uint32_t i = 0; i < seq.columns(); i++) {
-				o << seq.get(j, i) << " ";
-			}
-			o << std::endl;
-		}
-		return o;
-	}
 
 	void SequenceConverter::setDimension(uint32_t dimension1) {
-		const uint32_t oldDim = dimension;
 
 		setOnlyDimensionWithResizing(dimension1);
 
 		//TODO: may be optimize the matrix refilling 
-		if (dimension1 > oldDim) {
-			//<0, 1> - columns, <00..00, 00..01, ..., 11..10, 11..11> - rows
+		//<0, 1> - columns, <00..00, 00..01, ..., 11..10, 11..11> - rows
 
-			//1 0
-			//0 1
-			set(0, 0, 1);
-			set(0, 1, 0);
-			set(1, 0, 0);
-			set(1, 1, 1);
+		//1 0
+		//0 1
+		set(0, 0, 1);
+		set(0, 1, 0);
+		set(1, 0, 0);
+		set(1, 1, 1);
 
-			for (uint32_t degree = 2; degree < rowCount; degree *= 2) {
-				for (uint32_t i = degree; i < 2 * degree; i++) {
-					rget(i, 0) = get(i - degree, 1);		//matrix[i][0] = matrix[i - degree][1];
-					rget(i, 1) = get(i - degree, 0);
-				}
+		for (uint32_t degree = 2; degree < rowCount; degree *= 2) {
+			for (uint32_t i = degree; i < 2 * degree; i++) {
+				rget(i, 0) = get(i - degree, 1);		//matrix[i][0] = matrix[i - degree][1];
+				rget(i, 1) = get(i - degree, 0);
 			}
 		}
 	}
 
 	void SequenceConverter::setOnlyDimensionWithResizing(uint32_t dimension1)
 	{
-		if (dimension1 <= 0 && dimension1 > 32)		//depends on type uint32_t of row count
+		if (dimension1 <= 0 || dimension1 > 32)		//depends on type uint32_t of row count
 			throw BadArgumentException();
 
 		dimension = dimension1;
@@ -134,6 +130,7 @@ namespace PseudoRandomSequences {
 		matrix.resize(2 * rowCount);
 	}
 
+	//TODO: test it
 	//TODO: change writing to file (write matrix in row to economy symbols count in file)
 	void SequenceConverter::load(const string& filename) {
 		ifstream inFile;
@@ -143,14 +140,17 @@ namespace PseudoRandomSequences {
 
 		inFile >> dim1;
 		setOnlyDimensionWithResizing(dim1);
-		for (uint32_t i = 0; i < rowCount; i++) {
+
+		std::copy(std::istream_iterator<AlphabetType>(inFile),
+			std::istream_iterator<AlphabetType>(), matrix.begin());
+		/*for (uint32_t i = 0; i < rowCount; i++) {
 			AlphabetType elem1,
 				elem2;
 			inFile >> elem1;
 			set(i, 0, elem1);
 			inFile >> elem2;
 			set(i, 1, elem2);
-		}
+		}*/
 
 		inFile.close();
 	}
@@ -160,9 +160,22 @@ namespace PseudoRandomSequences {
 
 		outFile.open(filename, ios::out | ios::trunc);
 		outFile << dimension << std::endl;
-		outFile << (*this);
+		
+		//Try to storage binary
+
+		//In memory we will storage only vector
+		std::copy(matrix.cbegin(), matrix.cend(), std::ostream_iterator<AlphabetType>(outFile, " "));
+
 		outFile.close();
 	}
+
+	const SequenceConverter & SequenceConverter::operator=(SequenceConverter other)
+	{
+		swap(*this, other);
+		return *this;
+	}
+
+	
 
 	ostream& operator<< (ostream & o, const Sequence& seq) {
 		for (size_t i = 0; i < seq.size(); i++) {

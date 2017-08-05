@@ -7,6 +7,7 @@
 #include <iterator>
 #include <time.h>
 #include <stdlib.h>
+#include <string>
 
 using namespace std;
 using namespace PseudoRandomSequences;
@@ -27,32 +28,51 @@ int main(void) {
 
 	string filename = "BinaryMatrixGenerator.txt";
 
-	uint32_t k = 4;
-	SequenceConverter converter(k);
+	//for all the converters the same sequence
 
-	for (; k <= 12; k++) {
-		converter.setDimension(k);
-		Sequence seq(1e3);		//TODO: test on sequence size and Dimension (2D test)
+	std::vector<SequenceConverter> converters;
+	std::vector<double> statistics;
+	for (uint32_t i = 4; i <= 4; i += 4) {
+		converters.push_back(SequenceConverter(i));
+		statistics.push_back(0.0);
+	}
+	converters.push_back(SequenceConverter(filename));
+	statistics.push_back(0.0);
 
-		//possibility(1) = 1 / 10
+	Sequence seq(1e4);
+	uint32_t testSize = 5;
+	for (uint32_t i = 0; i < testSize; i++) {
 		std::generate(seq.begin(), seq.end(),
 			[]() -> AlphabetType { return ((0 == std::rand() % 10) ? 1 : 0); }
 		);
-		Sequence newSeq = converter.converse(seq);
-		//cout << newSeq << endl;
-		std::cout << "Dim = " << k << std::endl;
-		bookStackTest(newSeq);
+		Sequence result(seq.size());
+		for (uint32_t j = 0; j < converters.size(); j++) {
+			converters[j].converse(result, seq);
+			statistics[j] += bookStackTest(result);
+		}
 	}
+	
+	std::transform(statistics.begin(), statistics.end(), std::ostream_iterator<string>(std::cout),
+		[&testSize, &converters](double elem) -> string {
+		static int i = 0; 
+		return std::to_string(converters[i++].getDimension()) + std::string(": ") 
+			+ std::to_string(elem / testSize) + string("\n");
+	});
+	/*for (uint32_t i = 0; i < statistics.size(); i++) {
+		std::cout << converters[i].getDimension() << ": " << statistics[i] / testSize << std::endl;
+	}*/
 
-	cout << "My test:" << endl;
-	//My test sequence
-	Sequence gap(40);		//~loophole
-	std::generate(gap.begin(), gap.end(), 
-		[]() -> AlphabetType { static int i = 0; return (((i++) % 4 < 2) ? 1 : 0); }
-	);
-	std::copy(gap.cbegin(), gap.cend(), std::ostream_iterator<AlphabetType>(cout, " "));
-	std::cout << std::endl;
-	bookStackTest(gap);
+	//cout << "My test:" << endl;
+	////My test sequence
+	//Sequence gap(40);		//~loophole
+	//std::generate(gap.begin(), gap.end(), 
+	//	[]() -> AlphabetType { static int i = 0; return (((i++) % 4 < 2) ? 1 : 0); }
+	//);
+	//std::copy(gap.cbegin(), gap.cend(), std::ostream_iterator<AlphabetType>(cout, " "));
+	//std::cout << std::endl;
+	//bookStackTest(gap);
+
+	/*--------------End Crypto----------------*/
 
 
 	//boost::any_range anyRange;
