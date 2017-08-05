@@ -1,51 +1,67 @@
 #include "sequence_converter.h"
 
 #include <fstream>
+#include <algorithm>
+#include <iterator>
+
+//#include "isequence.h"
 
 namespace PseudoRandomSequences {
+	
+	bool bookStackTest(const Sequence & seq) {
 
-	bool bookPileTest(const Sequence & seq)
-	{
 		const uint32_t alphabetSize = 2;
-		//map: alphabet -> pile position
-		vector<uint32_t> pile(alphabetSize);
+		//map: alphabet -> stack position
+		vector<uint32_t> stack(alphabetSize);
 		const uint32_t plentyCounts = alphabetSize;
 		//map: { {0}, {1} } -> frequency of meeting symbol into {0} or {1} before
-		//moving this symbol to pile peek
+		//moving this symbol to stack peek
 		vector<uint32_t> freq(plentyCounts);
 
-		for (uint32_t i = 0; i < pile.size(); i++) {
-			pile[i] = i;
+		for (uint32_t i = 0; i < stack.size(); i++) {
+			stack[i] = i;
 			freq[i] = 0;
 		}
 
+		std::copy(seq.cbegin(), seq.cend(), std::ostream_iterator<AlphabetType>(std::cout, " "));
+		std::cout << std::endl;
 		for (uint32_t t = 1; t <= seq.size(); t++) {
 			const uint32_t currSymbol = seq[t - 1];
-			const uint32_t prevPos = pile[currSymbol];
+			const uint32_t prevPos = stack[currSymbol];
 
-			//old pile state (t - 1)
+			//old stack state (t - 1)
 			if (prevPos == currSymbol)
 				freq[currSymbol]++;
 
-			pile[currSymbol] = 0;		//move to pile peek (up)
-			for (uint32_t i = 0; i < pile.size(); i++) {
-				if (pile[i] < prevPos)
-					++pile[i];				//move down
-			}
+			std::cout << "(" << stack[0] << ", " << stack[1] << ") ";
+			stack[currSymbol] = 0;		//move to stack peek (up)
+			if (prevPos > 0)		//not necessary
+				for (uint32_t i = 0; i < stack.size(); i++)
+					if (stack[i] < prevPos)
+						++stack[i];				//move down
 
-			//new pile state (t)
+			//new stack state (t)
 		}
+		std::cout << std::endl;
 
-		//Meaning: symbols with equal possibility can be (turn out to be) on any pile position
+		//Meaning: symbols with equal possibility can be (turn out to be) on any stack position
+
+		//TODO: replace (N / 2) on (N / alphabetSize)
 
 		double statisticX2 = 0;
 		const uint32_t N = seq.size();
 		for (uint32_t j = 0; j < freq.size(); j++) {
-			statisticX2 += std::pow((freq[j] * 1.0 / (N / 2.0) - 1), 2);
+			statisticX2 += std::pow(freq[j] - (N / 2.0), 2) / (N / 2.0);
+		}
+
+		double statisticX2Correction = 0;	//Yates's correction
+		for (uint32_t j = 0; j < freq.size(); j++) {
+			statisticX2Correction += std::pow(std::abs(freq[j] - (N / 2.0)) - 0.5, 2) / (N / 2.0);
 		}
 
 		std::cout << "StatisticX^2 = " << statisticX2 << endl;
-		statisticX2 *= N / 2.0;
+		std::cout << "StatisticX^2 with Yates's correction = " << statisticX2Correction << endl;
+		//statisticX2 *= N / 2.0;
 		//std::cout << "StatisticX^2 = " << statisticX2 << endl;
 
 		return false;

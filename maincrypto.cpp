@@ -1,26 +1,52 @@
+#include "../lipaboyLibrary/src/intervals/interval.h"
+#include "../lipaboyLibrary/src/maths/accuracy_number.h"
+#include "sequence_converter.h"
+//#include "isequence.h"
+
 #include <iostream>
+#include <iterator>
 #include <time.h>
 #include <stdlib.h>
-
-#include "lipaboyLibrary/src/intervals/interval.h"
-#include "lipaboyLibrary/src/maths/accuracy_number.h"
-#include "sequence_converter.h"
-#include "isequence.h"
 
 using namespace std;
 using namespace PseudoRandomSequences;
 using namespace LipaboyMaths;
 
-#include <boost\iterator\transform_iterator.hpp>
-#include <boost\bind.hpp>
-#include <boost\log\utility\functional\bind.hpp>
-#include <boost\range\any_range.hpp>
+//#include <boost\iterator\transform_iterator.hpp>
+//#include <boost\bind.hpp>
+//#include <boost\log\utility\functional\bind.hpp>
+//#include <boost\range\any_range.hpp>
 
 //TODO: try to use GoogleTests
 
 int main(void) {
 	time_t t;
 	srand((unsigned)time(&t));
+
+	/*--------------Crypto----------------*/
+
+	string filename = "BinaryMatrixGenerator.txt";
+
+	uint32_t k = 8;
+	SequenceConverter converter(k);
+
+	for (; k <= 12; k++) {
+		converter.setDimension(k);
+		const uint32_t N = static_cast<uint32_t>(50);
+		Sequence seq(N);
+
+		//possibility(1) = 1 / 10
+		std::generate(seq.begin(), seq.end(),
+			[]() -> AlphabetType { return ((0 == std::rand() % 10) ? 1 : 0); }
+		);
+		/*std::copy(seq.cbegin(), seq.cend(), std::ostream_iterator<AlphabetType>(std::cout, " "));
+		cout << endl;*/
+		Sequence newSeq = converter.converse(seq);
+		//cout << newSeq << endl;
+
+		bookStackTest(newSeq);
+	}
+
 
 	//boost::any_range anyRange;
 	
@@ -100,32 +126,7 @@ int main(void) {
 	}
 	delete plenty;*/
 
-
-
-
-	/*--------------Crypto----------------*/
-
-	//string filename = "BinaryMatrixGenerator.txt";
-
-	//uint32_t k = 8;
-	//SequenceConverter converter(k);
-
-	//for (; k <= 8; k++) {
-	//	converter.setDimension(k);
-	//	const uint32_t N = static_cast<uint32_t>(1e5);
-	//	Sequence seq(N);
-
-	//	//possibility(1) = 1 / 10
-	//	for (size_t i = 0; i < seq.size(); i++) {
-	//		seq[i] = (0 == std::rand() % 10) ? 1 : 0;
-	//	}
-	//	//cout << seq << endl;
-	//	Sequence newSeq = converter.converse(seq);
-	//	//cout << newSeq << endl;
-
-	//	bookPileTest(newSeq);
-	//}
-
+	
 
 	return 0;
 }

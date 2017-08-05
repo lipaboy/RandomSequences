@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -65,7 +66,7 @@ namespace PseudoRandomSequences {
 	ostream& operator<< (ostream & o, const Sequence& seq);
 
 
-	bool bookPileTest(const Sequence& seq);
+	bool bookStackTest(const Sequence& seq);
 }
 
 #endif //SEQUENCE_GENERATOR_H
