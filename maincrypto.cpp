@@ -1,6 +1,6 @@
-#include "../lipaboyLibrary/src/intervals/interval.h"
-#include "../lipaboyLibrary/src/maths/accuracy_number.h"
+#include "book_stack_test.h"
 #include "sequence_converter.h"
+
 //#include "isequence.h"
 
 #include <iostream>
@@ -11,7 +11,7 @@
 
 using namespace std;
 using namespace PseudoRandomSequences;
-using namespace LipaboyMaths;
+//using namespace LipaboyMaths;
 
 //#include <boost\iterator\transform_iterator.hpp>
 //#include <boost\bind.hpp>
@@ -45,34 +45,39 @@ int main(void) {
 
 	//for all the converters the same sequence
 
-	//std::vector<SequenceConverter> converters;
-	//std::vector<double> statistics;
-	//for (uint32_t i = 4; i <= 4; i += 4) {
-	//	converters.push_back(SequenceConverter(i));
-	//	statistics.push_back(0.0);
-	//}
-	////converters.push_back(SequenceConverter(filename));
-	////statistics.push_back(0.0);
+	typedef uint32_t AlphabetType;
+	typedef vector<AlphabetType> Sequence;
+	typedef SequenceConverter<AlphabetType, Sequence > VectorSequenceConverter;
 
-	//Sequence seq(1e4);
-	//uint32_t testSize = 5;
-	//for (uint32_t i = 0; i < testSize; i++) {
-	//	std::generate(seq.begin(), seq.end(),
-	//		[]() -> AlphabetType { return ((0 == std::rand() % 10) ? 1 : 0); }
-	//	);
-	//	Sequence result(seq.size());
-	//	for (uint32_t j = 0; j < converters.size(); j++) {
-	//		converters[j].converse(result, seq);
-	//		statistics[j] += bookStackTest(result);
-	//	}
-	//}
-	//
-	//std::transform(statistics.begin(), statistics.end(), std::ostream_iterator<string>(std::cout),
-	//	[&testSize, &converters](double elem) -> string {
-	//	static int i = 0; 
-	//	return std::to_string(converters[i++].getDimension()) + std::string(": ") 
-	//		+ std::to_string(elem / testSize) + string("\n");
-	//});
+	std::vector<VectorSequenceConverter> converters;
+	std::vector<double> statistics;
+	for (uint32_t i = 4; i <= 4; i += 4) {
+		converters.push_back(VectorSequenceConverter(i));
+		statistics.push_back(0.0);
+	}
+	//converters.push_back(SequenceConverter(filename));
+	//statistics.push_back(0.0);
+	
+
+	Sequence seq(1e4);
+	uint32_t testSize = 5;
+	for (uint32_t i = 0; i < testSize; i++) {
+		std::generate(seq.begin(), seq.end(),
+			[]() -> AlphabetType { return ((0 == std::rand() % 10) ? 1 : 0); }
+		);
+		Sequence result(seq.size());
+		for (uint32_t j = 0; j < converters.size(); j++) {
+			converters[j].converse(result, seq);
+			statistics[j] += bookStackTest<bool>(result, 2);
+		}
+	}
+	
+	std::transform(statistics.begin(), statistics.end(), std::ostream_iterator<string>(std::cout),
+		[&testSize, &converters](double elem) -> string {
+		static int i = 0; 
+		return std::to_string(converters[i++].getDimension()) + std::string(": ") 
+			+ std::to_string(elem / testSize) + string("\n");
+	});
 
 	//cout << "My test:" << endl;
 	////My test sequence
