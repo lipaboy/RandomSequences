@@ -1,4 +1,5 @@
 #include "book_stack_test.h"
+#include "discrete_fourier_transform_test.h"
 #include "sequence_converter.h"
 
 //#include "isequence.h"
@@ -9,7 +10,7 @@
 #include <stdlib.h>
 #include <string>
 
-using namespace std;
+//using namespace std;
 using namespace PseudoRandomSequences;
 //using namespace LipaboyMaths;
 
@@ -23,14 +24,32 @@ using namespace PseudoRandomSequences;
 #include <boost/range/algorithm/copy.hpp>
 #include <boost/range/adaptor/filtered.hpp>
 
+template <class Type>
+using AnyRange = boost::any_range<
+	Type,
+	boost::bidirectional_traversal_tag,
+	Type,
+	std::ptrdiff_t
+>;
+
+#include <iomanip>
+#include <limits>
+#include <cmath>
+
+typedef std::vector<bool> Sequence;
+typedef MatrixRandomConverter<Sequence > VectorMatrixRandomGenerator;
+
 int main(void) {
 	time_t t;
 	srand((unsigned)time(&t));
 
 	/*--------------Crypto----------------*/
 
-	std::vector<int> vec({ 0, 1, 2 });
-	UIntAnyRange anyRange = vec;
+	//std::vector<int> vec({ 0, 1, 2 });
+	//UIntAnyRange anyRange = vec;
+	/*std::array<bool> vec({ 0, 1, 0 });
+	AnyRange<bool> range = vec;
+	boost::copy(range, std::ostream_iterator<bool>(std::cout, " "));*/
 	
 		//Useful funcs
 	//boost::copy(anyRange, std::ostream_iterator<int>(std::cout, " "));
@@ -40,13 +59,19 @@ int main(void) {
 	//boost::copy(x | boost::adaptors::filtered([](double xx) -> bool { return xx > 2.0; }), 
 	//	std::back_inserter(y));
 	//boost::copy(y, std::ostream_iterator<double>(std::cout, " "));
-
+	using std::string;
+	using std::vector;
 	string filename = "BinaryMatrixGenerator.txt";
 
 	//for all the converters the same sequence
+	//3.141592653589793239
+	//3,1415926535897932384626433832795
+	//3.14159265358979323116
 
-	typedef vector<bool> Sequence;
-	typedef MatrixRandomConverter<Sequence > VectorMatrixRandomGenerator;
+	//double pi = std::acos(static_cast<double>(-1.0));
+	//std::cout << std::setprecision(21) << " " << pi << std::endl;
+	//long double pi2 = std::acos(static_cast<long double>(-1.0));
+	//std::cout << std::setprecision(21) << " " << pi2 << std::endl;
 
 	std::vector<VectorMatrixRandomGenerator> converters;
 	std::vector<double> statistics;
@@ -67,6 +92,7 @@ int main(void) {
 		for (uint32_t j = 0; j < converters.size(); j++) {
 			converters[j].converse(result, seq);
 			statistics[j] += bookStackTest<bool>(result, 2);
+			//discreteFourierTransformTest(result);
 		}
 	}
 	
@@ -115,58 +141,6 @@ int main(void) {
 	//	std::ostream_iterator<int>(std::cout, " "));
 	//std::cout << std::endl;
 
-	/*--------------AccuracyNumber----------------*/
-
-	/*PositiveRay<int, std::less<> > ray(5);
-	if (ray.contains(INT_MAX))
-		std::cout << "ray (5, +inf) contains int_max" << std::endl;
-	AccuracyDouble d1(5.0, 1.0);
-	if (d1 < 6.1)
-		std::cout << "5 < 6.1 with eps = 1" << std::endl;
-	if (d1 >= 6.0)
-		std::cout << "5 >= 6 with eps = 1" << std::endl;
-	if (d1 >= AccuracyDouble(5.5, 1.0))
-		std::cout << "5 >= 5.5 with eps = 1" << std::endl;*/
-
-
-		/*--------------ConstAccuracyNumber----------------*/
-	/*ConstAccuracyNumber<double, int, 1, -2> cd1(5.0);
-	constexpr double dPow = std::exp(5.0);*/
-
-
-	/*--------------Intervals----------------*/
-
-	/*OpenInterval<int> openInterval(0, 5);
-	if (openInterval.contains(4)) {
-		cout << "4 in (0, 5)" << endl;
-	}
-	CloseInterval<int> closeInterval(0, 5);
-	if (closeInterval.contains(5)) {
-		cout << "5 in [0, 5]" << endl;
-	}*/
-	//PositiveInfinity<int> plusInfinity;
-	////std::comp
-	//if (plusInfinity > 100)
-	//	cout << "+inf > 100" << endl;
-	//if (100 < plusInfinity)
-	//	cout << "100 < +inf" << endl;
-
-	/*Interval<int, std::less<>, std::less<> > interval(0, 5);
-
-	if (interval.in(1))
-		std::cout << "1 lays into interval" << std::endl;
-	if (interval.out(0))
-		std::cout << "0 out of interval" << std::endl;
-	if (interval.containsAll(1, 2, 3, 4))
-		std::cout << "1, 2, 3, 4 lay into interval" << std::endl;
-	if (interval.containsAny(0, 1, 5))
-		std::cout << "0, 1 or 5 lay into interval" << std::endl;*/
-
-	/*IPlenty<int> *plenty = new Interval<int>(-1, 4);
-	if (plenty -> in(cutOffBorder(-4, 4, 0))) {
-		cout << "3 in (0, 4)" << endl;
-	}
-	delete plenty;*/
 
 	
 

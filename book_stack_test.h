@@ -7,8 +7,9 @@ namespace PseudoRandomSequences {
 
 	//TODO: rewrite on any_range (because this func only reading and only in series)
 
-	template <typename AlphabetType, class SequenceRandAccessContainer>
-	double bookStackTest(const SequenceRandAccessContainer& seq, uint32_t alphabetSize) {
+	//return statistics X^2 with Yates correction (how say it?)
+	template <typename AlphabetType, class BoolSequenceRandAccessContainer>
+	double bookStackTest(const BoolSequenceRandAccessContainer& seq, uint32_t alphabetSize) {
 		using std::vector;
 
 		//map: alphabet -> stack position
