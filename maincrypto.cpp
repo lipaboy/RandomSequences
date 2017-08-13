@@ -45,18 +45,17 @@ int main(void) {
 
 	//for all the converters the same sequence
 
-	typedef vector<uint32_t> Sequence;
-	typedef SequenceConverter<Sequence > VectorSequenceConverter;
+	typedef vector<bool> Sequence;
+	typedef MatrixRandomGenerator<Sequence > VectorMatrixRandomGenerator;
 
-	std::vector<VectorSequenceConverter> converters;
+	std::vector<VectorMatrixRandomGenerator> converters;
 	std::vector<double> statistics;
 	for (uint32_t i = 4; i <= 4; i += 4) {
-		converters.push_back(VectorSequenceConverter(i));
+		converters.push_back(VectorMatrixRandomGenerator(i));
 		statistics.push_back(0.0);
 	}
 	//converters.push_back(SequenceConverter(filename));
 	//statistics.push_back(0.0);
-	
 
 	Sequence seq(1e4);
 	uint32_t testSize = 5;

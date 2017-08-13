@@ -9,8 +9,6 @@
 
 #include <boost\range\any_range.hpp>
 
-//TODO: make for different types (not only for int). But I think it is too redundancy.
-
 //template <typename T>
 typedef boost::any_range<
 	int,
@@ -36,12 +34,12 @@ namespace PseudoRandomSequences {
 	//TODO: make template <type, int dimensionSize>, might be without first parameter
 	//TODO: add matrix storage type into template parameter (array - stack storage data, vector - heap storage)
 	template <class SequenceRandAccessContainer>
-	class SequenceConverter {
+	class MatrixRandomGenerator {
 	public:
 		//matrixLength = 2 ^ dimension
-		SequenceConverter(uint32_t dimension = 1) { setDimension(dimension); }
-		SequenceConverter(const std::string& filename) { load(filename); }
-		SequenceConverter(SequenceConverter&& other) { swap(*this, other); }
+		MatrixRandomGenerator(uint32_t dimension = 1) { setDimension(dimension); }
+		MatrixRandomGenerator(const std::string& filename) { load(filename); }
+		MatrixRandomGenerator(MatrixRandomGenerator&& other) { swap(*this, other); }
 		
 		void setDimension(uint32_t dimension1);
 		uint32_t getDimension() const { return dimension; }
@@ -56,10 +54,10 @@ namespace PseudoRandomSequences {
 		void save(const std::string& filename, char separator = ' ');
 		void load(const std::string& filename);
 
-		const SequenceConverter& operator=(SequenceConverter other);
+		const MatrixRandomGenerator& operator=(MatrixRandomGenerator other);
 		template <class SequenceRandAccessContainer>
-		friend void swap(SequenceConverter<SequenceRandAccessContainer>& first, 
-			SequenceConverter<SequenceRandAccessContainer>& second);
+		friend void swap(MatrixRandomGenerator<SequenceRandAccessContainer>& first, 
+			MatrixRandomGenerator<SequenceRandAccessContainer>& second);
 
 		bool get(uint32_t i, uint32_t j) const { return matrix[i * 2 + j]; }
 	private:
@@ -68,8 +66,6 @@ namespace PseudoRandomSequences {
 		void setOnlyDimensionWithResizing(uint32_t dimension1);
 
 	private:
-		//TODO: you can decrease memory size if storage in bits
-
 		//matrix for conversation from SequenceRandAccessContainer first type into another one
 		//<0, 1> - columns, <00..00, 00..01, ..., 11..10, 11..11> - rows
 		std::vector<bool> matrix;
@@ -77,17 +73,16 @@ namespace PseudoRandomSequences {
 		uint32_t dimension;
 		//Notice: if you add new variables don't forget about swap
 	};
-	//TODO: rename SequenceConverter to MatrixRandomGenerator
+
 	template <class SequenceRandAccessContainer>
-	inline SequenceRandAccessContainer SequenceConverter<SequenceRandAccessContainer>::converse(const SequenceRandAccessContainer & source) const {
+	inline SequenceRandAccessContainer MatrixRandomGenerator<SequenceRandAccessContainer>::converse(const SequenceRandAccessContainer & source) const {
 		SequenceRandAccessContainer newSeq(source.size());
 		converse(newSeq, source);
 		return newSeq;
 	}
 
-	//TODO: remove bool to bool
 	template <  class SequenceRandAccessContainer>
-	inline void SequenceConverter<SequenceRandAccessContainer>::converse(SequenceRandAccessContainer & dest, const SequenceRandAccessContainer & source) const {
+	inline void MatrixRandomGenerator<SequenceRandAccessContainer>::converse(SequenceRandAccessContainer & dest, const SequenceRandAccessContainer & source) const {
 		//dest.resize(source);		//for just in case
 		uint32_t row = 0;	//row number (not row count)
 							//00...00
@@ -108,8 +103,8 @@ namespace PseudoRandomSequences {
 	}
 
 	template <  class SequenceRandAccessContainer>
-	void swap(SequenceConverter<SequenceRandAccessContainer>& first, 
-					SequenceConverter<SequenceRandAccessContainer>& second) {
+	void swap(MatrixRandomGenerator<SequenceRandAccessContainer>& first, 
+					MatrixRandomGenerator<SequenceRandAccessContainer>& second) {
 		using std::swap;
 		swap(first.matrix, second.matrix);
 		swap(first.rowCount, second.rowCount);
@@ -118,9 +113,8 @@ namespace PseudoRandomSequences {
 
 	//-------------------Configuring---------------------//
 
-
 	template <  class SequenceRandAccessContainer>
-	inline void SequenceConverter<SequenceRandAccessContainer>::setDimension(uint32_t dimension1) {
+	inline void MatrixRandomGenerator<SequenceRandAccessContainer>::setDimension(uint32_t dimension1) {
 
 		setOnlyDimensionWithResizing(dimension1);
 
@@ -143,7 +137,7 @@ namespace PseudoRandomSequences {
 	}
 
 	template <  class SequenceRandAccessContainer>
-	inline void SequenceConverter<SequenceRandAccessContainer>::setOnlyDimensionWithResizing(uint32_t dimension1)
+	inline void MatrixRandomGenerator<SequenceRandAccessContainer>::setOnlyDimensionWithResizing(uint32_t dimension1)
 	{
 		if (dimension1 <= 0 || dimension1 > 32)		//depends on type uint32_t of row count
 			throw BadArgumentException();
@@ -154,9 +148,8 @@ namespace PseudoRandomSequences {
 	}
 
 	//TODO: test it
-	//TODO: change writing to file (write matrix in row to economy symbols count in file)
 	template <  class SequenceRandAccessContainer>
-	inline void SequenceConverter<SequenceRandAccessContainer>::load(const std::string& filename) {
+	inline void MatrixRandomGenerator<SequenceRandAccessContainer>::load(const std::string& filename) {
 		std::ifstream inFile;
 		uint32_t dim1;
 
@@ -181,7 +174,7 @@ namespace PseudoRandomSequences {
 	}
 
 	template <  class SequenceRandAccessContainer>
-	inline void SequenceConverter<SequenceRandAccessContainer>::save(const std::string& filename, char separator) {
+	inline void MatrixRandomGenerator<SequenceRandAccessContainer>::save(const std::string& filename, char separator) {
 		ofstream outFile;
 
 		outFile.open(filename, ios::out | ios::trunc);
@@ -197,7 +190,7 @@ namespace PseudoRandomSequences {
 	}
 
 	template <  class SequenceRandAccessContainer>
-	inline const SequenceConverter<SequenceRandAccessContainer> & SequenceConverter<SequenceRandAccessContainer>::operator=(SequenceConverter<SequenceRandAccessContainer> other)
+	inline const MatrixRandomGenerator<SequenceRandAccessContainer> & MatrixRandomGenerator<SequenceRandAccessContainer>::operator=(MatrixRandomGenerator<SequenceRandAccessContainer> other)
 	{
 		swap(*this, other);
 		return *this;

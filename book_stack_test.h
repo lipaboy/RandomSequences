@@ -5,6 +5,8 @@
 
 namespace PseudoRandomSequences {
 
+	//TODO: rewrite on any_range (because this func only reading and only in series)
+
 	template <typename AlphabetType, class SequenceRandAccessContainer>
 	double bookStackTest(const SequenceRandAccessContainer& seq, uint32_t alphabetSize) {
 		using std::vector;
