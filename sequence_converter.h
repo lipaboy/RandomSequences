@@ -34,12 +34,12 @@ namespace PseudoRandomSequences {
 	//TODO: make template <type, int dimensionSize>, might be without first parameter
 	//TODO: add matrix storage type into template parameter (array - stack storage data, vector - heap storage)
 	template <class SequenceRandAccessContainer>
-	class MatrixRandomGenerator {
+	class MatrixRandomConverter {
 	public:
 		//matrixLength = 2 ^ dimension
-		MatrixRandomGenerator(uint32_t dimension = 1) { setDimension(dimension); }
-		MatrixRandomGenerator(const std::string& filename) { load(filename); }
-		MatrixRandomGenerator(MatrixRandomGenerator&& other) { swap(*this, other); }
+		MatrixRandomConverter(uint32_t dimension = 1) { setDimension(dimension); }
+		MatrixRandomConverter(const std::string& filename) { load(filename); }
+		MatrixRandomConverter(MatrixRandomConverter&& other) { swap(*this, other); }
 		
 		void setDimension(uint32_t dimension1);
 		uint32_t getDimension() const { return dimension; }
@@ -54,10 +54,10 @@ namespace PseudoRandomSequences {
 		void save(const std::string& filename, char separator = ' ');
 		void load(const std::string& filename);
 
-		const MatrixRandomGenerator& operator=(MatrixRandomGenerator other);
+		const MatrixRandomConverter& operator=(MatrixRandomConverter other);
 		template <class SequenceRandAccessContainer>
-		friend void swap(MatrixRandomGenerator<SequenceRandAccessContainer>& first, 
-			MatrixRandomGenerator<SequenceRandAccessContainer>& second);
+		friend void swap(MatrixRandomConverter<SequenceRandAccessContainer>& first, 
+			MatrixRandomConverter<SequenceRandAccessContainer>& second);
 
 		bool get(uint32_t i, uint32_t j) const { return matrix[i * 2 + j]; }
 	private:
@@ -75,14 +75,14 @@ namespace PseudoRandomSequences {
 	};
 
 	template <class SequenceRandAccessContainer>
-	inline SequenceRandAccessContainer MatrixRandomGenerator<SequenceRandAccessContainer>::converse(const SequenceRandAccessContainer & source) const {
+	inline SequenceRandAccessContainer MatrixRandomConverter<SequenceRandAccessContainer>::converse(const SequenceRandAccessContainer & source) const {
 		SequenceRandAccessContainer newSeq(source.size());
 		converse(newSeq, source);
 		return newSeq;
 	}
 
 	template <  class SequenceRandAccessContainer>
-	inline void MatrixRandomGenerator<SequenceRandAccessContainer>::converse(SequenceRandAccessContainer & dest, const SequenceRandAccessContainer & source) const {
+	inline void MatrixRandomConverter<SequenceRandAccessContainer>::converse(SequenceRandAccessContainer & dest, const SequenceRandAccessContainer & source) const {
 		//dest.resize(source);		//for just in case
 		uint32_t row = 0;	//row number (not row count)
 							//00...00
@@ -103,8 +103,8 @@ namespace PseudoRandomSequences {
 	}
 
 	template <  class SequenceRandAccessContainer>
-	void swap(MatrixRandomGenerator<SequenceRandAccessContainer>& first, 
-					MatrixRandomGenerator<SequenceRandAccessContainer>& second) {
+	void swap(MatrixRandomConverter<SequenceRandAccessContainer>& first, 
+					MatrixRandomConverter<SequenceRandAccessContainer>& second) {
 		using std::swap;
 		swap(first.matrix, second.matrix);
 		swap(first.rowCount, second.rowCount);
@@ -114,7 +114,7 @@ namespace PseudoRandomSequences {
 	//-------------------Configuring---------------------//
 
 	template <  class SequenceRandAccessContainer>
-	inline void MatrixRandomGenerator<SequenceRandAccessContainer>::setDimension(uint32_t dimension1) {
+	inline void MatrixRandomConverter<SequenceRandAccessContainer>::setDimension(uint32_t dimension1) {
 
 		setOnlyDimensionWithResizing(dimension1);
 
@@ -137,7 +137,7 @@ namespace PseudoRandomSequences {
 	}
 
 	template <  class SequenceRandAccessContainer>
-	inline void MatrixRandomGenerator<SequenceRandAccessContainer>::setOnlyDimensionWithResizing(uint32_t dimension1)
+	inline void MatrixRandomConverter<SequenceRandAccessContainer>::setOnlyDimensionWithResizing(uint32_t dimension1)
 	{
 		if (dimension1 <= 0 || dimension1 > 32)		//depends on type uint32_t of row count
 			throw BadArgumentException();
@@ -149,7 +149,7 @@ namespace PseudoRandomSequences {
 
 	//TODO: test it
 	template <  class SequenceRandAccessContainer>
-	inline void MatrixRandomGenerator<SequenceRandAccessContainer>::load(const std::string& filename) {
+	inline void MatrixRandomConverter<SequenceRandAccessContainer>::load(const std::string& filename) {
 		std::ifstream inFile;
 		uint32_t dim1;
 
@@ -174,7 +174,7 @@ namespace PseudoRandomSequences {
 	}
 
 	template <  class SequenceRandAccessContainer>
-	inline void MatrixRandomGenerator<SequenceRandAccessContainer>::save(const std::string& filename, char separator) {
+	inline void MatrixRandomConverter<SequenceRandAccessContainer>::save(const std::string& filename, char separator) {
 		ofstream outFile;
 
 		outFile.open(filename, ios::out | ios::trunc);
@@ -190,7 +190,7 @@ namespace PseudoRandomSequences {
 	}
 
 	template <  class SequenceRandAccessContainer>
-	inline const MatrixRandomGenerator<SequenceRandAccessContainer> & MatrixRandomGenerator<SequenceRandAccessContainer>::operator=(MatrixRandomGenerator<SequenceRandAccessContainer> other)
+	inline const MatrixRandomConverter<SequenceRandAccessContainer> & MatrixRandomConverter<SequenceRandAccessContainer>::operator=(MatrixRandomConverter<SequenceRandAccessContainer> other)
 	{
 		swap(*this, other);
 		return *this;

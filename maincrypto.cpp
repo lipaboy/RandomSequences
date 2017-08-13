@@ -46,7 +46,7 @@ int main(void) {
 	//for all the converters the same sequence
 
 	typedef vector<bool> Sequence;
-	typedef MatrixRandomGenerator<Sequence > VectorMatrixRandomGenerator;
+	typedef MatrixRandomConverter<Sequence > VectorMatrixRandomGenerator;
 
 	std::vector<VectorMatrixRandomGenerator> converters;
 	std::vector<double> statistics;
