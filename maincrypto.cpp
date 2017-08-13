@@ -45,9 +45,8 @@ int main(void) {
 
 	//for all the converters the same sequence
 
-	typedef uint32_t AlphabetType;
-	typedef vector<AlphabetType> Sequence;
-	typedef SequenceConverter<AlphabetType, Sequence > VectorSequenceConverter;
+	typedef vector<uint32_t> Sequence;
+	typedef SequenceConverter<Sequence > VectorSequenceConverter;
 
 	std::vector<VectorSequenceConverter> converters;
 	std::vector<double> statistics;
@@ -63,7 +62,7 @@ int main(void) {
 	uint32_t testSize = 5;
 	for (uint32_t i = 0; i < testSize; i++) {
 		std::generate(seq.begin(), seq.end(),
-			[]() -> AlphabetType { return ((0 == std::rand() % 10) ? 1 : 0); }
+			[]() -> bool { return ((0 == std::rand() % 10) ? 1 : 0); }
 		);
 		Sequence result(seq.size());
 		for (uint32_t j = 0; j < converters.size(); j++) {
