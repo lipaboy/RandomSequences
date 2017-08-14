@@ -7,7 +7,8 @@ namespace PseudoRandomSequences {
 
 	//TODO: rewrite on any_range (because this func only reading and only in series)
 
-	//return statistics X^2 with Yates correction (how say it?)
+	//Complexity: O(N * |Alphabet|)
+	//return statistics X^2 with Yates correction (how say it?) -> Answer: make conclusion about Randomness inside of function
 	template <typename AlphabetType, class BoolSequenceRandAccessContainer>
 	double bookStackTest(const BoolSequenceRandAccessContainer& seq, uint32_t alphabetSize) {
 		using std::vector;
@@ -37,7 +38,7 @@ namespace PseudoRandomSequences {
 						++stack[i];				//move down
 			stack[currSymbol] = 0;		//move to stack peek (up)
 
-										//new stack state (t)
+				//new stack state (t)
 		}
 		//Meaning: symbols with equal possibility can be (turn out to be) on any stack position
 		//TODO: replace (N / 2) on (N / alphabetSize)

@@ -74,34 +74,40 @@ int main(void) {
 	//std::cout << std::setprecision(21) << " " << pi2 << std::endl;
 
 	std::vector<VectorMatrixRandomGenerator> converters;
-	std::vector<double> statistics;
+	std::vector<double> statisticBooks;
+	std::vector<bool> statisticFourier;
 	for (uint32_t i = 4; i <= 4; i += 4) {
 		converters.push_back(VectorMatrixRandomGenerator(i));
-		statistics.push_back(0.0);
+		statisticBooks.push_back(0.);
+		statisticFourier.push_back(false);
 	}
 	//converters.push_back(SequenceConverter(filename));
-	//statistics.push_back(0.0);
+	//statisticBooks.push_back(0.0);
 
-	Sequence seq(1e4);
-	uint32_t testSize = 5;
-	for (uint32_t i = 0; i < testSize; i++) {
+	Sequence seq(3e3);
+	uint32_t testSize = 1;
+	for (uint32_t i = 0; i < testSize; i++) { //--wrong if testSize > 1
 		std::generate(seq.begin(), seq.end(),
 			[]() -> bool { return ((0 == std::rand() % 10) ? 1 : 0); }
 		);
 		Sequence result(seq.size());
 		for (uint32_t j = 0; j < converters.size(); j++) {
 			converters[j].converse(result, seq);
-			statistics[j] += bookStackTest<bool>(result, 2);
-			//discreteFourierTransformTest(result);
+			//statisticBooks[j] += bookStackTest<bool>(result, 2);	--wrong
+			statisticFourier[j] = discreteFourierTransformTest(result);
 		}
 	}
-	
-	std::transform(statistics.begin(), statistics.end(), std::ostream_iterator<string>(std::cout),
+	std::cout << "BookStackTest\tDFTT" << std::endl;
+	for (uint32_t i = 0; i < statisticBooks.size(); i++) {
+		std::cout << converters[i].getDimension() << ": " << statisticBooks[i]
+			<< "\t" << statisticFourier[i] << std::endl;
+	}
+	/*std::transform(statisticBooks.begin(), statisticBooks.end(), std::ostream_iterator<string>(std::cout),
 		[&testSize, &converters](double elem) -> string {
 		static int i = 0; 
 		return std::to_string(converters[i++].getDimension()) + std::string(": ") 
 			+ std::to_string(elem / testSize) + string("\n");
-	});
+	});*/
 
 	//cout << "My test:" << endl;
 	////My test sequence
