@@ -54,7 +54,7 @@ namespace PseudoRandomSequences {
 		for (uint32_t j = 0; j < freq.size(); j++) {
 			statisticX2Correction += std::pow(std::abs(freq[j] - expectedNumber) - 0.5, 2) / expectedNumber;
 		}
-		//std::cout << "StatisticX^2 = " << statisticX2 << "\t Yates = " << statisticX2Correction << endl;
+		std::cout <<  "\t Yates = " << statisticX2Correction << std::endl;
 
 		return statisticX2Correction;
 	}

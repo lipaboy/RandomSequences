@@ -42,6 +42,10 @@ typedef MatrixRandomConverter<Sequence > VectorMatrixRandomGenerator;
 int main(void) {
 	time_t t;
 	srand((unsigned)time(&t));
+	using std::string;
+	using std::vector;
+	using std::cout;
+	using std::endl;
 
 	/*--------------Crypto----------------*/
 
@@ -59,8 +63,7 @@ int main(void) {
 	//boost::copy(x | boost::adaptors::filtered([](double xx) -> bool { return xx > 2.0; }), 
 	//	std::back_inserter(y));
 	//boost::copy(y, std::ostream_iterator<double>(std::cout, " "));
-	using std::string;
-	using std::vector;
+	
 	string filename = "BinaryMatrixGenerator.txt";
 
 	//for all the converters the same sequence
@@ -84,7 +87,7 @@ int main(void) {
 	//converters.push_back(SequenceConverter(filename));
 	//statisticBooks.push_back(0.0);
 
-	Sequence seq(3e3);
+	Sequence seq(1e6);
 	uint32_t testSize = 1;
 	for (uint32_t i = 0; i < testSize; i++) { //--wrong if testSize > 1
 		std::generate(seq.begin(), seq.end(),
@@ -93,8 +96,8 @@ int main(void) {
 		Sequence result(seq.size());
 		for (uint32_t j = 0; j < converters.size(); j++) {
 			converters[j].converse(result, seq);
-			//statisticBooks[j] += bookStackTest<bool>(result, 2);	--wrong
-			statisticFourier[j] = discreteFourierTransformTest(result);
+			statisticBooks[j] += bookStackTest<bool>(result, 2);	//--wrong
+			//statisticFourier[j] = discreteFourierTransformTest(result);
 		}
 	}
 	std::cout << "BookStackTest\tDFTT" << std::endl;
@@ -109,15 +112,15 @@ int main(void) {
 			+ std::to_string(elem / testSize) + string("\n");
 	});*/
 
-	//cout << "My test:" << endl;
-	////My test sequence
-	//Sequence gap(40);		//~loophole
-	//std::generate(gap.begin(), gap.end(), 
-	//	[]() -> AlphabetType { static int i = 0; return (((i++) % 4 < 2) ? 1 : 0); }
-	//);
-	//std::copy(gap.cbegin(), gap.cend(), std::ostream_iterator<AlphabetType>(cout, " "));
-	//std::cout << std::endl;
-	//bookStackTest(gap);
+	cout << "My test:" << endl;
+	//My test sequence
+	Sequence gap(40);		//~loophole
+	std::generate(gap.begin(), gap.end(), 
+		[]() -> bool { static int i = 0; return (((i++) % 4 < 2) ? 1 : 0); }
+	);
+	std::copy(gap.cbegin(), gap.cend(), std::ostream_iterator<bool>(cout, " "));
+	std::cout << std::endl;
+	cout << bookStackTest<bool>(gap, 2) << " " << discreteFourierTransformTest(gap) << endl;
 
 	/*--------------End Crypto----------------*/
 
