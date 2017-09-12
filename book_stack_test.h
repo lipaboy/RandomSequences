@@ -2,6 +2,10 @@
 #define BOOK_STACK_TEST_H
 
 #include <vector>
+#include <random>
+#include <boost/math/distributions/inverse_chi_squared.hpp>
+#include <boost/math/distributions/chi_squared.hpp>
+#include <boost/math/policies/policy.hpp>
 
 namespace PseudoRandomSequences {
 
@@ -54,7 +58,12 @@ namespace PseudoRandomSequences {
 		for (uint32_t j = 0; j < freq.size(); j++) {
 			statisticX2Correction += std::pow(std::abs(freq[j] - expectedNumber) - 0.5, 2) / expectedNumber;
 		}
-		std::cout <<  "\t Yates = " << statisticX2Correction << std::endl;
+		//std::cout <<  "\t Yates = " << statisticX2Correction << std::endl;
+
+		using namespace boost::math;
+		std::cout << "Chi-squared = " << 
+			cdf(chi_squared_distribution<double, policies::policy<> >(5), 
+				0.83121) << std::endl;
 
 		return statisticX2Correction;
 	}

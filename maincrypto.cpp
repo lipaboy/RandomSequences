@@ -76,6 +76,8 @@ int main(void) {
 	//long double pi2 = std::acos(static_cast<long double>(-1.0));
 	//std::cout << std::setprecision(21) << " " << pi2 << std::endl;
 
+	
+
 	std::vector<VectorMatrixRandomGenerator> converters;
 	std::vector<double> statisticBooks;
 	std::vector<bool> statisticFourier;
@@ -87,7 +89,7 @@ int main(void) {
 	//converters.push_back(SequenceConverter(filename));
 	//statisticBooks.push_back(0.0);
 
-	Sequence seq(1e6);
+	Sequence seq(1e3);
 	uint32_t testSize = 1;
 	for (uint32_t i = 0; i < testSize; i++) { //--wrong if testSize > 1
 		std::generate(seq.begin(), seq.end(),
@@ -112,15 +114,15 @@ int main(void) {
 			+ std::to_string(elem / testSize) + string("\n");
 	});*/
 
-	cout << "My test:" << endl;
-	//My test sequence
-	Sequence gap(40);		//~loophole
-	std::generate(gap.begin(), gap.end(), 
-		[]() -> bool { static int i = 0; return (((i++) % 4 < 2) ? 1 : 0); }
-	);
-	std::copy(gap.cbegin(), gap.cend(), std::ostream_iterator<bool>(cout, " "));
-	std::cout << std::endl;
-	cout << bookStackTest<bool>(gap, 2) << " " << discreteFourierTransformTest(gap) << endl;
+	//cout << "My test:" << endl;
+	////My test sequence
+	//Sequence gap(40);		//~loophole
+	//std::generate(gap.begin(), gap.end(), 
+	//	[]() -> bool { static int i = 0; return (((i++) % 4 < 2) ? 1 : 0); }
+	//);
+	//std::copy(gap.cbegin(), gap.cend(), std::ostream_iterator<bool>(cout, " "));
+	//std::cout << std::endl;
+	//cout << bookStackTest<bool>(gap, 2) << " " << discreteFourierTransformTest(gap) << endl;
 
 	/*--------------End Crypto----------------*/
 
