@@ -1,43 +1,42 @@
-#include "book_stack_test.h"
-#include "discrete_fourier_transform_test.h"
-#include "sequence_converter.h"
-
-//#include "isequence.h"
-
-#include <iostream>
-#include <iterator>
-#include <time.h>
-#include <stdlib.h>
-#include <string>
-
-//using namespace std;
-using namespace PseudoRandomSequences;
-//using namespace LipaboyMaths;
-
 //#include <boost\iterator\transform_iterator.hpp>
 //#include <boost\bind.hpp>
 //#include <boost\log\utility\functional\bind.hpp>
 //#include <boost\range\any_range.hpp>
+//template <class Type>
+//using AnyRange = boost::any_range<
+//	Type,
+//	boost::bidirectional_traversal_tag,
+//	Type,
+//	std::ptrdiff_t
+//>;
 
-//TODO: try to use GoogleTests
+//#include <boost/range/algorithm/copy.hpp>
+//#include <boost/range/adaptor/filtered.hpp>
 
-#include <boost/range/algorithm/copy.hpp>
-#include <boost/range/adaptor/filtered.hpp>
 
-template <class Type>
-using AnyRange = boost::any_range<
-	Type,
-	boost::bidirectional_traversal_tag,
-	Type,
-	std::ptrdiff_t
->;
 
+#include "book_stack_test.h"
+#include "discrete_fourier_transform_test.h"
+#include "sequence_converter.h"
+
+#include <iterator>
+#include <bitset>
+#include <string>
+#include <array>
+
+#include <iostream>
+#include <time.h>
+#include <stdlib.h>
 #include <iomanip>
 #include <limits>
 #include <cmath>
 
+using namespace PseudoRandomSequences;
+
+//TODO: try to use GoogleTests
+
 typedef std::vector<bool> Sequence;
-typedef MatrixRandomConverter<Sequence > VectorMatrixRandomGenerator;
+typedef MatrixRandomConverter<Sequence> VectorMatrixRandomGenerator;
 
 int main(void) {
 	time_t t;
@@ -47,41 +46,20 @@ int main(void) {
 	using std::cout;
 	using std::endl;
 
+	//vector<bool> vecb({ 0, 1, 0 });
+	//BoolAnyRange anyrange = vecb;
+	//std::copy(anyrange.begin(), anyrange.end(), std::ostream_iterator<bool>(cout, " "));
+
 	/*--------------Crypto----------------*/
-
-	//std::vector<int> vec({ 0, 1, 2 });
-	//UIntAnyRange anyRange = vec;
-	/*std::array<bool> vec({ 0, 1, 0 });
-	AnyRange<bool> range = vec;
-	boost::copy(range, std::ostream_iterator<bool>(std::cout, " "));*/
 	
-		//Useful funcs
-	//boost::copy(anyRange, std::ostream_iterator<int>(std::cout, " "));
-	//double d[] = { 1,2,3,4 };
-	//std::vector<double> x(d, d + 4);
-	//std::vector<double> y;
-	//boost::copy(x | boost::adaptors::filtered([](double xx) -> bool { return xx > 2.0; }), 
-	//	std::back_inserter(y));
-	//boost::copy(y, std::ostream_iterator<double>(std::cout, " "));
-	
-	string filename = "BinaryMatrixGenerator.txt";
+	//cout << std::bitset<32>("1010101").to_string() << endl;
 
-	//for all the converters the same sequence
-	//3.141592653589793239
-	//3,1415926535897932384626433832795
-	//3.14159265358979323116
-
-	//double pi = std::acos(static_cast<double>(-1.0));
-	//std::cout << std::setprecision(21) << " " << pi << std::endl;
-	//long double pi2 = std::acos(static_cast<long double>(-1.0));
-	//std::cout << std::setprecision(21) << " " << pi2 << std::endl;
-
-	
+	//string filename = "BinaryMatrixGenerator.txt";
 
 	std::vector<VectorMatrixRandomGenerator> converters;
 	std::vector<double> statisticBooks;
 	std::vector<bool> statisticFourier;
-	for (uint32_t i = 4; i <= 4; i += 4) {
+	for (uint32_t i = 10; i <= 10; i += 4) {
 		converters.push_back(VectorMatrixRandomGenerator(i));
 		statisticBooks.push_back(0.);
 		statisticFourier.push_back(false);
@@ -89,7 +67,7 @@ int main(void) {
 	//converters.push_back(SequenceConverter(filename));
 	//statisticBooks.push_back(0.0);
 
-	Sequence seq(1e3);
+	Sequence seq(size_t(1e5));
 	uint32_t testSize = 1;
 	for (uint32_t i = 0; i < testSize; i++) { //--wrong if testSize > 1
 		std::generate(seq.begin(), seq.end(),
@@ -98,13 +76,13 @@ int main(void) {
 		Sequence result(seq.size());
 		for (uint32_t j = 0; j < converters.size(); j++) {
 			converters[j].converse(result, seq);
-			statisticBooks[j] += bookStackTest<bool>(result, 2);	//--wrong
+			statisticBooks[j] += bookStackTest(result, converters[i].getDimension());
 			//statisticFourier[j] = discreteFourierTransformTest(result);
 		}
 	}
-	std::cout << "BookStackTest\tDFTT" << std::endl;
+	std::cout << "\tBookStackTest\tDFTT" << std::endl;
 	for (uint32_t i = 0; i < statisticBooks.size(); i++) {
-		std::cout << converters[i].getDimension() << ": " << statisticBooks[i]
+		std::cout << converters[i].getDimension() << ":\t" << statisticBooks[i]
 			<< "\t" << statisticFourier[i] << std::endl;
 	}
 	/*std::transform(statisticBooks.begin(), statisticBooks.end(), std::ostream_iterator<string>(std::cout),
@@ -130,6 +108,23 @@ int main(void) {
 	//boost::any_range anyRange;
 	
 	/*--------------Boost Library-----------------*/
+
+	//std::vector<int> vec({ 0, 1, 2 });
+	//UIntAnyRange anyRange = vec;
+	/*std::array<bool> vec({ 0, 1, 0 });
+	AnyRange<bool> range = vec;
+	boost::copy(range, std::ostream_iterator<bool>(std::cout, " "));*/
+
+	//Useful funcs
+	//boost::copy(anyRange, std::ostream_iterator<int>(std::cout, " "));
+	//double d[] = { 1,2,3,4 };
+	//std::vector<double> x(d, d + 4);
+	//std::vector<double> y;
+	//boost::copy(x | boost::adaptors::filtered([](double xx) -> bool { return xx > 2.0; }), 
+	//	std::back_inserter(y));
+	//boost::copy(y, std::ostream_iterator<double>(std::cout, " "));
+
+
 	//int x[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
 	//const int N = sizeof(x) / sizeof(int);
 
