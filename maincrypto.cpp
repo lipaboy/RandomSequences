@@ -18,6 +18,7 @@
 #include "book_stack_test.h"
 #include "discrete_fourier_transform_test.h"
 #include "sequence_converter.h"
+#include "statisticChiSquared.h"
 
 #include <iterator>
 #include <bitset>
@@ -32,7 +33,6 @@
 #include <cmath>
 
 using namespace PseudoRandomSequences;
-
 //TODO: try to use GoogleTests
 
 typedef std::vector<bool> Sequence;
@@ -45,10 +45,6 @@ int main(int argc, char *argv[]) {
 	using std::vector;
 	using std::cout;
 	using std::endl;
-
-	//vector<bool> vecb({ 0, 1, 0 });
-	//BoolAnyRange anyrange = vecb;
-	//std::copy(anyrange.begin(), anyrange.end(), std::ostream_iterator<bool>(cout, " "));
 
 	/*--------------Crypto----------------*/
 	
@@ -66,11 +62,13 @@ int main(int argc, char *argv[]) {
 	uint32_t dimension = uint32_t(boost::lexical_cast<double>(argv[1]));
 	std::vector<VectorMatrixRandomGenerator> converters;
 	std::vector<double> statisticBooks;
+	vector<double> statChiSquared;
 	std::vector<bool> statisticFourier;
 	for (uint32_t i = dimension; i <= dimension; i += 1) {
 		converters.push_back(VectorMatrixRandomGenerator(i));
 		statisticBooks.push_back(0.);
 		statisticFourier.push_back(false);
+		statChiSquared.push_back(0.);
 	}
 
 	Sequence seq(size_t(boost::lexical_cast<double>(argv[2])));
@@ -84,12 +82,14 @@ int main(int argc, char *argv[]) {
 		for (uint32_t j = 0; j < converters.size(); j++) {
 			converters[j].converse(result, seq);
 			statisticBooks[j] += bookStackTest(result, converters[i].getDimension());
+			statChiSquared[j] += statisticChiSquaredTest(result, converters[i].getDimension());
 			//statisticFourier[j] = discreteFourierTransformTest(result);
 		}
 	}
-	std::cout << "\tBookStackTest\tDFTT" << std::endl;
+	std::cout << "\tBookStackTest\tChiSquared\tDFTT" << std::endl;
 	for (uint32_t i = 0; i < statisticBooks.size(); i++) {
-		std::cout << converters[i].getDimension() << ":\t" << statisticBooks[i]
+		std::cout << converters[i].getDimension() << ":\t" << statisticBooks[i] << "\t" 
+			<< statChiSquared[i]
 			<< "\t" << statisticFourier[i] << std::endl;
 	}
 	/*std::transform(statisticBooks.begin(), statisticBooks.end(), std::ostream_iterator<string>(std::cout),

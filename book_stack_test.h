@@ -8,6 +8,7 @@
 #include <boost/math/distributions/chi_squared.hpp>
 
 #include "statisticChiSquared.h"
+#include "pseudoRandomSequences.h"
 
 namespace PseudoRandomSequences {
 
@@ -19,8 +20,7 @@ namespace PseudoRandomSequences {
 		The size_t type may be bigger than, equal to, or smaller than an unsigned int, 
 		and your compiler might make assumptions about it for optimization.
 	------------------*/
-	typedef size_t Word;
-	const uint32_t MAX_DIMENSION = sizeof(Word) * 8;
+	
 
 	//TODO: rewrite on any_range (because this func only reading and only in series)
 
@@ -30,10 +30,9 @@ namespace PseudoRandomSequences {
 	//	//= std::vector<bool> 
 	//>
 	double bookStackTest(const std::vector<bool>& seq, 
-			uint32_t dimension) //degree
+			uint32_t dimension) // == length of alphabet symbol
 	{
 		using std::vector;
-		using AlphabetType = std::bitset<MAX_DIMENSION>;
 
 		if (dimension <= 0)	// TODO: throw exception
 			return 0;
@@ -69,13 +68,10 @@ namespace PseudoRandomSequences {
 		//Meaning: symbols with equal possibility can be (turn out to be) on any stack position
 		const Word N = seq.size() / dimension;
 		double expectedNumber = N / (alphabetSize * 1.0);
-		double statisticX2Yates = statisticChiSquared(freq, expectedNumber);	//Yates's correction
-		
-		//std::cout <<  "\t Yates = " << statisticX2Correction << std::endl;
-
+		double statisticX2 = statisticChiSquared(freq, expectedNumber);
 		double possibility = 1 - 
 			boost::math::cdf(boost::math::chi_squared_distribution<double>(alphabetSize - 1),
-				statisticX2Yates);
+				statisticX2);
 
 		return possibility;
 	}

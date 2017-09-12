@@ -6,18 +6,20 @@
 
 #include <boost/range/any_range.hpp>
 
+#include "pseudoRandomSequences.h"
+
 namespace PseudoRandomSequences {
 
 	using std::vector;
 
-	using SizeTAnyRange = boost::any_range<
-		size_t,
+	using WordAnyRange = boost::any_range<
+		Word,
 		boost::bidirectional_traversal_tag,
-		size_t,
+		Word,
 		std::ptrdiff_t
 	>;
 
-	double statisticChiSquared(SizeTAnyRange frequences, double expectedValue) {
+	double statisticChiSquared(WordAnyRange frequences, double expectedValue) {
 		double statisticX2 = 0;
 		for (auto it = frequences.begin(); it != frequences.end(); it++) {
 			statisticX2 +=
@@ -28,12 +30,32 @@ namespace PseudoRandomSequences {
 		return statisticX2;
 	}
 
-	double statisticChiSquaredTest(vector<bool> const & sequence, uint32_t dimension) {
+	template <typename Sequence>
+	double statisticChiSquaredTest(Sequence const & sequence, uint32_t dimension) {
 		if (dimension <= 0)		// TODO: throw exception
 			return 0;
 
-		//for (u)
-		return 0;
+		Word alphabetSize = 1 << dimension;
+		vector<Word> frequences(alphabetSize, 0);
+		AlphabetType symbol;
+		for (Word i = 0; i < sequence.size(); i++) {
+			symbol[i % dimension] = sequence[i];
+			// You have real dependency by data
+			if (0 == (i + 1) % dimension) {
+				Word & currFreq = frequences[static_cast<Word>(symbol.to_ullong())];
+				// What's better: destroyed conveyor and less operations write 
+				// or unbroken conveyor with more write condition operations (not in memory)
+				currFreq += 1;
+			}
+		}
+
+		double expectedNumber = sequence.size() / (dimension * alphabetSize * 1.);
+		double statisticX2 = statisticChiSquared(frequences, expectedNumber);
+		double possibility = 1 -
+			boost::math::cdf(boost::math::chi_squared_distribution<double>(alphabetSize - 1),
+				statisticX2);
+
+		return possibility;
 	}
 
 }
