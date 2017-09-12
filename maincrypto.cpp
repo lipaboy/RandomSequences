@@ -38,7 +38,7 @@ using namespace PseudoRandomSequences;
 typedef std::vector<bool> Sequence;
 typedef MatrixRandomConverter<Sequence> VectorMatrixRandomGenerator;
 
-int main(void) {
+int main(int argc, char *argv[]) {
 	time_t t;
 	srand((unsigned)time(&t));
 	using std::string;
@@ -56,18 +56,23 @@ int main(void) {
 
 	//string filename = "BinaryMatrixGenerator.txt";
 
+	if (argc < 3) {
+		cout << "Not enough parameters (dimension, sequence size)" << endl;
+		return -1;
+	}
+
+	uint32_t dimension = uint32_t(boost::lexical_cast<double>(argv[1]));
 	std::vector<VectorMatrixRandomGenerator> converters;
 	std::vector<double> statisticBooks;
 	std::vector<bool> statisticFourier;
-	for (uint32_t i = 2; i <= 4; i += 4) {
+	for (uint32_t i = dimension; i <= dimension; i += 1) {
 		converters.push_back(VectorMatrixRandomGenerator(i));
 		statisticBooks.push_back(0.);
 		statisticFourier.push_back(false);
 	}
-	//converters.push_back(SequenceConverter(filename));
-	//statisticBooks.push_back(0.0);
 
-	Sequence seq(size_t(1e2));
+	Sequence seq(size_t(boost::lexical_cast<double>(argv[2])));
+	//cout << seq.size() << endl;
 	uint32_t testSize = 1;
 	for (uint32_t i = 0; i < testSize; i++) { //--wrong if testSize > 1
 		std::generate(seq.begin(), seq.end(),

@@ -46,7 +46,8 @@ namespace PseudoRandomSequences {
 		for (Word i = 0; i < stack.size(); i++)
 			stack[i] = i;
 
-		for (Word t = 0; t < seq.size(); t += dimension) 
+		Word scaledSize = seq.size() - seq.size() % dimension;
+		for (Word t = 0; t < scaledSize; t += dimension)
 		{
 			AlphabetType currSymbol;
 			for (uint32_t i = 0; i < dimension; i++)
