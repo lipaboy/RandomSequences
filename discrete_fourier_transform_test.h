@@ -20,7 +20,7 @@ namespace PseudoRandomSequences {
 
 	//Slow test O(N ^ 2) or O(N ^ 2 * 3 / 8 + N / 2)
 	template <class BoolSequenceRandAccessContainer>
-	bool discreteFourierTransformTest(const BoolSequenceRandAccessContainer& sequence) {
+	double discreteFourierTransformTest(const BoolSequenceRandAccessContainer& sequence) {
 		//Calculate only from 0 to n/2 - 1 (because symmetry)
 		using std::vector;
 		using std::complex;
@@ -49,17 +49,17 @@ namespace PseudoRandomSequences {
 			}
 		}
 
-		const double confidenceIntervalBorder = std::sqrt(std::log(1. / .05) * size);
-		const double expectedPeaks = .95 * size / 2.;
+		const double confidenceIntervalBorder = std::sqrt(std::log(1. / 0.05) * size);
+		const double expectedPeaks = 0.95 * size / 2.;
 		uint32_t observedPeaks = 0;
 		for (uint32_t i = 0; i < sums.size(); i++)
 			if (std::abs(sums[i]) < confidenceIntervalBorder)
 				observedPeaks++;
-		const double distance = (observedPeaks - expectedPeaks) / std::sqrt(size * .95 * .05 / 4.);
+		const double distance = (observedPeaks - expectedPeaks) / std::sqrt(size * 0.95 * 0.05 / 4.);
 		const double pValue = std::erfc(std::abs(distance) / std::sqrt(2));
 
 		//at the 1% level
-		return (pValue >= 0.01);
+		return pValue;
 	}
 
 }

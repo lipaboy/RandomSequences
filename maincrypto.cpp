@@ -61,9 +61,9 @@ int main(int argc, char *argv[]) {
 
 	uint32_t dimension = uint32_t(boost::lexical_cast<double>(argv[1]));
 	std::vector<VectorMatrixRandomGenerator> converters;
-	std::vector<double> statisticBooks;
+	vector<double> statisticBooks;
 	vector<double> statChiSquared;
-	std::vector<bool> statisticFourier;
+	vector<double> statisticFourier;
 	for (uint32_t i = dimension; i <= dimension; i += 1) {
 		converters.push_back(VectorMatrixRandomGenerator(i));
 		statisticBooks.push_back(0.);
@@ -81,9 +81,9 @@ int main(int argc, char *argv[]) {
 		Sequence result(seq.size());
 		for (uint32_t j = 0; j < converters.size(); j++) {
 			converters[j].converse(result, seq);
-			statisticBooks[j] += bookStackTest(result, converters[i].getDimension());
-			statChiSquared[j] += statisticChiSquaredTest(result, converters[i].getDimension());
-			//statisticFourier[j] = discreteFourierTransformTest(result);
+			statisticBooks[j] = bookStackTest(result, converters[i].getDimension());
+			statChiSquared[j] = statisticChiSquaredTest(result, converters[i].getDimension());
+			statisticFourier[j] = discreteFourierTransformTest(result);
 		}
 	}
 	std::cout << "\tBookStackTest\tChiSquared\tDFTT" << std::endl;
