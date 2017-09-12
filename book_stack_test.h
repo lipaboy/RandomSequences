@@ -58,18 +58,13 @@ namespace PseudoRandomSequences {
 			if (prevPos > 0)	//if alphabetSize is small you can add inside of cycle
 				for (Word i = 0; i < stack.size(); i++)
 					stack[i] = (stack[i] < prevPos) ? 1 + stack[i] : stack[i];	//move down
-						//++stack[i];
 			stack[static_cast<Word>(currSymbol.to_ullong())] = 0;		//move to stack peek (up)
 		}
+
+		//------------Calculate Chi-squared--------------//
+
 		//Meaning: symbols with equal possibility can be (turn out to be) on any stack position
-		//TODO: replace (N / 2) on (N / alphabetSize)
-		const Word N = seq.size();
-
-		/*double statisticX2 = 0;
-		for (uint32_t j = 0; j < freq.size(); j++) {
-		statisticX2 += std::pow(freq[j] - (N / 2.0), 2) / (N / 2.0);
-		}*/
-
+		const Word N = seq.size() / dimension;
 		double statisticX2Yates = 0;	//Yates's correction
 		double expectedNumber = N / (alphabetSize * 1.0);
 		for (Word j = 0; j < freq.size(); j++) {

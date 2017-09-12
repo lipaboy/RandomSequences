@@ -59,7 +59,7 @@ int main(void) {
 	std::vector<VectorMatrixRandomGenerator> converters;
 	std::vector<double> statisticBooks;
 	std::vector<bool> statisticFourier;
-	for (uint32_t i = 10; i <= 10; i += 4) {
+	for (uint32_t i = 2; i <= 4; i += 4) {
 		converters.push_back(VectorMatrixRandomGenerator(i));
 		statisticBooks.push_back(0.);
 		statisticFourier.push_back(false);
@@ -67,7 +67,7 @@ int main(void) {
 	//converters.push_back(SequenceConverter(filename));
 	//statisticBooks.push_back(0.0);
 
-	Sequence seq(size_t(1e5));
+	Sequence seq(size_t(1e2));
 	uint32_t testSize = 1;
 	for (uint32_t i = 0; i < testSize; i++) { //--wrong if testSize > 1
 		std::generate(seq.begin(), seq.end(),
