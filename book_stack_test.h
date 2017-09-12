@@ -7,6 +7,8 @@
 #include <algorithm>
 #include <boost/math/distributions/chi_squared.hpp>
 
+#include "statisticChiSquared.h"
+
 namespace PseudoRandomSequences {
 
 	/*------------------
@@ -66,12 +68,9 @@ namespace PseudoRandomSequences {
 
 		//Meaning: symbols with equal possibility can be (turn out to be) on any stack position
 		const Word N = seq.size() / dimension;
-		double statisticX2Yates = 0;	//Yates's correction
 		double expectedNumber = N / (alphabetSize * 1.0);
-		for (Word j = 0; j < freq.size(); j++) {
-			statisticX2Yates += 
-				std::pow(std::abs(freq[j] - expectedNumber) - 0.5, 2) / expectedNumber;
-		}
+		double statisticX2Yates = statisticChiSquared(freq, expectedNumber);	//Yates's correction
+		
 		//std::cout <<  "\t Yates = " << statisticX2Correction << std::endl;
 
 		double possibility = 1 - 
