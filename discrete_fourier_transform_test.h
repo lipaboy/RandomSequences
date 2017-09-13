@@ -31,22 +31,19 @@ namespace PseudoRandomSequences {
 		const uint32_t halfSize = //size / 2 + (size % 2 == 1);
 			size;
 		//Complex sums
-		vector<complex<double> > sums(halfSize);
+		vector<complex<double> > sums(halfSize, 0. + 0i);
 		
 		//Converse sequence from {0, 1} to {-1, +1}
 		const double PI = std::acos(-1.0);
 		for (size_t j = 0; j < sums.size(); j++) {
-			sums[j] = 0. + 0i;
-			//wrong
-			const double seqj = static_cast<double>(sequence[j]);
-
-			for (size_t k = 0; // j;	// (1)
+			for (size_t k = 0; // = j;	// (1)
 					k < sequence.size(); k++) 
 			{
+				// danger reference
 				const double & seqk = static_cast<double>(sequence[k]);
 				complex<double> val = 
-					std::exp((2 * PI * 1i) * static_cast<double>(k * j) / static_cast<double>(size));
-				sums[j] += (2 * seqk - 1) * val;
+					std::exp((2. * PI * 1i) * static_cast<double>(k * j) / static_cast<double>(size));
+				sums[j] += (2. * seqk - 1.) * val;
 				// What be faster : (1) write to variable that isn't into cache or (2)calculate complex exponent value again??
 				// (2) with 3e3 seq length faster than (1) (4100ms vs 5600ms)
 
@@ -56,21 +53,21 @@ namespace PseudoRandomSequences {
 			}
 		}
 
-		bool flag = true;
-		double sum1(0), sum2(0);
+		//bool flag = true;
+	//	double sum1(0), sum2(0);
 		for (size_t i = 0; i < sums.size() / 2; i++) {
 			double temp = std::abs(sums[i]);
-			if (std::abs(temp - 1000) < 20)
-				std::cout << "ind: " << i << std::endl;
-			sum1 += temp;
+			if (std::abs(temp - size) < size / 2)
+				std::cout << "ind: " << i << " val = " << temp << std::endl;
+		//	sum1 += temp;
 		}
 		for (size_t i = sums.size() / 2; i < sums.size(); i++) {
 			double temp = std::abs(sums[i]);
-			if (std::abs(temp - 1000) < 20)
-				std::cout << "ind: " << i << std::endl;
-			sum2 += temp;
+			if (std::abs(temp - size) < size / 2)
+				std::cout << "ind: " << i << " val = " << temp << std::endl;
+		//	sum2 += temp;
 		}
-		std::cout << sum1 << " " << sum2 << std::endl;
+		//std::cout << sum1 << " " << sum2 << std::endl;
 
 		const double confidenceIntervalBorder = std::sqrt(std::log(1. / 0.05) * size);
 		const double expectedPeaks = 0.95 * halfSize;

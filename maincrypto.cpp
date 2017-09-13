@@ -52,10 +52,21 @@ int main(int argc, char *argv[]) {
 	// 1 Test
 	//std::fill(seq.begin(), seq.end(), 0);
 	// 2 Test
-	std::generate(seq.begin(), seq.end(), 
+	/*std::generate(seq.begin(), seq.end(), 
 		[] () -> bool { 
 		static size_t i = 0;
-		return 0;
+		return ((i++) % 4 < 2);
+	});*/
+	// 3 Test
+	/*std::generate(seq.begin(), seq.end(),
+		[]() -> bool {
+		return rand() % 2;
+	});*/
+	// 4 Test
+	std::generate(seq.begin(), seq.end(),
+		[&seq]() -> bool {
+		static size_t i = 0;
+		return ((i++) % (seq.size() / 4) < seq.size() / 8);
 	});
 
 	cout << "Fourier stat = " << discreteFourierTransformTest(seq) 
