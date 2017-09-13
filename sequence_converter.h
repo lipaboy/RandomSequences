@@ -13,13 +13,15 @@ namespace PseudoRandomSequences {
 	public:
 		BadArgumentException() : std::runtime_error("Bad Argument Exception") {}
 	};
+
+	// TODO: throw-nothrow exception problem
 	
 	//input: BoolSequenceRandAccessContainer {0, 1} ^ n with P(1) = 0.1 (possibility of 1)
 	//output: BoolSequenceRandAccessContainer {0, 1} ^ n  with P(1) = 0.5
 
 	//TODO: make template <type, int dimensionSize>, might be without first parameter
 	//TODO: add matrix storage type into template parameter (array - stack storage data, vector - heap storage)
-	template <class BoolSequenceRandAccessContainer>
+	template <class BoolSequenceRandAccessContainer = std::vector<bool> >
 	class MatrixRandomConverter {
 	public:
 		//matrixLength = 2 ^ dimension
