@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
 	std::generate(seq.begin(), seq.end(), 
 		[] () -> bool { 
 		static size_t i = 0;
-		return (i % 4 < 2);
+		return 0;
 	});
 
 	cout << "Fourier stat = " << discreteFourierTransformTest(seq) 

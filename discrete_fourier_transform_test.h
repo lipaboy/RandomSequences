@@ -37,6 +37,7 @@ namespace PseudoRandomSequences {
 		const double PI = std::acos(-1.0);
 		for (size_t j = 0; j < sums.size(); j++) {
 			sums[j] = 0. + 0i;
+			//wrong
 			const double seqj = static_cast<double>(sequence[j]);
 
 			for (size_t k = 0; // j;	// (1)
@@ -46,7 +47,7 @@ namespace PseudoRandomSequences {
 				complex<double> val = 
 					std::exp((2 * PI * 1i) * static_cast<double>(k * j) / static_cast<double>(size));
 				sums[j] += (2 * seqk - 1) * val;
-				// What be faster : (1)write to variable that isn't into cache or (2)calculate complex exponent value again??
+				// What be faster : (1) write to variable that isn't into cache or (2)calculate complex exponent value again??
 				// (2) with 3e3 seq length faster than (1) (4100ms vs 5600ms)
 
 				// (1)
@@ -55,13 +56,21 @@ namespace PseudoRandomSequences {
 			}
 		}
 
-		//bool flag = true;
-		//double sum1(0), sum2(0);
-		//for (size_t i = 0; i < sums.size() / 2; i++)
-		//	sum1 += std::abs(sums[i]);
-		//for (size_t i = sums.size() / 2; i < sums.size(); i++)
-		//	sum2 += std::abs(sums[i]);
-		//std::cout << sum1 << " " << sum2 << std::endl;
+		bool flag = true;
+		double sum1(0), sum2(0);
+		for (size_t i = 0; i < sums.size() / 2; i++) {
+			double temp = std::abs(sums[i]);
+			if (std::abs(temp - 1000) < 20)
+				std::cout << "ind: " << i << std::endl;
+			sum1 += temp;
+		}
+		for (size_t i = sums.size() / 2; i < sums.size(); i++) {
+			double temp = std::abs(sums[i]);
+			if (std::abs(temp - 1000) < 20)
+				std::cout << "ind: " << i << std::endl;
+			sum2 += temp;
+		}
+		std::cout << sum1 << " " << sum2 << std::endl;
 
 		const double confidenceIntervalBorder = std::sqrt(std::log(1. / 0.05) * size);
 		const double expectedPeaks = 0.95 * halfSize;
