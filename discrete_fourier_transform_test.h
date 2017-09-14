@@ -28,8 +28,8 @@ namespace PseudoRandomSequences {
 		using namespace std::complex_literals;
 
 		const uint32_t size = sequence.size();
-		const uint32_t halfSize = //size / 2 + (size % 2 == 1);
-			size;
+		const uint32_t halfSize = size / 2 + (size % 2 == 0);
+			//size;
 		//Complex sums
 		vector<complex<double> > sums(halfSize, 0. + 0i);
 		

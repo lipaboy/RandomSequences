@@ -49,29 +49,52 @@ int main(int argc, char *argv[]) {
 
 	Sequence seq(size_t(boost::lexical_cast<double>(argv[2])));
 
-	// 1 Test
+	// 1 Test (0^n)
 	//std::fill(seq.begin(), seq.end(), 0);
-	// 2 Test
+	// 2 Test (0011)^n
 	/*std::generate(seq.begin(), seq.end(), 
 		[] () -> bool { 
 		static size_t i = 0;
 		return ((i++) % 4 < 2);
 	});*/
-	// 3 Test
+	// 3 Test (std::rand)
 	/*std::generate(seq.begin(), seq.end(),
 		[]() -> bool {
 		return rand() % 2;
 	});*/
 	// 4 Test
-	std::generate(seq.begin(), seq.end(),
+	/*std::generate(seq.begin(), seq.end(),
 		[&seq]() -> bool {
 		static size_t i = 0;
 		return ((i++) % (seq.size() / 4) < seq.size() / 8);
+	});*/
+
+	// 5 Test	(110100)^n
+	/*std::generate(seq.begin(), seq.end(),
+		[&seq]() -> bool {
+		static size_t i = 0;
+		size_t j = (i++) % 6;
+		return (j < 2 || j == 3);
+	});*/
+
+	// 6 Test	(1110011000)^n
+	//std::generate(seq.begin(), seq.end(),
+	//	[&seq]() -> bool {
+	//	static size_t i = 0;
+	//	size_t j = (i++) % 10;
+	//	return (j < 3 || j == 5 || j == 6);
+	//});
+
+	// 7 Test	(1 rand() 0)^n
+	std::generate(seq.begin(), seq.end(),
+		[&seq]() -> bool {
+		static size_t i = 0;
+		size_t j = (i++) % 3;
+		return ((j == 1) ? rand() % 2 : ((j < 1) ? 1 : 0));
 	});
 
 	cout << "Fourier stat = " << discreteFourierTransformTest(seq) 
 		<< " Time: " << (steady_clock::now() - start).count() / 1e3 << endl;
-	
 
 	return 0;
 }
