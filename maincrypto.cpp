@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
 	using std::cout;
 	using std::endl;
 
-	if (argc < 3) {
+	if (argc < 4 || std::strlen(argv[3]) < 3) {
 		cout << "Not enough parameters (dimension, sequence size)" << endl;
 		return -1;
 	}
@@ -43,11 +43,37 @@ int main(int argc, char *argv[]) {
 	uint32_t dimension = uint32_t(boost::lexical_cast<double>(argv[1]));
 	MatrixRandomConverter<> converter(dimension);
 
-	// Test Fourier
-
-	steady_clock::time_point start = steady_clock::now();
-
 	Sequence seq(size_t(boost::lexical_cast<double>(argv[2])));
+	std::generate(seq.begin(), seq.end(), 
+		[]() -> bool {
+			return (rand() % 10 == 0);
+	});
+
+	Sequence result(seq.size());
+	//steady_clock::time_point start = steady_clock::now();
+	volatile clock_t start = clock();
+	converter.converse(result, seq);
+	cout << " Conversation time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
+	
+	string testKey(argv[3]);
+	if (testKey[0] == '1') {
+		start = clock();
+		cout << "ChiSquared = " << statisticChiSquaredTest(result, dimension) << endl
+			<< " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
+	}
+	if (testKey[1] == '1') {
+		start = clock();
+		cout << "BookStack stat = " << bookStackTest(result, dimension) << endl
+			<< " Time: " << (clock() - start) / (CLOCKS_PER_SEC / 1000.) << endl;
+	}
+	if (testKey[2] == '1') {
+		start = clock();
+		cout << "Fourier stat = " << discreteFourierTransformTest(result) << endl
+			<< " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
+	}
+	
+
+	//-------------------Test Fourier---------------------//
 
 	// 1 Test (0^n)
 	//std::fill(seq.begin(), seq.end(), 0);
@@ -86,15 +112,14 @@ int main(int argc, char *argv[]) {
 	//});
 
 	// 7 Test	(1 rand() 0)^n
-	std::generate(seq.begin(), seq.end(),
+	/*std::generate(seq.begin(), seq.end(),
 		[&seq]() -> bool {
 		static size_t i = 0;
 		size_t j = (i++) % 3;
 		return ((j == 1) ? rand() % 2 : ((j < 1) ? 1 : 0));
-	});
+	});*/
 
-	cout << "Fourier stat = " << discreteFourierTransformTest(seq) 
-		<< " Time: " << (steady_clock::now() - start).count() / 1e3 << endl;
+	
 
 	return 0;
 }

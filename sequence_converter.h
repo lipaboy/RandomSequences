@@ -35,7 +35,8 @@ namespace PseudoRandomSequences {
 		//-------Selectors--------//
 
 		BoolSequenceRandAccessContainer converse(const BoolSequenceRandAccessContainer &) const;
-		void converse(BoolSequenceRandAccessContainer &, const BoolSequenceRandAccessContainer &) const;
+		void converse(BoolSequenceRandAccessContainer &dest, 
+			const BoolSequenceRandAccessContainer &source) const;
 
 		uint32_t rows() const { return rowCount; }
 
