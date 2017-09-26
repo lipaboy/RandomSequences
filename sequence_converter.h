@@ -79,7 +79,7 @@ namespace PseudoRandomSequences {
 			bool val = get(row, source[i]);
 			dest[i] = val;
 			//erase bit k (== dim)
-			row &= ~(1 << (dimension - 1));		//what for??
+			row &= ~(1 << (dimension - 1));		//what for?? - ask Max about it
 												//shift left
 			row <<= 1;
 			//assign new bit
