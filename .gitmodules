@@ -1,3 +1,6 @@
 [submodule "lipaboyLibrary"]
 	path = lipaboyLibrary
 	url = https://github.com/lipatkin96/lipaboyLibrary.git
+[submodule "book-stack"]
+	path = book-stack
+	url = https://github.com/sashasasha-1987/book-stack.git
