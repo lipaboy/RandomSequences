@@ -6,9 +6,9 @@
 //#include "../include/utilities.h"
 //#include "cephes.h"
 
-#include "defs.h"
-#include "assess.h"
-#include "stat_fncs.h"
+#include "..\include\defs.h"
+#include "..\include\assess.h"
+#include "..\include\stat_fncs.h"
 
 #include <vector>
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

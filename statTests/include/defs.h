@@ -1,7 +1,7 @@
 
 
-#ifndef DEFS_H
-#define DEFS_H
+#ifndef STAT_TESTS_DEFS_H
+#define STAT_TESTS_DEFS_H
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                        D E B U G G I N G  A I D E S
@@ -65,4 +65,4 @@ typedef struct _testParameters {
 	int		numOfBitStreams;
 } TP;
 
-#endif
+#endif //STAT_TESTS_DEFS_H

@@ -12,6 +12,9 @@
 
 namespace PseudoRandomSequences {
 
+	//class THash;
+	//class TBookStack;
+
 	/*------------------
 		The size_t type is the unsigned integer type that is the result of the 
 		sizeof operator (and the offsetof operator), so it is guaranteed to be big enough 

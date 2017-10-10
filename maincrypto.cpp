@@ -17,7 +17,7 @@
 #include <cmath>
 #include <chrono>
 
-#include "statTests\stat_fncs.h"
+#include "statTests\include\stat_fncs.h"
 
 using namespace PseudoRandomSequences;
 using namespace std::chrono;
@@ -31,7 +31,7 @@ typedef std::vector<bool> Sequence;
 
 int main(int argc, char *argv[]) {
 	time_t t;
-	std::srand(std::time(0));
+	std::srand(unsigned int(std::time(&t)));
 	using std::string;
 	using std::vector;
 	using std::cout;
@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
 	///*double chi2 = boost::math::pdf(boost::math::inverse_chi_squared_distribution<double>(n), alpha);
 	//cout << "Chi2 = " << chi2 << endl;*/
 
-	if (argc < 5 || std::strlen(argv[3]) < 3) {
+	if (argc < 5 || std::strlen(argv[3]) < 4) {
 		cout << "Not enough parameters ( matrix dimension, sequence size, testKey, input possibility)" 
 			<< endl;
 		return -1;
@@ -62,9 +62,7 @@ int main(int argc, char *argv[]) {
 		[&inputOppositePossibility]() -> bool {
 			return (rand() % inputOppositePossibility == 0);
 	});
-	/*std::ofstream outFile;
-	outFile.open(argv[5], std::ios::out);
-	std::copy(seq.begin(), seq.end(), std::ostream_iterator<bool>(outFile, " "));*/
+	
 
 	Sequence result(seq.size());
 	//steady_clock::time_point start = steady_clock::now();
@@ -73,6 +71,10 @@ int main(int argc, char *argv[]) {
 	cout << " Conversation time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.)
 		//<< " rows = " << converter.rows() 
 		<< endl;
+
+	std::ofstream outFile;
+	outFile.open(argv[5], std::ios::out | std::ios::trunc);
+	std::copy(result.begin(), result.end(), std::ostream_iterator<bool>(outFile, ""));
 	
 	string testKey(argv[3]);
 	if (testKey[0] == '1') {
@@ -84,15 +86,22 @@ int main(int argc, char *argv[]) {
 		start = clock();
 		cout << "BookStack stat = " << bookStackTest(result, dimension) << endl;
 		cout << " Time: " << (clock() - start) / (CLOCKS_PER_SEC / 1000.) << endl;
+		//TBookStack bookStack()
 	}
 	if (testKey[2] == '1') {
 		start = clock();
-		cout << "Fourier stat = "; //<<
-			//discreteFourierTransformTest(result) 
+		cout << "Fourier stat = "; 
 		DiscreteFourierTransform(result.size(), result);
-			//<< endl;
 		cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
+	if (testKey[3] == '1') {
+		start = clock();
+		cout << "Matrix stat = ";
+		std::swap(epsilon, result);
+		Rank(epsilon.size());
+		cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
+	}
+	// Warning: result haven't already contained current sequence
 	
 
 	//-------------------Test Fourier---------------------//

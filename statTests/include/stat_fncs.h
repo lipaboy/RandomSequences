@@ -8,6 +8,7 @@
 
 //#include "..\..\assess.h"
 
+#include "externs.h"
 #include <vector>
 
 void  __ogg_fdrffti(int n, double *wsave, int *ifac);
@@ -19,7 +20,7 @@ void	Frequency(int n);
 //void	CumulativeSums(int n);
 //void	Runs(int n);
 //void	LongestRunOfOnes(int n);
-//void	Rank(int n);
+void	Rank(int n);
 void	DiscreteFourierTransform(int n, const std::vector<bool>& seq);
 //void	NonOverlappingTemplateMatchings(int m, int n);
 //void	OverlappingTemplateMatchings(int m, int n);

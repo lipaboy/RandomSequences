@@ -54,7 +54,7 @@ that (like the original fortran), these routines can work on
 arbitrary length vectors that need not be powers of two in
 length. */
 
-#include "stat_fncs.h"
+#include "..\include\stat_fncs.h"
 
 #include <math.h>
 #define STIN static
