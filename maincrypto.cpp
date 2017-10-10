@@ -17,6 +17,8 @@
 #include <cmath>
 #include <chrono>
 
+#include "statTests\stat_fncs.h"
+
 using namespace PseudoRandomSequences;
 using namespace std::chrono;
 
@@ -25,16 +27,24 @@ using namespace std::chrono;
 typedef std::vector<bool> Sequence;
 //typedef MatrixRandomConverter<Sequence> VectorMatrixRandomGenerator;
 
+#include <boost/math/distributions/inverse_chi_squared.hpp>
+
 int main(int argc, char *argv[]) {
 	time_t t;
-	srand((unsigned)time(&t));
+	std::srand(std::time(0));
 	using std::string;
 	using std::vector;
 	using std::cout;
 	using std::endl;
 
-	if (argc < 4 || std::strlen(argv[3]) < 3) {
-		cout << "Not enough parameters (dimension, sequence size)" << endl;
+	//double possibility = boost::math::cdf(boost::math::chi_squared_distribution<double>(n), alpha);
+	//cout << "Alpha = " << possibility << endl;
+	///*double chi2 = boost::math::pdf(boost::math::inverse_chi_squared_distribution<double>(n), alpha);
+	//cout << "Chi2 = " << chi2 << endl;*/
+
+	if (argc < 5 || std::strlen(argv[3]) < 3) {
+		cout << "Not enough parameters ( matrix dimension, sequence size, testKey, input possibility)" 
+			<< endl;
 		return -1;
 	}
 
@@ -44,32 +54,44 @@ int main(int argc, char *argv[]) {
 	MatrixRandomConverter<> converter(dimension);
 
 	Sequence seq(size_t(boost::lexical_cast<double>(argv[2])));
+	// TODO: bad computation of input possibility (use another input format)
+	int inputOppositePossibility = static_cast<int>(
+		std::round(1.0 / boost::lexical_cast<double>(argv[4]))
+	);
 	std::generate(seq.begin(), seq.end(), 
-		[]() -> bool {
-			return (rand() % 10 == 0);
+		[&inputOppositePossibility]() -> bool {
+			return (rand() % inputOppositePossibility == 0);
 	});
+	/*std::ofstream outFile;
+	outFile.open(argv[5], std::ios::out);
+	std::copy(seq.begin(), seq.end(), std::ostream_iterator<bool>(outFile, " "));*/
 
 	Sequence result(seq.size());
 	//steady_clock::time_point start = steady_clock::now();
 	volatile clock_t start = clock();
 	converter.converse(result, seq);
-	cout << " Conversation time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
+	cout << " Conversation time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.)
+		//<< " rows = " << converter.rows() 
+		<< endl;
 	
 	string testKey(argv[3]);
 	if (testKey[0] == '1') {
 		start = clock();
-		cout << "ChiSquared = " << statisticChiSquaredTest(result, dimension) << endl
-			<< " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
+		cout << "ChiSquared = " << statisticChiSquaredTest(result, dimension) << endl;
+		cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	if (testKey[1] == '1') {
 		start = clock();
-		cout << "BookStack stat = " << bookStackTest(result, dimension) << endl
-			<< " Time: " << (clock() - start) / (CLOCKS_PER_SEC / 1000.) << endl;
+		cout << "BookStack stat = " << bookStackTest(result, dimension) << endl;
+		cout << " Time: " << (clock() - start) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	if (testKey[2] == '1') {
 		start = clock();
-		cout << "Fourier stat = " << discreteFourierTransformTest(result) << endl
-			<< " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
+		cout << "Fourier stat = "; //<<
+			//discreteFourierTransformTest(result) 
+		DiscreteFourierTransform(result.size(), result);
+			//<< endl;
+		cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	
 
