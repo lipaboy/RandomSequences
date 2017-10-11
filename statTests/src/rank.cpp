@@ -75,8 +75,8 @@ Rank(int n)
 			fprintf(stats[TEST_RANK], "\t\t---------------------------------------------\n");*/
 
 		p_value = exp(arg1);
-		//if ( isNegative(p_value) || isGreaterThanOne(p_value) )
-		//	fprintf(stats[TEST_RANK], "WARNING:  P_VALUE IS OUT OF RANGE.\n");
+		if ( isNegative(p_value) || isGreaterThanOne(p_value) )
+			printf("WARNING:  P_VALUE IS OUT OF RANGE.\n");
 
 		for (i = 0; i < 32; i++)				/* DEALLOCATE MATRIX  */
 			free(matrix[i]);

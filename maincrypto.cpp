@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
 	///*double chi2 = boost::math::pdf(boost::math::inverse_chi_squared_distribution<double>(n), alpha);
 	//cout << "Chi2 = " << chi2 << endl;*/
 
-	if (argc < 5 || std::strlen(argv[3]) < 4) {
+	if (argc < 5 || std::strlen(argv[3]) < 5) {
 		cout << "Not enough parameters ( matrix dimension, sequence size, testKey, input possibility)" 
 			<< endl;
 		return -1;
@@ -75,6 +75,7 @@ int main(int argc, char *argv[]) {
 	std::ofstream outFile;
 	outFile.open(argv[5], std::ios::out | std::ios::trunc);
 	std::copy(result.begin(), result.end(), std::ostream_iterator<bool>(outFile, ""));
+	outFile.close();
 	
 	string testKey(argv[3]);
 	if (testKey[0] == '1') {
@@ -102,6 +103,13 @@ int main(int argc, char *argv[]) {
 		cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	// Warning: result haven't already contained current sequence
+	if (testKey[4] == '1') {
+		start = clock();
+		cout << "Matrix stat = ";
+		BlockFrequency(2, epsilon.size());
+		cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
+	}
+	
 	
 
 	//-------------------Test Fourier---------------------//

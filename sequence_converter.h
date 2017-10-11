@@ -153,14 +153,6 @@ namespace PseudoRandomSequences {
 		//TODO: where exceptions????? Wrong file
 		std::copy(std::istream_iterator<bool>(inFile),
 			std::istream_iterator<bool>(), matrix.begin());
-		/*for (uint32_t i = 0; i < rowCount; i++) {
-		bool elem1,
-		elem2;
-		inFile >> elem1;
-		set(i, 0, elem1);
-		inFile >> elem2;
-		set(i, 1, elem2);
-		}*/
 
 		inFile.close();
 	}
