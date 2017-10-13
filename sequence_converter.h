@@ -35,8 +35,10 @@ namespace PseudoRandomSequences {
 		//-------Selectors--------//
 
 		BoolSequenceRandAccessContainer converse(const BoolSequenceRandAccessContainer &) const;
+	private:
 		void converse(BoolSequenceRandAccessContainer &dest, 
 			const BoolSequenceRandAccessContainer &source) const;
+	public:
 
 		uint32_t rows() const { return rowCount; }
 
@@ -68,7 +70,7 @@ namespace PseudoRandomSequences {
 		::converse(const BoolSequenceRandAccessContainer & source) const {
 		BoolSequenceRandAccessContainer newSeq(source.size());
 		converse(newSeq, source);
-		return newSeq;
+		return std::move(newSeq);
 	}
 
 	template <  class BoolSequenceRandAccessContainer>

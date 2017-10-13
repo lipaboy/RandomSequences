@@ -53,60 +53,78 @@ int main(int argc, char *argv[]) {
 	uint32_t dimension = uint32_t(boost::lexical_cast<double>(argv[1]));
 	MatrixRandomConverter<> converter(dimension);
 
-	Sequence seq(size_t(boost::lexical_cast<double>(argv[2])));
+	Sequence seq;
+	//Sequence seq(size_t(boost::lexical_cast<double>(argv[2])));
 	// TODO: bad computation of input possibility (use another input format)
 	int inputOppositePossibility = static_cast<int>(
 		std::round(1.0 / boost::lexical_cast<double>(argv[4]))
 	);
-	std::generate(seq.begin(), seq.end(), 
+	/*std::generate(seq.begin(), seq.end(), 
 		[&inputOppositePossibility]() -> bool {
 			return (rand() % inputOppositePossibility == 0);
-	});
-	
+	});*/
 
-	Sequence result(seq.size());
+	std::ifstream inFile;
+	inFile.open(argv[5], std::ios::in);
+	inFile >> std::skipws;
+	std::copy_n(std::istream_iterator<char>(inFile), size_t(boost::lexical_cast<double>(argv[2])),
+		std::back_inserter(seq));
+	inFile.close();
+
+	Sequence result;
 	//steady_clock::time_point start = steady_clock::now();
 	volatile clock_t start = clock();
-	converter.converse(result, seq);
+	result = converter.converse(seq);
+	//result = std::move(seq);
 	cout << " Conversation time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.)
 		//<< " rows = " << converter.rows() 
-		<< endl;
+		<< endl << "Seq size = " << result.size() << endl;
 
-	std::ofstream outFile;
+	/*std::ofstream outFile;
 	outFile.open(argv[5], std::ios::out | std::ios::trunc);
 	std::copy(result.begin(), result.end(), std::ostream_iterator<bool>(outFile, ""));
-	outFile.close();
+	outFile.close();*/
+
+	if (result.size() == 0)
+	{
+		cout << "empty sequence " << argv[5] << endl;
+		return 0;
+	}
 	
 	string testKey(argv[3]);
+	
 	if (testKey[0] == '1') {
-		start = clock();
-		cout << "ChiSquared = " << statisticChiSquaredTest(result, dimension) << endl;
-		cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
-	}
-	if (testKey[1] == '1') {
 		start = clock();
 		cout << "BookStack stat = " << bookStackTest(result, dimension) << endl;
 		cout << " Time: " << (clock() - start) / (CLOCKS_PER_SEC / 1000.) << endl;
 		//TBookStack bookStack()
 	}
-	if (testKey[2] == '1') {
+	if (testKey[1] == '1') {
 		start = clock();
 		cout << "Fourier stat = "; 
 		DiscreteFourierTransform(result.size(), result);
+		//cout << discreteFourierTransformTest(result) << endl;
+		cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
+	}
+	std::swap(epsilon, result);
+	if (testKey[2] == '1') {
+		start = clock();
+		//cout << "ChiSquared = " << statisticChiSquaredTest(result, dimension) << endl;
+		cout << "Frequency = ";
+		Frequency(epsilon.size());
 		cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	if (testKey[3] == '1') {
 		start = clock();
-		cout << "Matrix stat = ";
-		std::swap(epsilon, result);
-		Rank(epsilon.size());
+		//cout << "Matrix (rank) stat = ";
+		//Rank(epsilon.size());
 		cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	// Warning: result haven't already contained current sequence
 	if (testKey[4] == '1') {
 		start = clock();
-		cout << "Matrix stat = ";
-		BlockFrequency(2, epsilon.size());
+		cout << "Block frequency stat = ";
+		BlockFrequency(epsilon.size() / 2, epsilon.size());
 		cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	
