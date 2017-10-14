@@ -57,23 +57,28 @@ int main(int argc, char *argv[]) {
 	Sequence seq;
 	//Sequence seq(size_t(boost::lexical_cast<double>(argv[2])));
 	// TODO: bad computation of input possibility (use another input format)
-	/*int inputOppositePossibility = static_cast<int>(
+	//std::random_device generator;
+	std::ranlux48 generator;				//failure with normal_distribution and with chi_squared_distribution
+	std::normal_distribution<double> distribution(5.0, 2.0);		//doesn't failure with random_device generator
+	//std::chi_squared_distribution<double> distribution(3.0);		//failure with random_device
+	int inputOppositePossibility = static_cast<int>(
 		std::round(1.0 / boost::lexical_cast<double>(argv[4]))
 	);
 	std::generate_n(std::back_inserter(seq), inputSize,
-		[&inputOppositePossibility]() -> bool {
-			return (rand() % inputOppositePossibility == 0);
-	});*/
+		[&inputOppositePossibility, &generator, &distribution]() -> bool {
+			//return (rand() % inputOppositePossibility == 0);
+		return (int(std::round(distribution(generator))) % inputOppositePossibility == 0);
+	});
 
 				//-------------Input----------------//
-	std::ifstream inFile;
+	/*std::ifstream inFile;
 	inFile.open(argv[5], std::ios::in);
 	inFile >> std::skipws;
 	auto iter = std::istream_iterator<char>(inFile);
 	for (size_t i = 0; i < inputSize && iter != std::istream_iterator<char>(); i++, iter++) {
 		seq.push_back( (*iter) == '1' );
 	}
-	inFile.close();
+	inFile.close();*/
 
 	Sequence result;
 	//steady_clock::time_point start = steady_clock::now();
@@ -115,13 +120,13 @@ int main(int argc, char *argv[]) {
 	if (testKey[2] == '1') {
 		start = clock();
 		//cout << "ChiSquared = " << statisticChiSquaredTest(result, dimension) << endl;
-		cout << "Frequency = ";
+		cout << "Frequency (Monobit) = ";
 		Frequency(epsilon.size());
 		cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	if (testKey[3] == '1') {
 		start = clock();
-		cout << "Runs stat = ";
+		cout << "Runs (depends on Frequency Monobit) stat = ";
 		Runs(epsilon.size());
 		cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
