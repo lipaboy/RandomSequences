@@ -53,33 +53,38 @@ int main(int argc, char *argv[]) {
 	uint32_t dimension = uint32_t(boost::lexical_cast<double>(argv[1]));
 	MatrixRandomConverter<> converter(dimension);
 
+	size_t inputSize = size_t(boost::lexical_cast<double>(argv[2]));
 	Sequence seq;
 	//Sequence seq(size_t(boost::lexical_cast<double>(argv[2])));
 	// TODO: bad computation of input possibility (use another input format)
-	int inputOppositePossibility = static_cast<int>(
+	/*int inputOppositePossibility = static_cast<int>(
 		std::round(1.0 / boost::lexical_cast<double>(argv[4]))
 	);
-	/*std::generate(seq.begin(), seq.end(), 
+	std::generate_n(std::back_inserter(seq), inputSize,
 		[&inputOppositePossibility]() -> bool {
 			return (rand() % inputOppositePossibility == 0);
 	});*/
 
+				//-------------Input----------------//
 	std::ifstream inFile;
 	inFile.open(argv[5], std::ios::in);
 	inFile >> std::skipws;
-	std::copy_n(std::istream_iterator<char>(inFile), size_t(boost::lexical_cast<double>(argv[2])),
-		std::back_inserter(seq));
+	auto iter = std::istream_iterator<char>(inFile);
+	for (size_t i = 0; i < inputSize && iter != std::istream_iterator<char>(); i++, iter++) {
+		seq.push_back( (*iter) == '1' );
+	}
 	inFile.close();
 
 	Sequence result;
 	//steady_clock::time_point start = steady_clock::now();
 	volatile clock_t start = clock();
-	result = converter.converse(seq);
-	//result = std::move(seq);
+	//result = converter.converse(seq);
+	result = std::move(seq);
 	cout << " Conversation time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.)
 		//<< " rows = " << converter.rows() 
 		<< endl << "Seq size = " << result.size() << endl;
 
+				//-------------Output----------------//
 	/*std::ofstream outFile;
 	outFile.open(argv[5], std::ios::out | std::ios::trunc);
 	std::copy(result.begin(), result.end(), std::ostream_iterator<bool>(outFile, ""));
@@ -116,15 +121,15 @@ int main(int argc, char *argv[]) {
 	}
 	if (testKey[3] == '1') {
 		start = clock();
-		//cout << "Matrix (rank) stat = ";
-		//Rank(epsilon.size());
+		cout << "Runs stat = ";
+		Runs(epsilon.size());
 		cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	// Warning: result haven't already contained current sequence
 	if (testKey[4] == '1') {
 		start = clock();
-		cout << "Block frequency stat = ";
-		BlockFrequency(epsilon.size() / 2, epsilon.size());
+		//cout << "Block frequency stat = ";
+		//BlockFrequency(epsilon.size() / 2, epsilon.size());
 		cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	

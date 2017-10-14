@@ -21,8 +21,8 @@ Frequency(int n)
 	
 	sum = 0.0;
 	for ( i=0; i<n; i++ )
-		//sum += 2*(int)epsilon[i]-1;
-		sum += 2 * (int)getRand(i) - 1;
+		sum += 2*(int)epsilon[i]-1;
+		//sum += 2 * (int)getRand(i) - 1;
 	s_obs = fabs(sum)/sqrt(n);
 	f = s_obs/sqrt2;
 	p_value = erfc(f);

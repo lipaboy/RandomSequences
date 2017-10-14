@@ -22,9 +22,9 @@ Runs(int n)
 	pi = (double)S / (double)n;
 
 	if ( fabs(pi - 0.5) > (2.0 / sqrt(n)) ) {
-		//fprintf(stats[TEST_RUNS], "\t\t\t\tRUNS TEST\n");
-		//fprintf(stats[TEST_RUNS], "\t\t------------------------------------------\n");
-		//fprintf(stats[TEST_RUNS], "\t\tPI ESTIMATOR CRITERIA NOT MET! PI = %f\n", pi);
+		printf("\t\t\t\tRUNS TEST\n");
+		printf("\t\t------------------------------------------\n");
+		printf("\t\tPI ESTIMATOR CRITERIA NOT MET! PI = %f\n", pi);
 		p_value = 0.0;
 	}
 	else {
