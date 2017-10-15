@@ -19,7 +19,7 @@ void	Frequency(int n);
 void	BlockFrequency(int M, int n);
 //void	CumulativeSums(int n);
 void	Runs(int n);
-//void	LongestRunOfOnes(int n);
+void	LongestRunOfOnes(int n);
 void	Rank(int n);
 void	DiscreteFourierTransform(int n, const std::vector<bool>& seq);
 //void	NonOverlappingTemplateMatchings(int m, int n);
