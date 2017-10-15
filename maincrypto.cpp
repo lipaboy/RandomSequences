@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
 	using std::cout;
 	using std::endl;
 
-	//double possibility = boost::math::cdf(boost::math::chi_squared_distribution<double>(n), alpha);
+	//double possibility = boost::math::cdf(boost::math::chi_squared_distribution<double>(n), statistic);
 	//cout << "Alpha = " << possibility << endl;
 	///*double chi2 = boost::math::pdf(boost::math::inverse_chi_squared_distribution<double>(n), alpha);
 	//cout << "Chi2 = " << chi2 << endl;*/
@@ -106,9 +106,21 @@ int main(int argc, char *argv[]) {
 	
 	if (testKey[0] == '1') {
 		start = clock();
-		cout << "BookStack stat = " << bookStackTest(result, dimension) << endl;
+		cout << "BookStack stat = ";// << bookStackTest(result, dimension) << endl;
+		
+		std::vector<const char *> arguments{ "bs.exe",
+			"-f", argv[5],
+			"-n", itoa(INT_MAX, nullptr, 10),
+			"-w", "8",
+			"-u", "32"
+		};
+		std::copy(arguments.begin(), arguments.end(), std::ostream_iterator<const char *>(cout, " "));
+		double chi = bookStackTestMain(arguments.size(), &arguments[0]);
+		double p_value = 1 - 
+			boost::math::cdf(boost::math::chi_squared_distribution<double>(1), chi);
+
+		cout << ((p_value > 0.01) ? "SUCCESS" : "FAILURE") << "\tp_value = " << p_value << endl;
 		cout << " Time: " << (clock() - start) / (CLOCKS_PER_SEC / 1000.) << endl;
-		//TBookStack bookStack()
 	}
 	if (testKey[1] == '1') {
 		start = clock();

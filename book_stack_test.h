@@ -7,13 +7,12 @@
 #include <algorithm>
 #include <boost/math/distributions/chi_squared.hpp>
 
-#include "statisticChiSquared.h"
+//#include "statisticChiSquared.h"
 #include "pseudoRandomSequences.h"
 
 namespace PseudoRandomSequences {
 
-	//class THash;
-	//class TBookStack;
+	double bookStackTestMain(int argc, const char* argv[]);
 
 	/*------------------
 		The size_t type is the unsigned integer type that is the result of the 
@@ -32,52 +31,52 @@ namespace PseudoRandomSequences {
 	//template <class BoolSequenceRandAccessContainer
 	//	//= std::vector<bool> 
 	//>
-	double bookStackTest(const std::vector<bool>& seq, 
-			uint32_t dimension) // == length of alphabet symbol
-	{
-		using std::vector;
+	//double bookStackTest(const std::vector<bool>& seq, 
+	//		uint32_t dimension) // == length of alphabet symbol
+	//{
+	//	using std::vector;
 
-		if (dimension <= 0)	// TODO: throw exception
-			return 0;
+	//	if (dimension <= 0)	// TODO: throw exception
+	//		return 0;
 
-		Word alphabetSize = 1 << dimension;
-		//map: alphabet -> stack position
-		vector<Word> stack(alphabetSize);
-		//map: { stack position } -> frequency of meeting symbol onto this position
-		//moving this symbol to stack peek
-		vector<Word> freq(alphabetSize, 0);
+	//	Word alphabetSize = 1 << dimension;
+	//	//map: alphabet -> stack position
+	//	vector<Word> stack(alphabetSize);
+	//	//map: { stack position } -> frequency of meeting symbol onto this position
+	//	//moving this symbol to stack peek
+	//	vector<Word> freq(alphabetSize, 0);
 
-		for (Word i = 0; i < stack.size(); i++)
-			stack[i] = i;
+	//	for (Word i = 0; i < stack.size(); i++)
+	//		stack[i] = i;
 
-		Word scaledSize = seq.size() - seq.size() % dimension;
-		for (Word t = 0; t < scaledSize; t += dimension)
-		{
-			AlphabetType currSymbol;
-			for (uint32_t i = 0; i < dimension; i++)
-				currSymbol[i] = seq[i + t];
+	//	Word scaledSize = seq.size() - seq.size() % dimension;
+	//	for (Word t = 0; t < scaledSize; t += dimension)
+	//	{
+	//		AlphabetType currSymbol;
+	//		for (uint32_t i = 0; i < dimension; i++)
+	//			currSymbol[i] = seq[i + t];
 
-			const Word prevPos = stack[static_cast<Word>(currSymbol.to_ullong())];
-			freq[prevPos]++;
+	//		const Word prevPos = stack[static_cast<Word>(currSymbol.to_ullong())];
+	//		freq[prevPos]++;
 
-			if (prevPos > 0)	//if alphabetSize is small you can add inside of cycle
-				for (Word i = 0; i < stack.size(); i++)
-					stack[i] = (stack[i] < prevPos) ? 1 + stack[i] : stack[i];	//move down
-			stack[static_cast<Word>(currSymbol.to_ullong())] = 0;		//move to stack peek (up)
-		}
+	//		if (prevPos > 0)	//if alphabetSize is small you can add inside of cycle
+	//			for (Word i = 0; i < stack.size(); i++)
+	//				stack[i] = (stack[i] < prevPos) ? 1 + stack[i] : stack[i];	//move down
+	//		stack[static_cast<Word>(currSymbol.to_ullong())] = 0;		//move to stack peek (up)
+	//	}
 
-		//------------Calculate Chi-squared--------------//
+	//	//------------Calculate Chi-squared--------------//
 
-		//Meaning: symbols with equal possibility can be (turn out to be) on any stack position
-		const Word N = seq.size() / dimension;
-		double expectedNumber = N / (alphabetSize * 1.0);
-		double statisticX2 = statisticChiSquared(freq, expectedNumber);
-		double possibility = 1 - 
-			boost::math::cdf(boost::math::chi_squared_distribution<double>(alphabetSize - 1),
-				statisticX2);
+	//	//Meaning: symbols with equal possibility can be (turn out to be) on any stack position
+	//	const Word N = seq.size() / dimension;
+	//	double expectedNumber = N / (alphabetSize * 1.0);
+	//	double statisticX2 = statisticChiSquared(freq, expectedNumber);
+	//	double possibility = 1 - 
+	//		boost::math::cdf(boost::math::chi_squared_distribution<double>(alphabetSize - 1),
+	//			statisticX2);
 
-		return possibility;
-	}
+	//	return possibility;
+	//}
 
 }
 
