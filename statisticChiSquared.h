@@ -23,9 +23,10 @@ namespace PseudoRandomSequences {
 		double statisticX2 = 0;
 		for (auto it = frequences.begin(); it != frequences.end(); it++) {
 			statisticX2 +=
-				std::pow(std::abs(*it - expectedValue) 
-					//- 0.5			//Yates correction
-					, 2) / expectedValue;
+				std::pow(
+						std::abs(*it - expectedValue) 
+							//- 0.5			//Yates correction
+						, 2) / expectedValue;
 		}
 		return statisticX2;
 	}

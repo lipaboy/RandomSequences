@@ -6,13 +6,15 @@
      S T A T I S T I C A L  T E S T  F U N C T I O N  P R O T O T Y P E S 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-//#include "..\..\assess.h"
-
 #include "externs.h"
 #include <vector>
 
+#define _CRT_SECURE_NO_WARNINGS
+
 void  __ogg_fdrffti(int n, double *wsave, int *ifac);
 void  __ogg_fdrfftf(int n, double *X, double *wsave, int *ifac);
+
+double bookStackTestMain(int argc, const char* argv[]);
 
 
 void	Frequency(int n);

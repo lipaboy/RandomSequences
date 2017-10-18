@@ -43,7 +43,8 @@ int main(int argc, char *argv[]) {
 	//cout << "Chi2 = " << chi2 << endl;*/
 
 	if (argc < 5 || std::strlen(argv[3]) < 5) {
-		cout << "Not enough parameters ( matrix dimension, sequence size, testKey, input possibility)" 
+		cout << "Not enough parameters ( matrix dimension, sequence size, testKey, input possibility, "
+			<< "file input, file output)" 
 			<< endl;
 		return -1;
 	}
@@ -57,11 +58,11 @@ int main(int argc, char *argv[]) {
 	Sequence seq;
 	//Sequence seq(size_t(boost::lexical_cast<double>(argv[2])));
 	// TODO: bad computation of input possibility (use another input format)
-	std::default_random_engine generator;
-	//std::random_device generator;
+	//std::default_random_engine generator;
+	std::random_device generator;
 	//std::ranlux48 generator;				//failure with normal_distribution and with chi_squared_distribution
-	std::normal_distribution<double> distribution(5.0, 2.0);		//doesn't failure with random_device generator
-	//std::chi_squared_distribution<double> distribution(3.0);		//failure with random_device
+	//std::normal_distribution<double> distribution(5.0, 2.0);		//doesn't failure with random_device generator
+	std::chi_squared_distribution<double> distribution(3.0);		//failure with random_device and with number of freedoms = 3.0
 	int inputOppositePossibility = static_cast<int>(
 		std::round(1.0 / boost::lexical_cast<double>(argv[4]))
 	);
@@ -91,10 +92,10 @@ int main(int argc, char *argv[]) {
 		<< endl << "Seq size = " << result.size() << endl;
 
 				//-------------Output----------------//
-	/*std::ofstream outFile;
-	outFile.open(argv[5], std::ios::out | std::ios::trunc);
+	std::ofstream outFile;
+	outFile.open(argv[6], std::ios::out | std::ios::trunc);
 	std::copy(result.begin(), result.end(), std::ostream_iterator<bool>(outFile, ""));
-	outFile.close();*/
+	outFile.close();
 
 	if (result.size() == 0)
 	{
@@ -108,18 +109,20 @@ int main(int argc, char *argv[]) {
 		start = clock();
 		cout << "BookStack stat = ";// << bookStackTest(result, dimension) << endl;
 		
+		std::string sizeStr = std::to_string(inputSize * 8);
 		std::vector<const char *> arguments{ "bs.exe",
 			"-f", argv[5],
-			"-n", itoa(INT_MAX, nullptr, 10),
-			"-w", "8",
-			"-u", "32"
+			"-n", sizeStr.c_str(),	// file size (in bits)
+			"-w", "8",				// word size
+			"-u", "32",				// size of upper part book stack
+			"-b", "0"				// blank between words
 		};
-		std::copy(arguments.begin(), arguments.end(), std::ostream_iterator<const char *>(cout, " "));
+		//std::copy(arguments.begin(), arguments.end(), std::ostream_iterator<const char *>(cout, " "));
 		double chi = bookStackTestMain(arguments.size(), &arguments[0]);
 		double p_value = 1 - 
 			boost::math::cdf(boost::math::chi_squared_distribution<double>(1), chi);
 
-		cout << ((p_value > 0.01) ? "SUCCESS" : "FAILURE") << "\tp_value = " << p_value << endl;
+		cout << ((p_value > 0.01) ? "SUCCESS" : "FAILURE") << "\tp_value = " << p_value << " chi = " << chi << endl;
 		cout << " Time: " << (clock() - start) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	if (testKey[1] == '1') {

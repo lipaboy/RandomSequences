@@ -12,7 +12,7 @@
 
 namespace PseudoRandomSequences {
 
-	double bookStackTestMain(int argc, const char* argv[]);
+	
 
 	/*------------------
 		The size_t type is the unsigned integer type that is the result of the 
