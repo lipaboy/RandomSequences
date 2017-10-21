@@ -17,7 +17,7 @@
 
 
 void
-DiscreteFourierTransform(int n, const std::vector<bool>& seq)
+DiscreteFourierTransform(int n)
 {
 	double	p_value, upperBound, percentile, N_l, N_o, d, *m = NULL, *X = NULL, *wsave = NULL;
 	int		i, count, ifac[15];
@@ -35,9 +35,9 @@ DiscreteFourierTransform(int n, const std::vector<bool>& seq)
 			return;
 	}
 	for ( i=0; i<n; i++ )
-		//X[i] = 2*(int)epsilon[i] - 1;
+		X[i] = 2*(int)epsilon[i] - 1;
 		//X[i] = 2* getRand(i) - 1;
-		X[i] = 2 * (int)seq[i] - 1;
+		//X[i] = 2 * (int)seq[i] - 1;
 	
 	__ogg_fdrffti(n, wsave, ifac);		/* INITIALIZE WORK ARRAYS */
 	__ogg_fdrfftf(n, X, wsave, ifac);	/* APPLY FORWARD FFT */
@@ -70,7 +70,7 @@ DiscreteFourierTransform(int n, const std::vector<bool>& seq)
 	fprintf(stats[TEST_FFT], "%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);
 	fprintf(results[TEST_FFT], "%f\n", p_value);*/
 
-	printf( "DiscreteFourier %s\t\tp_value = %.15lf\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);
+	printf( "DiscreteFourier:\t\t%s\t\tp_value = %.15lf\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);
 
 	free(X);
 	free(wsave);

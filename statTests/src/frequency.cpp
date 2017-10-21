@@ -38,7 +38,7 @@ Frequency(int n)
 	/*fprintf(stats[TEST_FREQUENCY], "%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value); fflush(stats[TEST_FREQUENCY]);
 	fprintf(results[TEST_FREQUENCY], "%f\n", p_value); fflush(results[TEST_FREQUENCY]);*/
 
-	printf("Frequency %s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value); 
+	printf("Frequency(Monobit):\t\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value); 
 	//fflush(stats[TEST_FREQUENCY]);
 	//printf("%f\n", p_value); fflush(results[TEST_FREQUENCY]);
 }

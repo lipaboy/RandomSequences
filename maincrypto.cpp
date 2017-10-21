@@ -51,9 +51,6 @@ int main(int argc, char *argv[]) {
 
 	// TODO: add test performance for conversation and tests
 
-	uint32_t dimension = uint32_t(boost::lexical_cast<double>(argv[1]));
-	MatrixRandomConverter<> converter(dimension);
-
 	size_t inputSize = size_t(boost::lexical_cast<double>(argv[2]));
 	Sequence seq;
 	//Sequence seq(size_t(boost::lexical_cast<double>(argv[2])));
@@ -83,77 +80,88 @@ int main(int argc, char *argv[]) {
 	inFile.close();*/
 
 	Sequence result;
-	//steady_clock::time_point start = steady_clock::now();
+	uint32_t dimension = uint32_t(boost::lexical_cast<double>(argv[1]));
+	MatrixRandomConverter<> converter(dimension);
 	volatile clock_t start = clock();
-	//result = converter.converse(seq);
-	result = std::move(seq);
-	cout << " Conversation time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.)
+	result = converter.converse(seq);
+	//result = std::move(seq);
+	cout //<< " Conversation time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.)
 		//<< " rows = " << converter.rows() 
 		<< endl << "Seq size = " << result.size() << endl;
 
 				//-------------Output----------------//
 	std::ofstream outFile;
 	outFile.open(argv[6], std::ios::out | std::ios::trunc);
-	std::copy(result.begin(), result.end(), std::ostream_iterator<bool>(outFile, ""));
+	//std::copy(result.begin(), result.end(), std::ostream_iterator<bool>(outFile, ""));
+	auto outIter = std::ostream_iterator<uint32_t>(outFile);
+	int i = 0;
+	uint32_t buffer = 0u;
+	for (auto iter : result) {
+		buffer |= iter << (i++);
+		if (i >= 32) {
+			i = 0;
+			*(outIter++) = buffer;
+		}
+	}
 	outFile.close();
 
 	if (result.size() == 0)
 	{
 		cout << "empty sequence " << argv[5] << endl;
-		return 0;
+		return -1;
 	}
 	
 	string testKey(argv[3]);
 	
 	if (testKey[0] == '1') {
 		start = clock();
-		cout << "BookStack stat = ";// << bookStackTest(result, dimension) << endl;
+		// << bookStackTest(result, dimension) << endl;
 		
 		// ! Each bit means 0 or 1 (you can't pass to bookStackTest 0 or 1 in whole byte for example)
 
-		std::string sizeStr = std::to_string(inputSize * 8);
+		std::string sizeStr = std::to_string(inputSize);
+		std::string dimStr = std::to_string(dimension);
 		std::vector<const char *> arguments{ "bs.exe",
 			"-f", argv[5],
 			"-n", sizeStr.c_str(),	// file size (in bits)
-			"-w", "8",				// word size
-			"-u", "32",				// size of upper part book stack
-			"-b", "7"				// blank between words
+			"-w", dimStr.c_str(),				// word size (or alphabet symbol length (see yourself book stack version)
+			//"-b", "0",				// blank between words
+			//"-u", "32"				// size of upper part book stack
 		};
 		//std::copy(arguments.begin(), arguments.end(), std::ostream_iterator<const char *>(cout, " "));
 		double chi = bookStackTestMain(arguments.size(), &arguments[0]);
 		double p_value = 1 - 
 			boost::math::cdf(boost::math::chi_squared_distribution<double>(1), chi);
 
-		cout << ((p_value > 0.01) ? "SUCCESS" : "FAILURE") << "\tp_value = " << p_value << " chi = " << chi << endl;
-		cout << " Time: " << (clock() - start) / (CLOCKS_PER_SEC / 1000.) << endl;
+		cout << "BookStack stat:\t\t\t" << ((p_value > 0.01) ? "SUCCESS" : "FAILURE") 
+			<< "\t\tp_value = " << p_value << endl << endl;
+		//cout << " Time: " << (clock() - start) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
+	epsilon = std::move(result);
 	if (testKey[1] == '1') {
 		start = clock();
-		cout << "Fourier stat = "; 
-		DiscreteFourierTransform(result.size(), result);
+		DiscreteFourierTransform(epsilon.size());
 		//cout << discreteFourierTransformTest(result) << endl;
-		cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
+		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
-	std::swap(epsilon, result);
 	if (testKey[2] == '1') {
 		start = clock();
 		//cout << "ChiSquared = " << statisticChiSquaredTest(result, dimension) << endl;
-		cout << "Frequency (Monobit) = ";
 		Frequency(epsilon.size());
-		cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
+		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	if (testKey[3] == '1') {
 		start = clock();
-		cout << "Runs (depends on Frequency Monobit) stat = ";
+		//cout << "Runs (depends on Frequency Monobit) stat = ";
 		Runs(epsilon.size());
-		cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
+		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	// Warning: result haven't already contained current sequence
 	if (testKey[4] == '1') {
 		start = clock();
-		cout << "Longest runs of ones stat = ";
+		//cout << "Longest runs of ones stat = ";
 		LongestRunOfOnes(epsilon.size());
-		cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
+		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	
 	

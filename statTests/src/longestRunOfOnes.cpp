@@ -113,6 +113,6 @@ LongestRunOfOnes(int n)
 	//if ( isNegative(pval) || isGreaterThanOne(pval) )
 	//	fprintf(stats[TEST_LONGEST_RUN], "WARNING:  P_VALUE IS OUT OF RANGE.\n");
 
-	printf("%s\t\tp_value = %f\n\n", pval < ALPHA ? "FAILURE" : "SUCCESS", pval); //fflush(stats[TEST_LONGEST_RUN]);
+	printf("Longest Runs of ones:\t\t%s\t\tp_value = %f\n\n", pval < ALPHA ? "FAILURE" : "SUCCESS", pval); //fflush(stats[TEST_LONGEST_RUN]);
 	//fprintf(results[TEST_LONGEST_RUN], "%f\n", pval); fflush(results[TEST_LONGEST_RUN]);
 }

@@ -50,7 +50,7 @@ Runs(int n)
 		//if ( isNegative(p_value) || isGreaterThanOne(p_value) )
 		//	fprintf(stats[TEST_RUNS], "WARNING:  P_VALUE IS OUT OF RANGE.\n");
 
-		printf("%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);// fflush(stats[TEST_RUNS]);
+		printf("Runs (depends on Frequency):\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);// fflush(stats[TEST_RUNS]);
 	}
 
 	//fprintf(results[TEST_RUNS], "%f\n", p_value); fflush(results[TEST_RUNS]);
