@@ -109,13 +109,15 @@ int main(int argc, char *argv[]) {
 		start = clock();
 		cout << "BookStack stat = ";// << bookStackTest(result, dimension) << endl;
 		
+		// ! Each bit means 0 or 1 (you can't pass to bookStackTest 0 or 1 in whole byte for example)
+
 		std::string sizeStr = std::to_string(inputSize * 8);
 		std::vector<const char *> arguments{ "bs.exe",
 			"-f", argv[5],
 			"-n", sizeStr.c_str(),	// file size (in bits)
 			"-w", "8",				// word size
 			"-u", "32",				// size of upper part book stack
-			"-b", "0"				// blank between words
+			"-b", "7"				// blank between words
 		};
 		//std::copy(arguments.begin(), arguments.end(), std::ostream_iterator<const char *>(cout, " "));
 		double chi = bookStackTestMain(arguments.size(), &arguments[0]);
