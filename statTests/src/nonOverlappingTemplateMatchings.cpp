@@ -41,10 +41,11 @@ NonOverlappingTemplateMatchings(int m, int n)
 	}
 	lambda = (M-m+1)/pow(2, m);
 	varWj = M*(1.0/pow(2.0, m) - (2.0*m-1.0)/pow(2.0, 2.0*m));
-	sprintf(directory, "templates\\template%d", m);
+	sprintf_s(directory, "templates\\template%d", m);
 
+	fopen_s(&fp, directory, "r");
 	if ( ((isNegative(lambda)) || (isZero(lambda))) ||
-		 ((fp = fopen(directory, "r")) == NULL) ||
+		 (fp == NULL) ||
 		 ((sequence = (BitSequence *) calloc(m, sizeof(BitSequence))) == NULL) ) {
 		printf("\tNONOVERLAPPING TEMPLATES TESTS ABORTED DUE TO ONE OF THE FOLLOWING : \n");
 		printf( "\tLambda (%f) not being positive!\n", lambda);
@@ -88,7 +89,7 @@ NonOverlappingTemplateMatchings(int m, int n)
 			sum = 0;
 
 			for ( k=0; k<m; k++ ) {
-				fscanf(fp, "%d", &bit);
+				fscanf_s(fp, "%d", &bit);
 				sequence[k] = bit;
 				//fprintf(stats[TEST_NONPERIODIC], "%d", sequence[k]);
 			}

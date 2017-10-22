@@ -7,7 +7,7 @@
                        D E B U G G I N G  A I D E S
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-//#include "config.h"
+#include "config.h"
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                               M A C R O S
@@ -52,7 +52,8 @@
                    G L O B A L   D A T A  S T R U C T U R E S
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-typedef unsigned char	BitSequence;
+//typedef unsigned char BitSequence;
+typedef bool	BitSequence;
 
 typedef struct _testParameters {
 	int		n;

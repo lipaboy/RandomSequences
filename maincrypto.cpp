@@ -25,9 +25,8 @@ using namespace std::chrono;
 //TODO: try to use GoogleTests
 
 typedef std::vector<bool> Sequence;
-//typedef MatrixRandomConverter<Sequence> VectorMatrixRandomGenerator;
 
-#include <boost/math/distributions/inverse_chi_squared.hpp>
+const int TEST_COUNT = 13;
 
 int main(int argc, char *argv[]) {
 	time_t t;
@@ -42,8 +41,9 @@ int main(int argc, char *argv[]) {
 	///*double chi2 = boost::math::pdf(boost::math::inverse_chi_squared_distribution<double>(n), alpha);
 	//cout << "Chi2 = " << chi2 << endl;*/
 
-	if (argc < 5 || std::strlen(argv[3]) < 8) {
-		cout << "Not enough parameters ( matrix dimension, sequence size, testKey, input possibility, "
+	if (argc < 5 || std::strlen(argv[3]) < TEST_COUNT) {
+		cout << "Not enough parameters ( matrix dimension, sequence size, testKey ("
+			<< TEST_COUNT << "), input possibility, "
 			<< "file input, file output)" 
 			<< endl;
 		return -1;
@@ -145,7 +145,7 @@ int main(int argc, char *argv[]) {
 	}
 	if (testKey[2] == '1') {
 		start = clock();
-		BlockFrequency(1 << dimension, epsilon.size());		//doesn't equal frequency monobit with M = 1
+		BlockFrequency(dimension, epsilon.size());		//doesn't equal frequency monobit with M = 1
 															//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	if (testKey[3] == '1') {
@@ -174,57 +174,32 @@ int main(int argc, char *argv[]) {
 		NonOverlappingTemplateMatchings(5, epsilon.size());
 		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
-	
-	
-	
-
-	//-------------------Test Fourier---------------------//
-
-	// 1 Test (0^n)
-	//std::fill(seq.begin(), seq.end(), 0);
-	// 2 Test (0011)^n
-	/*std::generate(seq.begin(), seq.end(), 
-		[] () -> bool { 
-		static size_t i = 0;
-		return ((i++) % 4 < 2);
-	});*/
-	// 3 Test (std::rand)
-	/*std::generate(seq.begin(), seq.end(),
-		[]() -> bool {
-		return rand() % 2;
-	});*/
-	// 4 Test
-	/*std::generate(seq.begin(), seq.end(),
-		[&seq]() -> bool {
-		static size_t i = 0;
-		return ((i++) % (seq.size() / 4) < seq.size() / 8);
-	});*/
-
-	// 5 Test	(110100)^n
-	/*std::generate(seq.begin(), seq.end(),
-		[&seq]() -> bool {
-		static size_t i = 0;
-		size_t j = (i++) % 6;
-		return (j < 2 || j == 3);
-	});*/
-
-	// 6 Test	(1110011000)^n
-	//std::generate(seq.begin(), seq.end(),
-	//	[&seq]() -> bool {
-	//	static size_t i = 0;
-	//	size_t j = (i++) % 10;
-	//	return (j < 3 || j == 5 || j == 6);
-	//});
-
-	// 7 Test	(1 rand() 0)^n
-	/*std::generate(seq.begin(), seq.end(),
-		[&seq]() -> bool {
-		static size_t i = 0;
-		size_t j = (i++) % 3;
-		return ((j == 1) ? rand() % 2 : ((j < 1) ? 1 : 0));
-	});*/
-
-	
+	if (testKey[8] == '1') {
+		start = clock();
+		OverlappingTemplateMatchings(5, epsilon.size());
+		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
+	}
+	if (testKey[9] == '1') {
+		start = clock();
+		Universal(epsilon.size());
+		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
+	}
+	if (testKey[10] == '1') {
+		start = clock();
+		LinearComplexity(1 << dimension, epsilon.size());
+		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
+	}
+	if (testKey[11] == '1') {
+		start = clock();
+		Serial(dimension, epsilon.size());
+		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
+	}
+	if (testKey[12] == '1') {
+		start = clock();
+		// (M + 1) - bit block is used to compare
+		ApproximateEntropy(dimension, epsilon.size());
+		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
+	}
 
 	return 0;
 }

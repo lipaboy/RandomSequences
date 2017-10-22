@@ -20,7 +20,7 @@ Serial(int m, int n)
 	p_value1 = cephes_igamc(pow(2, m-1)/2, del1/2.0);
 	p_value2 = cephes_igamc(pow(2, m-2)/2, del2/2.0);
 	
-	fprintf(stats[TEST_SERIAL], "\t\t\t       SERIAL TEST\n");
+	/*fprintf(stats[TEST_SERIAL], "\t\t\t       SERIAL TEST\n");
 	fprintf(stats[TEST_SERIAL], "\t\t---------------------------------------------\n");
 	fprintf(stats[TEST_SERIAL], "\t\t COMPUTATIONAL INFORMATION:		  \n");
 	fprintf(stats[TEST_SERIAL], "\t\t---------------------------------------------\n");
@@ -32,12 +32,12 @@ Serial(int m, int n)
 	fprintf(stats[TEST_SERIAL], "\t\t(f) Del_1               = %f\n", del1);
 	fprintf(stats[TEST_SERIAL], "\t\t(g) Del_2               = %f\n", del2);
 	fprintf(stats[TEST_SERIAL], "\t\t---------------------------------------------\n");
+*/
+	printf("Serial #1:\t\t%s\t\tp_value1 = %f\n", p_value1 < ALPHA ? "FAILURE" : "SUCCESS", p_value1);
+//	fprintf(results[TEST_SERIAL], "%f\n", p_value1);
 
-	fprintf(stats[TEST_SERIAL], "%s\t\tp_value1 = %f\n", p_value1 < ALPHA ? "FAILURE" : "SUCCESS", p_value1);
-	fprintf(results[TEST_SERIAL], "%f\n", p_value1);
-
-	fprintf(stats[TEST_SERIAL], "%s\t\tp_value2 = %f\n\n", p_value2 < ALPHA ? "FAILURE" : "SUCCESS", p_value2); fflush(stats[TEST_SERIAL]);
-	fprintf(results[TEST_SERIAL], "%f\n", p_value2); fflush(results[TEST_SERIAL]);
+	printf("Serial #2:\t\t%s\t\tp_value2 = %f\n\n", p_value2 < ALPHA ? "FAILURE" : "SUCCESS", p_value2);// fflush(stats[TEST_SERIAL]);
+	//fprintf(results[TEST_SERIAL], "%f\n", p_value2); fflush(results[TEST_SERIAL]);
 }
 
 double
@@ -52,8 +52,8 @@ psi2(int m, int n)
 	numOfBlocks = n;
 	powLen = (int)pow(2, m+1)-1;
 	if ( (P = (unsigned int*)calloc(powLen,sizeof(unsigned int)))== NULL ) {
-		fprintf(stats[TEST_SERIAL], "Serial Test:  Insufficient memory available.\n");
-		fflush(stats[TEST_SERIAL]);
+		printf("Serial Test:  Insufficient memory available.\n");
+		//fflush(stats[TEST_SERIAL]);
 		return 0.0;
 	}
 	for ( i=1; i<powLen-1; i++ )

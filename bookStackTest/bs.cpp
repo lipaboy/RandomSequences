@@ -521,7 +521,8 @@ double bookStackTestMain(int argc, const char* argv[])
 	// check parameters
 	if (ff.size() > 0)
 	{
-		if ((input = fopen(ff.c_str(), "rb")) == NULL)
+		fopen_s(&input, ff.c_str(), "rb");
+		if (input == NULL)
 		{
 			printf("ERROR: Coundn't open %s\n", ff.c_str());
 			Quit();

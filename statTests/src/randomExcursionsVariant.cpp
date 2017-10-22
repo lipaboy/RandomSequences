@@ -17,7 +17,7 @@ RandomExcursionsVariant(int n)
 	double	p_value;
 	
 	if ( (S_k = (int *)calloc(n, sizeof(int))) == NULL ) {
-		fprintf(stats[TEST_RND_EXCURSION_VAR], "\t\tRANDOM EXCURSIONS VARIANT: Insufficent memory allocated.\n");
+		printf("\t\tRANDOM EXCURSIONS VARIANT: Insufficent memory allocated.\n");
 		return;
 	}
 	J = 0;
@@ -30,23 +30,24 @@ RandomExcursionsVariant(int n)
 	if ( S_k[n-1] != 0 )
 		J++;
 
-	fprintf(stats[TEST_RND_EXCURSION_VAR], "\t\t\tRANDOM EXCURSIONS VARIANT TEST\n");
+	/*fprintf(stats[TEST_RND_EXCURSION_VAR], "\t\t\tRANDOM EXCURSIONS VARIANT TEST\n");
 	fprintf(stats[TEST_RND_EXCURSION_VAR], "\t\t--------------------------------------------\n");
 	fprintf(stats[TEST_RND_EXCURSION_VAR], "\t\tCOMPUTATIONAL INFORMATION:\n");
 	fprintf(stats[TEST_RND_EXCURSION_VAR], "\t\t--------------------------------------------\n");
 	fprintf(stats[TEST_RND_EXCURSION_VAR], "\t\t(a) Number Of Cycles (J) = %d\n", J);
 	fprintf(stats[TEST_RND_EXCURSION_VAR], "\t\t(b) Sequence Length (n)  = %d\n", n);
 	fprintf(stats[TEST_RND_EXCURSION_VAR], "\t\t--------------------------------------------\n");
-
+*/
 	constraint = (int)MAX(0.005*pow(n, 0.5), 500);
 	if (J < constraint) {
-		fprintf(stats[TEST_RND_EXCURSION_VAR], "\n\t\tWARNING:  TEST NOT APPLICABLE.  THERE ARE AN\n");
-		fprintf(stats[TEST_RND_EXCURSION_VAR], "\t\t\t  INSUFFICIENT NUMBER OF CYCLES.\n");
-		fprintf(stats[TEST_RND_EXCURSION_VAR], "\t\t---------------------------------------------\n");
+		printf("\n\t\tWARNING:  TEST NOT APPLICABLE.  THERE ARE AN\n");
+		printf("\t\t\t  INSUFFICIENT NUMBER OF CYCLES.\n");
+		printf("\t\t---------------------------------------------\n");
 		for ( i=0; i<18; i++ )
-			fprintf(results[TEST_RND_EXCURSION_VAR], "%f\n", 0.0);
+			printf("%f\n", 0.0);
 	}
 	else {
+		int successCount = 0;
 		for ( p=0; p<=17; p++ ) {
 			x = stateX[p];
 			count = 0;
@@ -56,12 +57,16 @@ RandomExcursionsVariant(int n)
 			p_value = erfc(fabs(count-J)/(sqrt(2.0*J*(4.0*fabs(x)-2))));
 
 			if ( isNegative(p_value) || isGreaterThanOne(p_value) )
-				fprintf(stats[TEST_RND_EXCURSION_VAR], "\t\t(b) WARNING: P_VALUE IS OUT OF RANGE.\n");
-			fprintf(stats[TEST_RND_EXCURSION_VAR], "%s\t\t", p_value < ALPHA ? "FAILURE" : "SUCCESS");
+				printf("\t\t(b) WARNING: P_VALUE IS OUT OF RANGE.\n");
+
+			if (p_value >= ALPHA)
+				successCount++;
+			/*fprintf(stats[TEST_RND_EXCURSION_VAR], "%s\t\t", p_value < ALPHA ? "FAILURE" : "SUCCESS");
 			fprintf(stats[TEST_RND_EXCURSION_VAR], "(x = %2d) Total visits = %4d; p-value = %f\n", x, count, p_value);
-			fprintf(results[TEST_RND_EXCURSION_VAR], "%f\n", p_value); fflush(results[TEST_RND_EXCURSION_VAR]);
+			fprintf(results[TEST_RND_EXCURSION_VAR], "%f\n", p_value); fflush(results[TEST_RND_EXCURSION_VAR]);*/
 		}
+		printf("RandomExcursions:\t\tsuccess = %d of %d\n", successCount, 18);
 	}
-	fprintf(stats[TEST_RND_EXCURSION_VAR], "\n"); fflush(stats[TEST_RND_EXCURSION_VAR]);
+	//fprintf(stats[TEST_RND_EXCURSION_VAR], "\n"); fflush(stats[TEST_RND_EXCURSION_VAR]);
 	free(S_k);
 }

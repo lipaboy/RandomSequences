@@ -26,9 +26,9 @@ OverlappingTemplateMatchings(int m, int n)
 	N = n/M;
 	
 	if ( (sequence = (BitSequence *) calloc(m, sizeof(BitSequence))) == NULL ) {
-		fprintf(stats[TEST_OVERLAPPING], "\t\t    OVERLAPPING TEMPLATE OF ALL ONES TEST\n");
-		fprintf(stats[TEST_OVERLAPPING], "\t\t---------------------------------------------\n");
-		fprintf(stats[TEST_OVERLAPPING], "\t\tTEMPLATE DEFINITION:  Insufficient memory, Overlapping Template Matchings test aborted!\n");
+		printf( "\t\t    OVERLAPPING TEMPLATE OF ALL ONES TEST\n");
+		printf( "\t\t---------------------------------------------\n");
+		printf( "\t\tTEMPLATE DEFINITION:  Insufficient memory, Overlapping Template Matchings test aborted!\n");
 	}
 	else
 		for ( i=0; i<m; i++ )
@@ -67,7 +67,7 @@ OverlappingTemplateMatchings(int m, int n)
 	}
 	p_value = cephes_igamc(K/2.0, chi2/2.0);
 
-	fprintf(stats[TEST_OVERLAPPING], "\t\t    OVERLAPPING TEMPLATE OF ALL ONES TEST\n");
+	/*fprintf(stats[TEST_OVERLAPPING], "\t\t    OVERLAPPING TEMPLATE OF ALL ONES TEST\n");
 	fprintf(stats[TEST_OVERLAPPING], "\t\t-----------------------------------------------\n");
 	fprintf(stats[TEST_OVERLAPPING], "\t\tCOMPUTATIONAL INFORMATION:\n");
 	fprintf(stats[TEST_OVERLAPPING], "\t\t-----------------------------------------------\n");
@@ -82,14 +82,15 @@ OverlappingTemplateMatchings(int m, int n)
 	fprintf(stats[TEST_OVERLAPPING], "\t\t  0   1   2   3   4 >=5   Chi^2   P-value  Assignment\n");
 	fprintf(stats[TEST_OVERLAPPING], "\t\t-----------------------------------------------\n");
 	fprintf(stats[TEST_OVERLAPPING], "\t\t%3d %3d %3d %3d %3d %3d  %f ",
-		nu[0], nu[1], nu[2], nu[3], nu[4], nu[5], chi2);
+		nu[0], nu[1], nu[2], nu[3], nu[4], nu[5], chi2);*/
 
 	if ( isNegative(p_value) || isGreaterThanOne(p_value) )
-		fprintf(stats[TEST_OVERLAPPING], "WARNING:  P_VALUE IS OUT OF RANGE.\n");
+		printf( "WARNING:  P_VALUE IS OUT OF RANGE.\n");
 
 	free(sequence);
-	fprintf(stats[TEST_OVERLAPPING], "%f %s\n\n", p_value, p_value < ALPHA ? "FAILURE" : "SUCCESS"); fflush(stats[TEST_OVERLAPPING]);
-	fprintf(results[TEST_OVERLAPPING], "%f\n", p_value); fflush(results[TEST_OVERLAPPING]);
+	printf("Overlapping Template Matrchings:%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS",
+		p_value); //fflush(stats[TEST_OVERLAPPING]);
+//	fprintf(results[TEST_OVERLAPPING], "%f\n", p_value); fflush(results[TEST_OVERLAPPING]);
 }
 
 double

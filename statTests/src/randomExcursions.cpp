@@ -52,25 +52,25 @@ RandomExcursions(int n)
 		J++;
 	cycle[J] = n;
 
-	fprintf(stats[TEST_RND_EXCURSION], "\t\t\t  RANDOM EXCURSIONS TEST\n");
+	/*fprintf(stats[TEST_RND_EXCURSION], "\t\t\t  RANDOM EXCURSIONS TEST\n");
 	fprintf(stats[TEST_RND_EXCURSION], "\t\t--------------------------------------------\n");
 	fprintf(stats[TEST_RND_EXCURSION], "\t\tCOMPUTATIONAL INFORMATION:\n");
 	fprintf(stats[TEST_RND_EXCURSION], "\t\t--------------------------------------------\n");
 	fprintf(stats[TEST_RND_EXCURSION], "\t\t(a) Number Of Cycles (J) = %04d\n", J);
-	fprintf(stats[TEST_RND_EXCURSION], "\t\t(b) Sequence Length (n)  = %d\n", n);
+	fprintf(stats[TEST_RND_EXCURSION], "\t\t(b) Sequence Length (n)  = %d\n", n);*/
 
 	constraint = MAX(0.005*pow(n, 0.5), 500);
 	if (J < constraint) {
-		fprintf(stats[TEST_RND_EXCURSION], "\t\t---------------------------------------------\n");
-		fprintf(stats[TEST_RND_EXCURSION], "\t\tWARNING:  TEST NOT APPLICABLE.  THERE ARE AN\n");
-		fprintf(stats[TEST_RND_EXCURSION], "\t\t\t  INSUFFICIENT NUMBER OF CYCLES.\n");
-		fprintf(stats[TEST_RND_EXCURSION], "\t\t---------------------------------------------\n");
+		printf("\t\t---------------------------------------------\n");
+		printf( "\t\tWARNING:  TEST NOT APPLICABLE.  THERE ARE AN\n");
+		printf("\t\t\t  INSUFFICIENT NUMBER OF CYCLES.\n");
+		printf( "\t\t---------------------------------------------\n");
 		for(i = 0; i < 8; i++)
-			fprintf(results[TEST_RND_EXCURSION], "%f\n", 0.0);
+			printf( "%f\n", 0.0);
 	}
 	else {
-		fprintf(stats[TEST_RND_EXCURSION], "\t\t(c) Rejection Constraint = %f\n", constraint);
-		fprintf(stats[TEST_RND_EXCURSION], "\t\t-------------------------------------------\n");
+		//fprintf(stats[TEST_RND_EXCURSION], "\t\t(c) Rejection Constraint = %f\n", constraint);
+		//fprintf(stats[TEST_RND_EXCURSION], "\t\t-------------------------------------------\n");
 
 		cycleStart = 0;
 		cycleStop  = cycle[1];
@@ -101,6 +101,7 @@ RandomExcursions(int n)
 			}
 		}
 		
+		int successCount = 0;
 		for ( i=0; i<8; i++ ) {
 			x = stateX[i];
 			sum = 0.;
@@ -109,14 +110,16 @@ RandomExcursions(int n)
 			p_value = cephes_igamc(2.5, sum/2.0);
 			
 			if ( isNegative(p_value) || isGreaterThanOne(p_value) )
-				fprintf(stats[TEST_RND_EXCURSION], "WARNING:  P_VALUE IS OUT OF RANGE.\n");
+				printf("WARNING:  P_VALUE IS OUT OF RANGE.\n");
 
-			fprintf(stats[TEST_RND_EXCURSION], "%s\t\tx = %2d chi^2 = %9.6f p_value = %f\n",
-					p_value < ALPHA ? "FAILURE" : "SUCCESS", x, sum, p_value);
-			fprintf(results[TEST_RND_EXCURSION], "%f\n", p_value); fflush(results[TEST_RND_EXCURSION]);
+			if (p_value >= ALPHA)
+				successCount++;
+			
+			//fprintf(results[TEST_RND_EXCURSION], "%f\n", p_value); fflush(results[TEST_RND_EXCURSION]);
 		}
+		printf("RandomExcursions:\t\tsuccess = %d of %d\n", successCount, 8);
 	} 
-	fprintf(stats[TEST_RND_EXCURSION], "\n"); fflush(stats[TEST_RND_EXCURSION]);
+	//fprintf(stats[TEST_RND_EXCURSION], "\n"); fflush(stats[TEST_RND_EXCURSION]);
 	free(S_k);
 	free(cycle);
 }

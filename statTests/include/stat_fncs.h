@@ -9,7 +9,9 @@
 #include "externs.h"
 #include <vector>
 
-#define _CRT_SECURE_NO_WARNINGS
+//#define _CRT_SECURE_NO_WARNINGS
+
+// TODO: move all the tests into namespace
 
 void  __ogg_fdrffti(int n, double *wsave, int *ifac);
 void  __ogg_fdrfftf(int n, double *X, double *wsave, int *ifac);
@@ -25,12 +27,12 @@ void	LongestRunOfOnes(int n);
 void	Rank(int n);
 void	DiscreteFourierTransform(int n);
 void	NonOverlappingTemplateMatchings(int m, int n);
-//void	OverlappingTemplateMatchings(int m, int n);
-//void	Universal(int n);
-//void	ApproximateEntropy(int m, int n);
+void	OverlappingTemplateMatchings(int m, int n);
+void	Universal(int n);
+void	ApproximateEntropy(int m, int n);
 //void	RandomExcursions(int n);
 //void	RandomExcursionsVariant(int n);
-//void	LinearComplexity(int M, int n);
-//void	Serial(int m, int n);
+void	LinearComplexity(int M, int n);
+void	Serial(int m, int n);
 
 #endif //STAT_FNCS_H
