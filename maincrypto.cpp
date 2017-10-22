@@ -26,7 +26,7 @@ using namespace std::chrono;
 
 typedef std::vector<bool> Sequence;
 
-const int TEST_COUNT = 13;
+const int TEST_COUNT = 14;
 
 int main(int argc, char *argv[]) {
 	time_t t;
@@ -165,6 +165,7 @@ int main(int argc, char *argv[]) {
 	}
 	if (testKey[6] == '1') {
 		start = clock();
+		// Has a little difference between results of my own discreteFourier Test version
 		DiscreteFourierTransform(epsilon.size());
 		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
@@ -198,6 +199,11 @@ int main(int argc, char *argv[]) {
 		start = clock();
 		// (M + 1) - bit block is used to compare
 		ApproximateEntropy(dimension, epsilon.size());
+		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
+	}
+	if (testKey[13] == '1') {
+		start = clock();
+		CumulativeSums(epsilon.size());
 		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 

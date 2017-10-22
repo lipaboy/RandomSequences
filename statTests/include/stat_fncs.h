@@ -21,7 +21,7 @@ double bookStackTestMain(int argc, const char* argv[]);
 
 void	Frequency(int n);
 void	BlockFrequency(int M, int n);
-//void	CumulativeSums(int n);
+void	CumulativeSums(int n);
 void	Runs(int n);
 void	LongestRunOfOnes(int n);
 void	Rank(int n);
