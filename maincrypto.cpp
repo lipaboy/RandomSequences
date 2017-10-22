@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
 	///*double chi2 = boost::math::pdf(boost::math::inverse_chi_squared_distribution<double>(n), alpha);
 	//cout << "Chi2 = " << chi2 << endl;*/
 
-	if (argc < 5 || std::strlen(argv[3]) < 5) {
+	if (argc < 5 || std::strlen(argv[3]) < 8) {
 		cout << "Not enough parameters ( matrix dimension, sequence size, testKey, input possibility, "
 			<< "file input, file output)" 
 			<< endl;
@@ -112,6 +112,7 @@ int main(int argc, char *argv[]) {
 	}
 	
 	string testKey(argv[3]);
+	epsilon = std::move(result);
 	
 	if (testKey[0] == '1') {
 		start = clock();
@@ -137,32 +138,43 @@ int main(int argc, char *argv[]) {
 			<< "\t\tp_value = " << p_value << endl << endl;
 		//cout << " Time: " << (clock() - start) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
-	epsilon = std::move(result);
 	if (testKey[1] == '1') {
 		start = clock();
-		DiscreteFourierTransform(epsilon.size());
-		//cout << discreteFourierTransformTest(result) << endl;
+		Frequency(epsilon.size());
 		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	if (testKey[2] == '1') {
 		start = clock();
-		//cout << "ChiSquared = " << statisticChiSquaredTest(result, dimension) << endl;
-		Frequency(epsilon.size());
-		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
+		BlockFrequency(1 << dimension, epsilon.size());		//doesn't equal frequency monobit with M = 1
+															//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	if (testKey[3] == '1') {
 		start = clock();
-		//cout << "Runs (depends on Frequency Monobit) stat = ";
 		Runs(epsilon.size());
 		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
-	// Warning: result haven't already contained current sequence
 	if (testKey[4] == '1') {
 		start = clock();
-		//cout << "Longest runs of ones stat = ";
 		LongestRunOfOnes(epsilon.size());
 		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
+	if (testKey[5] == '1') {
+		start = clock();
+		Rank(epsilon.size());
+		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
+	}
+	if (testKey[6] == '1') {
+		start = clock();
+		DiscreteFourierTransform(epsilon.size());
+		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
+	}
+	if (testKey[7] == '1') {
+		start = clock();
+			// from 2 to 16
+		NonOverlappingTemplateMatchings(5, epsilon.size());
+		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
+	}
+	
 	
 	
 

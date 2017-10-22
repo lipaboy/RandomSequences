@@ -39,6 +39,6 @@ BlockFrequency(int M, int n)
 	fprintf(stats[TEST_BLOCK_FREQUENCY], "\t\t(d) Note: %d bits were discarded.\n", n % M);
 	fprintf(stats[TEST_BLOCK_FREQUENCY], "\t\t---------------------------------------------\n");*/
 
-	printf("%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);// fflush(stats[TEST_BLOCK_FREQUENCY]);
+	printf("Block frequency:\t\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);// fflush(stats[TEST_BLOCK_FREQUENCY]);
 	//printf( "%f\n", p_value); fflush(results[TEST_BLOCK_FREQUENCY]);
 }

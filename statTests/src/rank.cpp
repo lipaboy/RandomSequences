@@ -19,8 +19,8 @@ Rank(int n)
 
 	N = n / (32 * 32);
 	if (isZero(N)) {
-		//		fprintf(stats[TEST_RANK], "\t\t\t\tRANK TEST\n");
-			//	fprintf(stats[TEST_RANK], "\t\tError: Insuffucient # Of Bits To Define An 32x32 (%dx%d) Matrix\n", 32, 32);
+		printf("\t\t\t\tRANK TEST\n");
+		printf("\t\tError: Insuffucient # Of Bits To Define An 32x32 (%dx%d) Matrix\n", 32, 32);
 		p_value = 0.00;
 	}
 	else {
@@ -82,6 +82,6 @@ Rank(int n)
 			free(matrix[i]);
 		free(matrix);
 	}
-	printf("%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);
-	printf("%f\n", p_value);
+	printf("Rank (matrix):\t\t\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);
+	//printf("%f\n", p_value);
 }

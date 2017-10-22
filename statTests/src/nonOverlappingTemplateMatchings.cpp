@@ -5,6 +5,9 @@
 #include "../include/externs.h"
 #include "../include/utilities.h"
 #include "../include/cephes.h"  
+#include "../include/stat_fncs.h"
+
+//#define _CRT_SECURE_NO_WARNINGS
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
           N O N O V E R L A P P I N G  T E M P L A T E  T E S T
@@ -32,26 +35,26 @@ NonOverlappingTemplateMatchings(int m, int n)
 	M = n/N;
 
 	if ( (Wj = (unsigned int*)calloc(N, sizeof(unsigned int))) == NULL ) {
-		fprintf(stats[TEST_NONPERIODIC], "\tNONOVERLAPPING TEMPLATES TESTS ABORTED DUE TO ONE OF THE FOLLOWING : \n");
-		fprintf(stats[TEST_NONPERIODIC], "\tInsufficient memory for required work space.\n");
+		printf( "\tNONOVERLAPPING TEMPLATES TESTS ABORTED DUE TO ONE OF THE FOLLOWING : \n");
+		printf( "\tInsufficient memory for required work space.\n");
 		return;
 	}
 	lambda = (M-m+1)/pow(2, m);
 	varWj = M*(1.0/pow(2.0, m) - (2.0*m-1.0)/pow(2.0, 2.0*m));
-	sprintf(directory, "templates/template%d", m);
+	sprintf(directory, "templates\\template%d", m);
 
 	if ( ((isNegative(lambda)) || (isZero(lambda))) ||
 		 ((fp = fopen(directory, "r")) == NULL) ||
 		 ((sequence = (BitSequence *) calloc(m, sizeof(BitSequence))) == NULL) ) {
-		fprintf(stats[TEST_NONPERIODIC], "\tNONOVERLAPPING TEMPLATES TESTS ABORTED DUE TO ONE OF THE FOLLOWING : \n");
-		fprintf(stats[TEST_NONPERIODIC], "\tLambda (%f) not being positive!\n", lambda);
-		fprintf(stats[TEST_NONPERIODIC], "\tTemplate file <%s> not existing\n", directory);
-		fprintf(stats[TEST_NONPERIODIC], "\tInsufficient memory for required work space.\n");
+		printf("\tNONOVERLAPPING TEMPLATES TESTS ABORTED DUE TO ONE OF THE FOLLOWING : \n");
+		printf( "\tLambda (%f) not being positive!\n", lambda);
+		printf( "\tTemplate file <%s> not existing\n", directory);
+		printf( "\tInsufficient memory for required work space.\n");
 		if ( sequence != NULL )
 			free(sequence);
 	}
 	else {
-		fprintf(stats[TEST_NONPERIODIC], "\t\t  NONPERIODIC TEMPLATES TEST\n");
+		/*fprintf(stats[TEST_NONPERIODIC], "\t\t  NONPERIODIC TEMPLATES TEST\n");
 		fprintf(stats[TEST_NONPERIODIC], "-------------------------------------------------------------------------------------\n");
 		fprintf(stats[TEST_NONPERIODIC], "\t\t  COMPUTATIONAL INFORMATION\n");
 		fprintf(stats[TEST_NONPERIODIC], "-------------------------------------------------------------------------------------\n");
@@ -59,7 +62,7 @@ NonOverlappingTemplateMatchings(int m, int n)
 		fprintf(stats[TEST_NONPERIODIC], "-------------------------------------------------------------------------------------\n");
 		fprintf(stats[TEST_NONPERIODIC], "\t\tF R E Q U E N C Y\n");
 		fprintf(stats[TEST_NONPERIODIC], "Template   W_1  W_2  W_3  W_4  W_5  W_6  W_7  W_8    Chi^2   P_value Assignment Index\n");
-		fprintf(stats[TEST_NONPERIODIC], "-------------------------------------------------------------------------------------\n");
+		fprintf(stats[TEST_NONPERIODIC], "-------------------------------------------------------------------------------------\n");*/
 
 		if ( numOfTemplates[m] < MAXNUMOFTEMPLATES )
 			SKIP = 1;
@@ -79,15 +82,17 @@ NonOverlappingTemplateMatchings(int m, int n)
 		}
 		pi[K] = 1 - sum;
 
+		int successCount = 0;
+		int failureCount = 0;
 		for( jj=0; jj<MIN(MAXNUMOFTEMPLATES, numOfTemplates[m]); jj++ ) {
 			sum = 0;
 
 			for ( k=0; k<m; k++ ) {
 				fscanf(fp, "%d", &bit);
 				sequence[k] = bit;
-				fprintf(stats[TEST_NONPERIODIC], "%d", sequence[k]);
+				//fprintf(stats[TEST_NONPERIODIC], "%d", sequence[k]);
 			}
-			fprintf(stats[TEST_NONPERIODIC], " ");
+			//fprintf(stats[TEST_NONPERIODIC], " ");
 			for ( k=0; k<=K; k++ )
 				nu[k] = 0;
 			for ( i=0; i<N; i++ ) {
@@ -110,25 +115,31 @@ NonOverlappingTemplateMatchings(int m, int n)
 			sum = 0;
 			chi2 = 0.0;                                   /* Compute Chi Square */
 			for ( i=0; i<N; i++ ) {
-				if ( m == 10 )
+				/*if ( m == 10 )
 					fprintf(stats[TEST_NONPERIODIC], "%3d  ", Wj[i]);
 				else
-					fprintf(stats[TEST_NONPERIODIC], "%4d ", Wj[i]);
+					fprintf(stats[TEST_NONPERIODIC], "%4d ", Wj[i]);*/
 				chi2 += pow(((double)Wj[i] - lambda)/pow(varWj, 0.5), 2);
 			}
 			p_value = cephes_igamc(N/2.0, chi2/2.0);
 		
 			if ( isNegative(p_value) || isGreaterThanOne(p_value) )
-				fprintf(stats[TEST_NONPERIODIC], "\t\tWARNING:  P_VALUE IS OUT OF RANGE.\n");
+				printf("\t\tWARNING:  P_VALUE IS OUT OF RANGE.\n");
 
-			fprintf(stats[TEST_NONPERIODIC], "%9.6f %f %s %3d\n", chi2, p_value, p_value < ALPHA ? "FAILURE" : "SUCCESS", jj);
+			if (p_value < ALPHA)
+				failureCount++;
+			else
+				successCount++;
+			//printf("Non Overlapping Template Matchings:\t%f %s %3d\n", p_value, p_value < ALPHA ? "FAILURE" : "SUCCESS", jj);
 			if ( SKIP > 1 )
 				fseek(fp, (long)(SKIP-1)*2*m, SEEK_CUR);
-			fprintf(results[TEST_NONPERIODIC], "%f\n", p_value); fflush(results[TEST_NONPERIODIC]);
+			//fprintf(results[TEST_NONPERIODIC], "%f\n", p_value); fflush(results[TEST_NONPERIODIC]);
 		}
+		printf("Non Overlapping Template Matchings:\tsuccess = %d of %d\n", successCount, 
+			successCount + failureCount);
 	}
 	
-	fprintf(stats[TEST_NONPERIODIC], "\n"); fflush(stats[TEST_NONPERIODIC]);
+	//fprintf(stats[TEST_NONPERIODIC], "\n"); fflush(stats[TEST_NONPERIODIC]);
 	if ( sequence != NULL )
 		free(sequence);
 
