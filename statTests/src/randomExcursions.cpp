@@ -23,6 +23,8 @@ RandomExcursions(int n)
 						 {0.8333333333, 0.02777777778, 0.02314814815, 0.01929012346, 0.01607510288, 0.0803755143},
 						 {0.8750000000, 0.01562500000, 0.01367187500, 0.01196289063, 0.01046752930, 0.0732727051} };
 	
+	printf("RandomExcursions:");
+
 	if ( ((S_k = (int *)calloc(n, sizeof(int))) == NULL) ||
 		 ((cycle = (int *)calloc(MAX(1000, n/100), sizeof(int))) == NULL) ) {
 		printf("Random Excursions Test:  Insufficent Work Space Allocated.\n");
@@ -65,8 +67,8 @@ RandomExcursions(int n)
 		printf( "\t\tWARNING:  TEST NOT APPLICABLE.  THERE ARE AN\n");
 		printf("\t\t\t  INSUFFICIENT NUMBER OF CYCLES.\n");
 		printf( "\t\t---------------------------------------------\n");
-		for(i = 0; i < 8; i++)
-			printf( "%f\n", 0.0);
+		/*for(i = 0; i < 8; i++)
+			printf( "%f\n", 0.0);*/
 	}
 	else {
 		//fprintf(stats[TEST_RND_EXCURSION], "\t\t(c) Rejection Constraint = %f\n", constraint);
@@ -117,7 +119,7 @@ RandomExcursions(int n)
 			
 			//fprintf(results[TEST_RND_EXCURSION], "%f\n", p_value); fflush(results[TEST_RND_EXCURSION]);
 		}
-		printf("RandomExcursions:\t\tsuccess = %d of %d\n", successCount, 8);
+		printf("\t\tsuccess = %d of %d\n", successCount, 8);
 	} 
 	//fprintf(stats[TEST_RND_EXCURSION], "\n"); fflush(stats[TEST_RND_EXCURSION]);
 	free(S_k);

@@ -26,7 +26,7 @@ using namespace std::chrono;
 
 typedef std::vector<bool> Sequence;
 
-const int TEST_COUNT = 14;
+const int TEST_COUNT = 16;
 
 int main(int argc, char *argv[]) {
 	time_t t;
@@ -41,9 +41,10 @@ int main(int argc, char *argv[]) {
 	///*double chi2 = boost::math::pdf(boost::math::inverse_chi_squared_distribution<double>(n), alpha);
 	//cout << "Chi2 = " << chi2 << endl;*/
 
-	if (argc < 5 || std::strlen(argv[3]) < TEST_COUNT) {
+	int len;
+	if (argc < 5 || (len = std::strlen(argv[3])) < TEST_COUNT) {
 		cout << "Not enough parameters ( matrix dimension, sequence size, testKey ("
-			<< TEST_COUNT << "), input possibility, "
+			<< TEST_COUNT << ", current = " << len << "), input possibility, "
 			<< "file input, file output)" 
 			<< endl;
 		return -1;
@@ -58,8 +59,8 @@ int main(int argc, char *argv[]) {
 	//std::default_random_engine generator;
 	std::random_device generator;
 	//std::ranlux48 generator;				//failure with normal_distribution and with chi_squared_distribution
-	//std::normal_distribution<double> distribution(5.0, 2.0);		//doesn't failure with random_device generator
-	std::chi_squared_distribution<double> distribution(3.0);		//failure with random_device and with number of freedoms = 3.0
+	std::normal_distribution<double> distribution(5.0, 2.0);		//doesn't failure with random_device generator
+	//std::chi_squared_distribution<double> distribution(3.0);		//failure with random_device and with number of freedoms = 3.0
 	int inputOppositePossibility = static_cast<int>(
 		std::round(1.0 / boost::lexical_cast<double>(argv[4]))
 	);
@@ -83,8 +84,8 @@ int main(int argc, char *argv[]) {
 	uint32_t dimension = uint32_t(boost::lexical_cast<double>(argv[1]));
 	MatrixRandomConverter<> converter(dimension);
 	volatile clock_t start = clock();
-	result = converter.converse(seq);
-	//result = std::move(seq);
+	//result = converter.converse(seq);
+	result = std::move(seq);
 	cout //<< " Conversation time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.)
 		//<< " rows = " << converter.rows() 
 		<< endl << "Seq size = " << result.size() << endl;
@@ -204,6 +205,16 @@ int main(int argc, char *argv[]) {
 	if (testKey[13] == '1') {
 		start = clock();
 		CumulativeSums(epsilon.size());
+		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
+	}
+	if (testKey[14] == '1') {
+		start = clock();
+		RandomExcursions(epsilon.size());
+		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
+	}
+	if (testKey[15] == '1') {		// For more longer sequences (> 1e6)
+		start = clock();
+		RandomExcursionsVariant(epsilon.size());
 		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 

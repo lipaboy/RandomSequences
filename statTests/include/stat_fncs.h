@@ -30,8 +30,8 @@ void	NonOverlappingTemplateMatchings(int m, int n);
 void	OverlappingTemplateMatchings(int m, int n);
 void	Universal(int n);
 void	ApproximateEntropy(int m, int n);
-//void	RandomExcursions(int n);
-//void	RandomExcursionsVariant(int n);
+void	RandomExcursions(int n);
+void	RandomExcursionsVariant(int n);
 void	LinearComplexity(int M, int n);
 void	Serial(int m, int n);
 

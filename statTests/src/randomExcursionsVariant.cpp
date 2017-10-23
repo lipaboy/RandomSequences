@@ -16,6 +16,8 @@ RandomExcursionsVariant(int n)
 	int		stateX[18] = { -9, -8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 	double	p_value;
 	
+	printf("RandomExcursions:");
+
 	if ( (S_k = (int *)calloc(n, sizeof(int))) == NULL ) {
 		printf("\t\tRANDOM EXCURSIONS VARIANT: Insufficent memory allocated.\n");
 		return;
@@ -43,8 +45,8 @@ RandomExcursionsVariant(int n)
 		printf("\n\t\tWARNING:  TEST NOT APPLICABLE.  THERE ARE AN\n");
 		printf("\t\t\t  INSUFFICIENT NUMBER OF CYCLES.\n");
 		printf("\t\t---------------------------------------------\n");
-		for ( i=0; i<18; i++ )
-			printf("%f\n", 0.0);
+		/*for ( i=0; i<18; i++ )
+			printf("%f\n", 0.0);*/
 	}
 	else {
 		int successCount = 0;
@@ -65,7 +67,7 @@ RandomExcursionsVariant(int n)
 			fprintf(stats[TEST_RND_EXCURSION_VAR], "(x = %2d) Total visits = %4d; p-value = %f\n", x, count, p_value);
 			fprintf(results[TEST_RND_EXCURSION_VAR], "%f\n", p_value); fflush(results[TEST_RND_EXCURSION_VAR]);*/
 		}
-		printf("RandomExcursions:\t\tsuccess = %d of %d\n", successCount, 18);
+		printf("\t\tsuccess = %d of %d\n", successCount, 18);
 	}
 	//fprintf(stats[TEST_RND_EXCURSION_VAR], "\n"); fflush(stats[TEST_RND_EXCURSION_VAR]);
 	free(S_k);
