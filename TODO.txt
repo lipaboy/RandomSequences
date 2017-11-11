@@ -1,4 +1,0 @@
-1) Read about RC-4 key-stream generator with
-8-bit words [5]
-
-- test it
