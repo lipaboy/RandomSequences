@@ -22,8 +22,6 @@ OverlappingTemplateMatchings(int m, int n)
 	double			pi[6] = { 0.364091, 0.185659, 0.139381, 0.100571, 0.0704323, 0.139865 };
 	BitSequence		*sequence;
 
-	double result;
-
 	M = 1032;
 	N = n/M;
 	

@@ -74,17 +74,18 @@ int main(int argc, char *argv[]) {
 				//-------------Input----------------//
 	std::ifstream inFile;
 	inFile.open(argv[5], std::ios::in);
-	//inFile >> std::skipws;
+	inFile >> std::skipws;
 	auto iter = std::istream_iterator<char>(inFile);
 	for (size_t i = 0; i < inputSize / 8
-			//&& iter != std::istream_iterator<char>()
+			&& iter != std::istream_iterator<char>()
 			; i++, iter++) {
 		// bool per char
-		//seq.push_back( (*iter) == '1' );
+		seq.push_back( (*iter) == '1' );
 		// bool per bit
+		/*char temp = *iter;
 		for (int j = 0; j < 8; j++) {
-			seq.push_back((*iter) & (1 << j));
-		}
+			seq.push_back(temp & (1 << j));
+		}*/
 	}
 	inFile.close();
 

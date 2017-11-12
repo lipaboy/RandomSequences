@@ -20,7 +20,7 @@ double bookStackTestMain(int argc, const char* argv[]);
 
 bool	Frequency(int n);
 bool	BlockFrequency(int M, int n);
-bool	CumulativeSums(int n);
+double 	CumulativeSums(int n);
 double	Runs(int n);
 double	LongestRunOfOnes(int n);
 double	Rank(int n);
