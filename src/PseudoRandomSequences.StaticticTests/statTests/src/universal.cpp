@@ -10,7 +10,7 @@
                          U N I V E R S A L  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-void
+bool
 Universal(int n)
 {
 	int		i, j, p, L, Q, K;
@@ -50,7 +50,7 @@ Universal(int n)
 		printf("\t\tERROR:  L IS OUT OF RANGE.\n");
 		printf("\t\t-OR- :  Q IS LESS THAN %f.\n", 10*pow(2, L));
 		printf("\t\t-OR- :  Unable to allocate T.\n");
-		return;
+		return false;
 	}
 	
 	/* COMPUTE THE EXPECTED:  Formula 16, in Marsaglia's Paper */
@@ -95,8 +95,8 @@ Universal(int n)
 	if ( isNegative(p_value) || isGreaterThanOne(p_value) )
 		printf("\t\tWARNING:  P_VALUE IS OUT OF RANGE\n");
 
-	printf("Universal (Maurer's):\t\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);// fflush(stats[TEST_UNIVERSAL]);
+	//printf("Universal (Maurer's):\t\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);// fflush(stats[TEST_UNIVERSAL]);
 	//fprintf(results[TEST_UNIVERSAL], "%f\n", p_value); fflush(results[TEST_UNIVERSAL]);
-	
+	return (p_value >= ALPHA);
 	free(T);
 }

@@ -9,18 +9,20 @@
             R A N D O M  E X C U R S I O N S  V A R I A N T  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-void
+std::pair<int, int>
 RandomExcursionsVariant(int n)
 {
 	int		i, p, J, x, constraint, count, *S_k;
 	int		stateX[18] = { -9, -8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 	double	p_value;
+
+	int successCount = 0;
 	
-	printf("RandomExcursions:");
+	//printf("RandomExcursionsVariant:");
 
 	if ( (S_k = (int *)calloc(n, sizeof(int))) == NULL ) {
 		printf("\t\tRANDOM EXCURSIONS VARIANT: Insufficent memory allocated.\n");
-		return;
+		return std::make_pair(0, 0);
 	}
 	J = 0;
 	S_k[0] = 2*(int)epsilon[0] - 1;
@@ -49,7 +51,7 @@ RandomExcursionsVariant(int n)
 			printf("%f\n", 0.0);*/
 	}
 	else {
-		int successCount = 0;
+		
 		for ( p=0; p<=17; p++ ) {
 			x = stateX[p];
 			count = 0;
@@ -67,8 +69,9 @@ RandomExcursionsVariant(int n)
 			fprintf(stats[TEST_RND_EXCURSION_VAR], "(x = %2d) Total visits = %4d; p-value = %f\n", x, count, p_value);
 			fprintf(results[TEST_RND_EXCURSION_VAR], "%f\n", p_value); fflush(results[TEST_RND_EXCURSION_VAR]);*/
 		}
-		printf("\t\tsuccess = %d of %d\n", successCount, 18);
+		//printf("\t\tsuccess = %d of %d\n", successCount, 18);
 	}
 	//fprintf(stats[TEST_RND_EXCURSION_VAR], "\n"); fflush(stats[TEST_RND_EXCURSION_VAR]);
 	free(S_k);
+	return std::make_pair(successCount, 8);
 }

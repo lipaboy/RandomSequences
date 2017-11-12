@@ -13,7 +13,7 @@
           N O N O V E R L A P P I N G  T E M P L A T E  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-void
+std::pair<int, int>
 NonOverlappingTemplateMatchings(int m, int n)
 {
 	int		numOfTemplates[100] = {0, 0, 2, 4, 6, 12, 20, 40, 74, 148, 284, 568, 1116,
@@ -31,13 +31,16 @@ NonOverlappingTemplateMatchings(int m, int n)
 	char			directory[100];
 	BitSequence		*sequence = NULL;
 
+	int successCount = 0;
+	int failureCount = 0;
+
 	N = 8;
 	M = n/N;
 
 	if ( (Wj = (unsigned int*)calloc(N, sizeof(unsigned int))) == NULL ) {
 		printf( "\tNONOVERLAPPING TEMPLATES TESTS ABORTED DUE TO ONE OF THE FOLLOWING : \n");
 		printf( "\tInsufficient memory for required work space.\n");
-		return;
+		return std::make_pair(0, 0);
 	}
 	lambda = (M-m+1)/pow(2, m);
 	varWj = M*(1.0/pow(2.0, m) - (2.0*m-1.0)/pow(2.0, 2.0*m));
@@ -83,8 +86,7 @@ NonOverlappingTemplateMatchings(int m, int n)
 		}
 		pi[K] = 1 - sum;
 
-		int successCount = 0;
-		int failureCount = 0;
+		
 		for( jj=0; jj<MIN(MAXNUMOFTEMPLATES, numOfTemplates[m]); jj++ ) {
 			sum = 0;
 
@@ -147,4 +149,6 @@ NonOverlappingTemplateMatchings(int m, int n)
 	free(Wj);
     if ( fp != NULL )
         fclose(fp);
+
+	return std::make_pair(successCount, failureCount + successCount);
 }

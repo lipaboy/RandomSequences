@@ -10,7 +10,7 @@
                 A P P R O X I M A T E  E N T R O P Y   T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-void
+bool
 ApproximateEntropy(int m, int n)
 {
 	int				i, j, k, r, blockSize, seqLength, powLen, index;
@@ -36,7 +36,7 @@ ApproximateEntropy(int m, int n)
 			powLen = (int)pow(2, blockSize+1)-1;
 			if ( (P = (unsigned int*)calloc(powLen,sizeof(unsigned int)))== NULL ) {
 				printf("ApEn:  Insufficient memory available.\n");
-				return;
+				return false;
 			}
 			for ( i=1; i<powLen-1; i++ )
 				P[i] = 0;
@@ -84,6 +84,7 @@ ApproximateEntropy(int m, int n)
 		printf( "\t\t--------------------------------------------\n");
 	}
 	
-	printf("Approximate Entropy:\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value); //fflush(stats[TEST_APEN]);
+	//printf("Approximate Entropy:\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value); //fflush(stats[TEST_APEN]);
+	return (p_value >= ALPHA);
 	/*fprintf(results[TEST_APEN], "%f\n", p_value); fflush(results[TEST_APEN]);*/
 }

@@ -7,7 +7,7 @@
 
 double psi2(int m, int n);
 
-void
+bool
 Serial(int m, int n)
 {
 	double	p_value1, p_value2, psim0, psim1, psim2, del1, del2;
@@ -33,11 +33,13 @@ Serial(int m, int n)
 	fprintf(stats[TEST_SERIAL], "\t\t(g) Del_2               = %f\n", del2);
 	fprintf(stats[TEST_SERIAL], "\t\t---------------------------------------------\n");
 */
-	printf("Serial #1:\t\t%s\t\tp_value1 = %f\n", p_value1 < ALPHA ? "FAILURE" : "SUCCESS", p_value1);
+	//printf("Serial #1:\t\t%s\t\tp_value1 = %f\n", p_value1 < ALPHA ? "FAILURE" : "SUCCESS", p_value1);
 //	fprintf(results[TEST_SERIAL], "%f\n", p_value1);
 
-	printf("Serial #2:\t\t%s\t\tp_value2 = %f\n\n", p_value2 < ALPHA ? "FAILURE" : "SUCCESS", p_value2);// fflush(stats[TEST_SERIAL]);
+	//printf("Serial #2:\t\t%s\t\tp_value2 = %f\n\n", p_value2 < ALPHA ? "FAILURE" : "SUCCESS", p_value2);// fflush(stats[TEST_SERIAL]);
 	//fprintf(results[TEST_SERIAL], "%f\n", p_value2); fflush(results[TEST_SERIAL]);
+
+	return (p_value1 >= ALPHA) && (p_value2 >= ALPHA);
 }
 
 double

@@ -9,7 +9,7 @@
                               R U N S  T E S T 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-void
+bool
 Runs(int n)
 {
 	int		S, k;
@@ -47,11 +47,12 @@ Runs(int n)
 		//fprintf(stats[TEST_RUNS], "\t\t    -----------------------   = %f\n", erfc_arg);
 		//fprintf(stats[TEST_RUNS], "\t\t      2 sqrt(2n) pi (1-pi)\n");
 		//fprintf(stats[TEST_RUNS], "\t\t------------------------------------------\n");
-		//if ( isNegative(p_value) || isGreaterThanOne(p_value) )
-		//	fprintf(stats[TEST_RUNS], "WARNING:  P_VALUE IS OUT OF RANGE.\n");
+		if ( isNegative(p_value) || isGreaterThanOne(p_value) )
+			printf("WARNING:  P_VALUE IS OUT OF RANGE.\n");
 
-		printf("Runs (depends on Frequency):\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);// fflush(stats[TEST_RUNS]);
+		//printf("Runs (depends on Frequency):\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);// fflush(stats[TEST_RUNS]);
+		
 	}
-
+	return (p_value >= ALPHA);
 	//fprintf(results[TEST_RUNS], "%f\n", p_value); fflush(results[TEST_RUNS]);
 }

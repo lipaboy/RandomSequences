@@ -87,13 +87,10 @@ int main(int argc, char *argv[]) {
 
 	Sequence result;
 	uint32_t dimension = uint32_t(boost::lexical_cast<double>(argv[1]));
-	MatrixRandomConverter<> converter(dimension);
-	volatile clock_t start = clock();
+	//MatrixRandomConverter<> converter(dimension);
 	//result = converter.converse(seq);
 	result = std::move(seq);
-	cout //<< " Conversation time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.)
-		//<< " rows = " << converter.rows() 
-		<< endl << "Seq size = " << result.size() << endl;
+	cout << endl << "Seq size = " << result.size() << endl;
 
 				//-------------Output----------------//
 

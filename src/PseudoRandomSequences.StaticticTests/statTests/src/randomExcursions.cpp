@@ -9,7 +9,7 @@
                      R A N D O M  E X C U R S I O N S  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-void
+std::pair<int, int>
 RandomExcursions(int n)
 {
 	int		b, i, j, k, J, x;
@@ -22,8 +22,9 @@ RandomExcursions(int n)
 						 {0.7500000000, 0.06250000000, 0.04687500000, 0.03515625000, 0.02636718750, 0.0791015625},
 						 {0.8333333333, 0.02777777778, 0.02314814815, 0.01929012346, 0.01607510288, 0.0803755143},
 						 {0.8750000000, 0.01562500000, 0.01367187500, 0.01196289063, 0.01046752930, 0.0732727051} };
-	
-	printf("RandomExcursions:");
+	int successCount = 0;
+
+	//printf("RandomExcursions:");
 
 	if ( ((S_k = (int *)calloc(n, sizeof(int))) == NULL) ||
 		 ((cycle = (int *)calloc(MAX(1000, n/100), sizeof(int))) == NULL) ) {
@@ -32,7 +33,7 @@ RandomExcursions(int n)
 			free(S_k);
 		if ( cycle != NULL )
 			free(cycle);
-		return;
+		return std::make_pair(0, 0);
 	}
 	
 	J = 0; 					/* DETERMINE CYCLES */
@@ -45,7 +46,7 @@ RandomExcursions(int n)
 				printf("ERROR IN FUNCTION randomExcursions:  EXCEEDING THE MAX NUMBER OF CYCLES EXPECTED\n.");
 				free(S_k);
 				free(cycle);
-				return;
+				return std::make_pair(0, 0);
 			}
 			cycle[J] = i;
 		}
@@ -103,7 +104,7 @@ RandomExcursions(int n)
 			}
 		}
 		
-		int successCount = 0;
+		
 		for ( i=0; i<8; i++ ) {
 			x = stateX[i];
 			sum = 0.;
@@ -119,9 +120,11 @@ RandomExcursions(int n)
 			
 			//fprintf(results[TEST_RND_EXCURSION], "%f\n", p_value); fflush(results[TEST_RND_EXCURSION]);
 		}
-		printf("\t\tsuccess = %d of %d\n", successCount, 8);
+		//printf("\t\tsuccess = %d of %d\n", successCount, 8);
 	} 
 	//fprintf(stats[TEST_RND_EXCURSION], "\n"); fflush(stats[TEST_RND_EXCURSION]);
 	free(S_k);
 	free(cycle);
+
+	return std::make_pair(successCount, 8);
 }

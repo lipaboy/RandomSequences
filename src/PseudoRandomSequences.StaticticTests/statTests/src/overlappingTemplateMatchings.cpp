@@ -11,7 +11,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 double	Pr(int u, double eta);
 
-void
+bool
 OverlappingTemplateMatchings(int m, int n)
 {
 	int				i, k, match;
@@ -88,8 +88,9 @@ OverlappingTemplateMatchings(int m, int n)
 		printf( "WARNING:  P_VALUE IS OUT OF RANGE.\n");
 
 	free(sequence);
-	printf("Overlapping Template Matrchings:%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS",
-		p_value); //fflush(stats[TEST_OVERLAPPING]);
+	//printf("Overlapping Template Matrchings:%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS",
+	//	p_value); //fflush(stats[TEST_OVERLAPPING]);
+	return (p_value >= ALPHA);
 //	fprintf(results[TEST_OVERLAPPING], "%f\n", p_value); fflush(results[TEST_OVERLAPPING]);
 }
 
