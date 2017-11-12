@@ -126,7 +126,7 @@ int main(int argc, char *argv[]) {
 	epsilon = std::move(result);
 	const int EPSILON_SIZE = int(epsilon.size());
 	
-	vector<string> testNames;
+	vector<string> testNames = {""};
 	vector<double> testResults;
 
 	if (testKey[0] == '1') {
