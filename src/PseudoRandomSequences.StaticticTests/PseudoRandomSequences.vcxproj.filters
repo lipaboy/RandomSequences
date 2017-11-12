@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="bookStackTest\bs.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="maincrypto.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="statTests\src\approximateEntropy.cpp">
+      <Filter>Source\statTests</Filter>
+    </ClCompile>
+    <ClCompile Include="statTests\src\blockFrequency.cpp">
+      <Filter>Source\statTests</Filter>
+    </ClCompile>
+    <ClCompile Include="statTests\src\cephes.cpp">
+      <Filter>Source\statTests</Filter>
+    </ClCompile>
+    <ClCompile Include="statTests\src\cusum.cpp">
+      <Filter>Source\statTests</Filter>
+    </ClCompile>
+    <ClCompile Include="statTests\src\dfft.cpp">
+      <Filter>Source\statTests</Filter>
+    </ClCompile>
+    <ClCompile Include="statTests\src\discreteFourierTransform.cpp">
+      <Filter>Source\statTests</Filter>
+    </ClCompile>
+    <ClCompile Include="statTests\src\frequency.cpp">
+      <Filter>Source\statTests</Filter>
+    </ClCompile>
+    <ClCompile Include="statTests\src\linearComplexity.cpp">
+      <Filter>Source\statTests</Filter>
+    </ClCompile>
+    <ClCompile Include="statTests\src\longestRunOfOnes.cpp">
+      <Filter>Source\statTests</Filter>
+    </ClCompile>
+    <ClCompile Include="statTests\src\matrix.cpp">
+      <Filter>Source\statTests</Filter>
+    </ClCompile>
+    <ClCompile Include="statTests\src\nonOverlappingTemplateMatchings.cpp">
+      <Filter>Source\statTests</Filter>
+    </ClCompile>
+    <ClCompile Include="statTests\src\overlappingTemplateMatchings.cpp">
+      <Filter>Source\statTests</Filter>
+    </ClCompile>
+    <ClCompile Include="statTests\src\randomExcursions.cpp">
+      <Filter>Source\statTests</Filter>
+    </ClCompile>
+    <ClCompile Include="statTests\src\randomExcursionsVariant.cpp">
+      <Filter>Source\statTests</Filter>
+    </ClCompile>
+    <ClCompile Include="statTests\src\rank.cpp">
+      <Filter>Source\statTests</Filter>
+    </ClCompile>
+    <ClCompile Include="statTests\src\runs.cpp">
+      <Filter>Source\statTests</Filter>
+    </ClCompile>
+    <ClCompile Include="statTests\src\serial.cpp">
+      <Filter>Source\statTests</Filter>
+    </ClCompile>
+    <ClCompile Include="statTests\src\universal.cpp">
+      <Filter>Source\statTests</Filter>
+    </ClCompile>
+    <ClCompile Include="statTests\src\utilities.cpp">
+      <Filter>Source\statTests</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="book_stack_test.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="discrete_fourier_transform_test.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="pseudoRandomSequences.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="statTests\include\assess.h">
+      <Filter>Header\statTests</Filter>
+    </ClInclude>
+    <ClInclude Include="statTests\include\cephes.h">
+      <Filter>Header\statTests</Filter>
+    </ClInclude>
+    <ClInclude Include="statTests\include\config.h">
+      <Filter>Header\statTests</Filter>
+    </ClInclude>
+    <ClInclude Include="statTests\include\decls.h">
+      <Filter>Header\statTests</Filter>
+    </ClInclude>
+    <ClInclude Include="statTests\include\defs.h">
+      <Filter>Header\statTests</Filter>
+    </ClInclude>
+    <ClInclude Include="statTests\include\externs.h">
+      <Filter>Header\statTests</Filter>
+    </ClInclude>
+    <ClInclude Include="statTests\include\generators.h">
+      <Filter>Header\statTests</Filter>
+    </ClInclude>
+    <ClInclude Include="statTests\include\genutils.h">
+      <Filter>Header\statTests</Filter>
+    </ClInclude>
+    <ClInclude Include="statTests\include\matrix.h">
+      <Filter>Header\statTests</Filter>
+    </ClInclude>
+    <ClInclude Include="statTests\include\stat_fncs.h">
+      <Filter>Header\statTests</Filter>
+    </ClInclude>
+    <ClInclude Include="statTests\include\utilities.h">
+      <Filter>Header\statTests</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source">
+      <UniqueIdentifier>{11b8789d-ad75-4e1d-a0eb-7fcda302eb7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header">
+      <UniqueIdentifier>{67365ea4-686b-4783-af12-65ac06df9977}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\statTests">
+      <UniqueIdentifier>{770aecca-0b7d-424f-ace0-33584ec4edea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header\statTests">
+      <UniqueIdentifier>{2ccc55d2-b90a-4c53-a31d-99a3c7402273}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

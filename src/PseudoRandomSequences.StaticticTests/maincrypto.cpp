@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
 	///*double chi2 = boost::math::pdf(boost::math::inverse_chi_squared_distribution<double>(n), alpha);
 	//cout << "Chi2 = " << chi2 << endl;*/
 
-	int len;
+	int len = -1;
 	if (argc < 5 || (len = std::strlen(argv[3])) < TEST_COUNT) {
 		cout << "Not enough parameters ( matrix dimension, sequence size, testKey ("
 			<< TEST_COUNT << ", current = " << len << "), input possibility, "
@@ -64,21 +64,26 @@ int main(int argc, char *argv[]) {
 	int inputOppositePossibility = static_cast<int>(
 		std::round(1.0 / boost::lexical_cast<double>(argv[4]))
 	);
-	std::generate_n(std::back_inserter(seq), inputSize,
-		[&inputOppositePossibility, &generator, &distribution, &inputSize]() -> bool {
-			//return (rand() % inputOppositePossibility == 0);
-		return (int(std::round(distribution(generator))) % inputOppositePossibility == 0);
-	});
+	//std::generate_n(std::back_inserter(seq), inputSize,
+	//	[&inputOppositePossibility, &generator, &distribution, &inputSize]() -> bool {
+	//		//return (rand() % inputOppositePossibility == 0);
+	//	return (int(std::round(distribution(generator))) % inputOppositePossibility == 0);
+	//});
 
 				//-------------Input----------------//
-	/*std::ifstream inFile;
+	std::ifstream inFile;
 	inFile.open(argv[5], std::ios::in);
 	inFile >> std::skipws;
 	auto iter = std::istream_iterator<char>(inFile);
 	for (size_t i = 0; i < inputSize && iter != std::istream_iterator<char>(); i++, iter++) {
-		seq.push_back( (*iter) == '1' );
+		// bool per char
+		//seq.push_back( (*iter) == '1' );
+		// bool per bit
+		for (int j = 0; j < 8; j++) {
+			seq.push_back((*iter) & (1 << j));
+		}
 	}
-	inFile.close();*/
+	inFile.close();
 
 	Sequence result;
 	uint32_t dimension = uint32_t(boost::lexical_cast<double>(argv[1]));
@@ -91,6 +96,7 @@ int main(int argc, char *argv[]) {
 		<< endl << "Seq size = " << result.size() << endl;
 
 				//-------------Output----------------//
+
 	std::ofstream outFile;
 	outFile.open(argv[6], std::ios::out | std::ios::trunc);
 	//std::copy(result.begin(), result.end(), std::ostream_iterator<bool>(outFile, ""));
@@ -116,9 +122,6 @@ int main(int argc, char *argv[]) {
 	epsilon = std::move(result);
 	
 	if (testKey[0] == '1') {
-		start = clock();
-		// << bookStackTest(result, dimension) << endl;
-		
 		// ! Each bit means 0 or 1 (you can't pass to bookStackTest 0 or 1 in whole byte for example)
 
 		std::string sizeStr = std::to_string(inputSize);
@@ -130,92 +133,60 @@ int main(int argc, char *argv[]) {
 			//"-b", "0",				// blank between words
 			//"-u", "32"				// size of upper part book stack
 		};
-		//std::copy(arguments.begin(), arguments.end(), std::ostream_iterator<const char *>(cout, " "));
-		double chi = bookStackTestMain(arguments.size(), &arguments[0]);
+		double chi = bookStackTestMain(int(arguments.size()), &arguments[0]);
 		double p_value = 1 - 
 			boost::math::cdf(boost::math::chi_squared_distribution<double>(1), chi);
 
 		cout << "BookStack stat:\t\t\t" << ((p_value > 0.01) ? "SUCCESS" : "FAILURE") 
 			<< "\t\tp_value = " << p_value << endl << endl;
-		//cout << " Time: " << (clock() - start) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	if (testKey[1] == '1') {
-		start = clock();
 		Frequency(epsilon.size());
-		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	if (testKey[2] == '1') {
-		start = clock();
 		BlockFrequency(dimension, epsilon.size());		//doesn't equal frequency monobit with M = 1
-															//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	if (testKey[3] == '1') {
-		start = clock();
 		Runs(epsilon.size());
-		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	if (testKey[4] == '1') {
-		start = clock();
 		LongestRunOfOnes(epsilon.size());
-		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	if (testKey[5] == '1') {
-		start = clock();
 		Rank(epsilon.size());
-		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	if (testKey[6] == '1') {
-		start = clock();
 		// Has a little difference between results of my own discreteFourier Test version
 		DiscreteFourierTransform(epsilon.size());
-		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	if (testKey[7] == '1') {
-		start = clock();
 			// from 2 to 16
 		NonOverlappingTemplateMatchings(5, epsilon.size());
-		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	if (testKey[8] == '1') {
-		start = clock();
 		OverlappingTemplateMatchings(5, epsilon.size());
-		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	if (testKey[9] == '1') {
-		start = clock();
 		Universal(epsilon.size());
-		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	if (testKey[10] == '1') {
-		start = clock();
 		LinearComplexity(1 << dimension, epsilon.size());
-		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	if (testKey[11] == '1') {
-		start = clock();
 		Serial(dimension, epsilon.size());
-		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	if (testKey[12] == '1') {
-		start = clock();
 		// (M + 1) - bit block is used to compare
 		ApproximateEntropy(dimension, epsilon.size());
-		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	if (testKey[13] == '1') {
-		start = clock();
 		CumulativeSums(epsilon.size());
-		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	if (testKey[14] == '1') {
-		start = clock();
 		RandomExcursions(epsilon.size());
-		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 	if (testKey[15] == '1') {		// For more longer sequences (> 1e6)
-		start = clock();
 		RandomExcursionsVariant(epsilon.size());
-		//cout << " Time: " << (clock() - start + 0.) / (CLOCKS_PER_SEC / 1000.) << endl;
 	}
 
 	return 0;
