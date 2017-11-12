@@ -9,7 +9,7 @@
                      R A N D O M  E X C U R S I O N S  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-std::pair<int, int>
+double
 RandomExcursions(int n)
 {
 	int		b, i, j, k, J, x;
@@ -22,7 +22,9 @@ RandomExcursions(int n)
 						 {0.7500000000, 0.06250000000, 0.04687500000, 0.03515625000, 0.02636718750, 0.0791015625},
 						 {0.8333333333, 0.02777777778, 0.02314814815, 0.01929012346, 0.01607510288, 0.0803755143},
 						 {0.8750000000, 0.01562500000, 0.01367187500, 0.01196289063, 0.01046752930, 0.0732727051} };
+
 	int successCount = 0;
+	double result;
 
 	//printf("RandomExcursions:");
 
@@ -33,7 +35,7 @@ RandomExcursions(int n)
 			free(S_k);
 		if ( cycle != NULL )
 			free(cycle);
-		return std::make_pair(0, 0);
+		return -1.;
 	}
 	
 	J = 0; 					/* DETERMINE CYCLES */
@@ -46,7 +48,7 @@ RandomExcursions(int n)
 				printf("ERROR IN FUNCTION randomExcursions:  EXCEEDING THE MAX NUMBER OF CYCLES EXPECTED\n.");
 				free(S_k);
 				free(cycle);
-				return std::make_pair(0, 0);
+				return -1.;
 			}
 			cycle[J] = i;
 		}
@@ -70,6 +72,7 @@ RandomExcursions(int n)
 		printf( "\t\t---------------------------------------------\n");
 		/*for(i = 0; i < 8; i++)
 			printf( "%f\n", 0.0);*/
+		result = -1.;
 	}
 	else {
 		//fprintf(stats[TEST_RND_EXCURSION], "\t\t(c) Rejection Constraint = %f\n", constraint);
@@ -121,10 +124,11 @@ RandomExcursions(int n)
 			//fprintf(results[TEST_RND_EXCURSION], "%f\n", p_value); fflush(results[TEST_RND_EXCURSION]);
 		}
 		//printf("\t\tsuccess = %d of %d\n", successCount, 8);
+		result = double(successCount) / 8;
 	} 
 	//fprintf(stats[TEST_RND_EXCURSION], "\n"); fflush(stats[TEST_RND_EXCURSION]);
 	free(S_k);
 	free(cycle);
 
-	return std::make_pair(successCount, 8);
+	return result;
 }

@@ -11,7 +11,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 double	Pr(int u, double eta);
 
-bool
+double
 OverlappingTemplateMatchings(int m, int n)
 {
 	int				i, k, match;
@@ -22,6 +22,8 @@ OverlappingTemplateMatchings(int m, int n)
 	double			pi[6] = { 0.364091, 0.185659, 0.139381, 0.100571, 0.0704323, 0.139865 };
 	BitSequence		*sequence;
 
+	double result;
+
 	M = 1032;
 	N = n/M;
 	
@@ -29,6 +31,7 @@ OverlappingTemplateMatchings(int m, int n)
 		printf( "\t\t    OVERLAPPING TEMPLATE OF ALL ONES TEST\n");
 		printf( "\t\t---------------------------------------------\n");
 		printf( "\t\tTEMPLATE DEFINITION:  Insufficient memory, Overlapping Template Matchings test aborted!\n");
+		return -1.;
 	}
 	else
 		for ( i=0; i<m; i++ )
@@ -90,7 +93,7 @@ OverlappingTemplateMatchings(int m, int n)
 	free(sequence);
 	//printf("Overlapping Template Matrchings:%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS",
 	//	p_value); //fflush(stats[TEST_OVERLAPPING]);
-	return (p_value >= ALPHA);
+	return double(p_value >= ALPHA);
 //	fprintf(results[TEST_OVERLAPPING], "%f\n", p_value); fflush(results[TEST_OVERLAPPING]);
 }
 

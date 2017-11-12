@@ -13,7 +13,7 @@
           N O N O V E R L A P P I N G  T E M P L A T E  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-std::pair<int, int>
+double
 NonOverlappingTemplateMatchings(int m, int n)
 {
 	int		numOfTemplates[100] = {0, 0, 2, 4, 6, 12, 20, 40, 74, 148, 284, 568, 1116,
@@ -31,6 +31,7 @@ NonOverlappingTemplateMatchings(int m, int n)
 	char			directory[100];
 	BitSequence		*sequence = NULL;
 
+	double result;
 	int successCount = 0;
 	int failureCount = 0;
 
@@ -40,7 +41,7 @@ NonOverlappingTemplateMatchings(int m, int n)
 	if ( (Wj = (unsigned int*)calloc(N, sizeof(unsigned int))) == NULL ) {
 		printf( "\tNONOVERLAPPING TEMPLATES TESTS ABORTED DUE TO ONE OF THE FOLLOWING : \n");
 		printf( "\tInsufficient memory for required work space.\n");
-		return std::make_pair(0, 0);
+		return -1.;
 	}
 	lambda = (M-m+1)/pow(2, m);
 	varWj = M*(1.0/pow(2.0, m) - (2.0*m-1.0)/pow(2.0, 2.0*m));
@@ -56,6 +57,7 @@ NonOverlappingTemplateMatchings(int m, int n)
 		printf( "\tInsufficient memory for required work space.\n");
 		if ( sequence != NULL )
 			free(sequence);
+		result = -1.;
 	}
 	else {
 		/*fprintf(stats[TEST_NONPERIODIC], "\t\t  NONPERIODIC TEMPLATES TEST\n");
@@ -138,8 +140,9 @@ NonOverlappingTemplateMatchings(int m, int n)
 				fseek(fp, (long)(SKIP-1)*2*m, SEEK_CUR);
 			//fprintf(results[TEST_NONPERIODIC], "%f\n", p_value); fflush(results[TEST_NONPERIODIC]);
 		}
-		printf("Non Overlapping Template Matchings:\tsuccess = %d of %d\n", successCount, 
-			successCount + failureCount);
+		/*printf("Non Overlapping Template Matchings:\tsuccess = %d of %d\n", successCount, 
+			successCount + failureCount);*/
+		result = double(successCount) / (failureCount + successCount);
 	}
 	
 	//fprintf(stats[TEST_NONPERIODIC], "\n"); fflush(stats[TEST_NONPERIODIC]);
@@ -150,5 +153,5 @@ NonOverlappingTemplateMatchings(int m, int n)
     if ( fp != NULL )
         fclose(fp);
 
-	return std::make_pair(successCount, failureCount + successCount);
+	return result;
 }

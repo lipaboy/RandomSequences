@@ -2,3 +2,5 @@
 8-bit words [5]
 
 - test it
+
+2) Write tests for all stat tests

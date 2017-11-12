@@ -9,7 +9,7 @@
             R A N D O M  E X C U R S I O N S  V A R I A N T  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-std::pair<int, int>
+double
 RandomExcursionsVariant(int n)
 {
 	int		i, p, J, x, constraint, count, *S_k;
@@ -22,7 +22,7 @@ RandomExcursionsVariant(int n)
 
 	if ( (S_k = (int *)calloc(n, sizeof(int))) == NULL ) {
 		printf("\t\tRANDOM EXCURSIONS VARIANT: Insufficent memory allocated.\n");
-		return std::make_pair(0, 0);
+		return -1.;
 	}
 	J = 0;
 	S_k[0] = 2*(int)epsilon[0] - 1;
@@ -47,6 +47,8 @@ RandomExcursionsVariant(int n)
 		printf("\n\t\tWARNING:  TEST NOT APPLICABLE.  THERE ARE AN\n");
 		printf("\t\t\t  INSUFFICIENT NUMBER OF CYCLES.\n");
 		printf("\t\t---------------------------------------------\n");
+		free(S_k);
+		return -1.;
 		/*for ( i=0; i<18; i++ )
 			printf("%f\n", 0.0);*/
 	}
@@ -73,5 +75,5 @@ RandomExcursionsVariant(int n)
 	}
 	//fprintf(stats[TEST_RND_EXCURSION_VAR], "\n"); fflush(stats[TEST_RND_EXCURSION_VAR]);
 	free(S_k);
-	return std::make_pair(successCount, 8);
+	return double(successCount) / 18;
 }

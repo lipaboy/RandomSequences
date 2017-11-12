@@ -9,7 +9,7 @@
                               R U N S  T E S T 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-bool
+double
 Runs(int n)
 {
 	int		S, k;
@@ -25,7 +25,7 @@ Runs(int n)
 		printf("\t\t\t\tRUNS TEST\n");
 		printf("\t\t------------------------------------------\n");
 		printf("\t\tPI ESTIMATOR CRITERIA NOT MET! PI = %f\n", pi);
-		p_value = 0.0;
+		return -1.;
 	}
 	else {
 
@@ -53,6 +53,6 @@ Runs(int n)
 		//printf("Runs (depends on Frequency):\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);// fflush(stats[TEST_RUNS]);
 		
 	}
-	return (p_value >= ALPHA);
+	return double(p_value >= ALPHA);
 	//fprintf(results[TEST_RUNS], "%f\n", p_value); fflush(results[TEST_RUNS]);
 }

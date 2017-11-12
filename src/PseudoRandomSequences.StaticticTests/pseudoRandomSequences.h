@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <bitset>
+#include <boost/math/distributions/chi_squared.hpp>
 
 namespace PseudoRandomSequences {
 

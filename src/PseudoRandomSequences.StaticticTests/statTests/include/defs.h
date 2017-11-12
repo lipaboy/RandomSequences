@@ -26,7 +26,7 @@
                          G L O B A L  C O N S T A N T S
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#define ALPHA							0.01	/* SIGNIFICANCE LEVEL */
+#define ALPHA							0.05	/* SIGNIFICANCE LEVEL */
 #define MAXNUMOFTEMPLATES				148		/* APERIODIC TEMPLATES: 148=>temp_length=9 */
 #define NUMOFTESTS						15		/* MAX TESTS DEFINED  */
 #define NUMOFGENERATORS					10		/* MAX PRNGs */
@@ -52,7 +52,8 @@
                    G L O B A L   D A T A  S T R U C T U R E S
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-//typedef unsigned char BitSequence;
+//----------typedef unsigned char BitSequence;
+
 typedef bool	BitSequence;
 
 typedef struct _testParameters {

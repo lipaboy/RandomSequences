@@ -5,7 +5,7 @@
 #include "../include/externs.h"
 #include "../include/cephes.h"  
 
-bool
+double
 LinearComplexity(int M, int n)
 {
 	int       i, ii, j, d, N, L, m, N_, parity, sign, K = 6;
@@ -27,7 +27,7 @@ LinearComplexity(int M, int n)
 			free(P);
 		if ( T != NULL )
 			free(T);
-		return false;
+		return -1.;
 	}
 
 

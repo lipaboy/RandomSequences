@@ -10,7 +10,7 @@
                       L O N G E S T  R U N S  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-bool
+double
 LongestRunOfOnes(int n)
 {
 	double			pval, chi2, pi[7];
@@ -21,7 +21,7 @@ LongestRunOfOnes(int n)
 		printf("\t\t\t  LONGEST RUNS OF ONES TEST\n");
 		printf("\t\t---------------------------------------------\n");
 		printf("\t\t   n=%d is too short\n", n);
-		return false;
+		return -1.;
 	}
 	if ( n < 6272 ) {
 		K = 3;
@@ -114,6 +114,6 @@ LongestRunOfOnes(int n)
 		printf("WARNING:  P_VALUE IS OUT OF RANGE.\n");
 
 	//printf("Longest Runs of ones:\t\t%s\t\tp_value = %f\n\n", pval < ALPHA ? "FAILURE" : "SUCCESS", pval); //fflush(stats[TEST_LONGEST_RUN]);
-	return (pval >= ALPHA);
+	return double(pval >= ALPHA);
 	//fprintf(results[TEST_LONGEST_RUN], "%f\n", pval); fflush(results[TEST_LONGEST_RUN]);
 }

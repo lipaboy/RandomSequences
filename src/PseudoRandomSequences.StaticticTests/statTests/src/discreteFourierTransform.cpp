@@ -16,7 +16,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
-bool
+double
 DiscreteFourierTransform(int n)
 {
 	double	p_value, upperBound, percentile, N_l, N_o, d, *m = NULL, *X = NULL, *wsave = NULL;
@@ -33,7 +33,7 @@ DiscreteFourierTransform(int n)
 			if( m != NULL )
 				free(m);
 			printf("DiscreteFourierTrans : failure by malloc\n");
-			return false;
+			return -1.;
 	}
 	for ( i=0; i<n; i++ )
 		X[i] = 2*(int)epsilon[i] - 1;
@@ -72,9 +72,11 @@ DiscreteFourierTransform(int n)
 	fprintf(results[TEST_FFT], "%f\n", p_value);*/
 
 	//printf( "DiscreteFourier:\t\t%s\t\tp_value = %.15lf\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);
-	return (p_value >= ALPHA);
+	
 
 	free(X);
 	free(wsave);
 	free(m);
+
+	return double(p_value >= ALPHA);
 }
