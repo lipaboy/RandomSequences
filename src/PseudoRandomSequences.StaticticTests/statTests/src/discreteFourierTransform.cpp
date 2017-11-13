@@ -78,5 +78,5 @@ DiscreteFourierTransform(int n)
 	free(wsave);
 	free(m);
 
-	return double(p_value >= ALPHA);
+	return double(p_value);
 }

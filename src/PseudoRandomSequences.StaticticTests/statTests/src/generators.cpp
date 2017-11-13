@@ -50,9 +50,8 @@ lcg()
 	int		num_0s, num_1s, v, bitsRead;
 
 	SEED = 23482349.0;
-	epsilon.resize()
-	if ( ((epsilon = (BitSequence *) calloc(tp.n, sizeof(BitSequence))) == NULL) ||
-	     ((DUNIF = (double*)calloc(tp.n, sizeof(double))) == NULL) ) {
+	epsilon.resize(tp.n);
+	if ( ((DUNIF = (double*)calloc(tp.n, sizeof(double))) == NULL) ) {
 		printf("Insufficient memory available.\n");
 		exit(1);
 	}
@@ -75,11 +74,11 @@ lcg()
 			bitsRead++;
 			epsilon[i] = bit;
 		}
-		fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
-		nist_test_suite();
-		}
+		//fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
+		//nist_test_suite();
+	}
 	free(DUNIF);
-	free(epsilon);
+	//free(epsilon);
 }
 
 
@@ -89,10 +88,8 @@ quadRes1()
 	int		k, num_0s, num_1s, bitsRead, done;
 	BYTE	p[64], g[64], x[128];
 	
-	if ( ((epsilon = (BitSequence *)calloc(tp.n, sizeof(BitSequence))) == NULL) ) {
-		printf("Insufficient memory available.\n");
-		exit(1);
-	}
+	epsilon.resize(tp.n);
+
 	ahtopb("987b6a6bf2c56a97291c445409920032499f9ee7ad128301b5d0254aa1a9633fdbd378d40149f1e23a13849f3d45992f5c4c6b7104099bc301f6005f9d8115e1", p, 64);
 	ahtopb("3844506a9456c564b8b8538e0cc15aff46c95e69600f084f0657c2401b3c244734b62ea9bb95be4923b9b7e84eeaf1a224894ef0328d44bc3eb3e983644da3f5", g, 64);
 	num_0s = 0;
@@ -110,10 +107,10 @@ quadRes1()
 			memcpy(g, x+64, 64);
 			done = convertToBits(g, 512, tp.n, &num_0s, &num_1s, &bitsRead);
 		} while ( !done );
-		fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
-		nist_test_suite();
+		//fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
+		//nist_test_suite();
 	}
-	free(epsilon);
+	//free(epsilon);
 
 	return;
 }
@@ -125,10 +122,11 @@ quadRes2()
 	BYTE	One[1], Two, Three[1];
 	int		k, num_0s, num_1s, bitsRead, done;
 	
-	if ( ((epsilon = (BitSequence *)calloc(tp.n, sizeof(BitSequence))) == NULL) ) {
+	epsilon.resize(tp.n);
+	/*if ( ((epsilon = (BitSequence *)calloc(tp.n, sizeof(BitSequence))) == NULL) ) {
 		printf("Insufficient memory available.\n");
 		exit(1);
-	}
+	}*/
 	One[0] = 0x01;
 	Two = 0x02;
 	Three[0] = 0x03;
@@ -150,10 +148,10 @@ quadRes2()
 			memcpy(g, x+65, 64);
 			done = convertToBits(g, 512, tp.n, &num_0s, &num_1s, &bitsRead);
 		} while ( !done) ;
-		fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
-		nist_test_suite();
+		//fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
+		//nist_test_suite();
 	}
-	free(epsilon);
+	//free(epsilon);
 
 	return;
 }
@@ -164,10 +162,11 @@ cubicRes()
 	BYTE	g[64], tmp[128], x[192];
 	int		k, num_0s, num_1s, bitsRead, done;
 	
-	if ( ((epsilon = (BitSequence *)calloc(tp.n, sizeof(BitSequence))) == NULL) ) {
+	epsilon.resize(tp.n);
+	/*if ( ((epsilon = (BitSequence *)calloc(tp.n, sizeof(BitSequence))) == NULL) ) {
 		printf("Insufficient memory available.\n");
 		exit(1);
-	}
+	}*/
 	
 	ahtopb("7844506a9456c564b8b8538e0cc15aff46c95e69600f084f0657c2401b3c244734b62ea9bb95be4923b9b7e84eeaf1a224894ef0328d44bc3eb3e983644da3f5", g, 64);
 
@@ -184,10 +183,10 @@ cubicRes()
 			memcpy(g, x+128, 64);
 			done = convertToBits(g, 512, tp.n, &num_0s, &num_1s, &bitsRead);
 		} while ( !done );
-		fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
-		nist_test_suite();
+		//fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
+		//nist_test_suite();
 	}
-	free(epsilon);
+	//free(epsilon);
 
 	return;
 }
@@ -198,10 +197,11 @@ exclusiveOR()
 	int		i, num_0s, num_1s, bitsRead;
 	BYTE	bit_sequence[127];
 	
-	if ( ((epsilon = (BitSequence *)calloc(tp.n,sizeof(BitSequence))) == NULL) ) {
+	/*if ( ((epsilon = (BitSequence *)calloc(tp.n,sizeof(BitSequence))) == NULL) ) {
 		printf("Insufficient memory available.\n");
 		exit(1);
-	}
+	}*/
+	epsilon.resize(tp.n);
 
 	memcpy(bit_sequence, "0001011011011001000101111001001010011011101101000100000010101111111010100100001010110110000000000100110000101110011111111100111", 127);
 	num_0s = 0;
@@ -231,14 +231,14 @@ exclusiveOR()
 		}
 		bitsRead++;
 		if ( bitsRead == tp.n ) {
-			fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
-			nist_test_suite();
+			//fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
+			//nist_test_suite();
 			num_0s = 0;
 			num_1s = 0;
 			bitsRead = 0;
 		}
 	}
-	free(epsilon);
+	//free(epsilon);
 		
 	return;
 }
@@ -250,10 +250,11 @@ modExp()
 	int		k, num_0s, num_1s, bitsRead, done;
 	BYTE	p[64], g[64], x[192], y[20];
 
-	if ( (epsilon = (BitSequence *)calloc(tp.n, sizeof(BitSequence))) == NULL ) {
+	epsilon.resize(tp.n);
+	/*if ( (epsilon = (BitSequence *)calloc(tp.n, sizeof(BitSequence))) == NULL ) {
 		printf("Insufficient memory available.\n");
 		exit(1);
-	}
+	}*/
 	ahtopb("7AB36982CE1ADF832019CDFEB2393CABDF0214EC", y, 20);
 	ahtopb("987b6a6bf2c56a97291c445409920032499f9ee7ad128301b5d0254aa1a9633fdbd378d40149f1e23a13849f3d45992f5c4c6b7104099bc301f6005f9d8115e1", p, 64);
 	ahtopb("3844506a9456c564b8b8538e0cc15aff46c95e69600f084f0657c2401b3c244734b62ea9bb95be4923b9b7e84eeaf1a224894ef0328d44bc3eb3e983644da3f5", g, 64);
@@ -269,10 +270,10 @@ modExp()
 			done = convertToBits(x, 512, tp.n, &num_0s, &num_1s, &bitsRead);
 			memcpy(y, x+44, 20);
 			} while ( !done );
-		fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
-		nist_test_suite();
+		//fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
+		//nist_test_suite();
 	}
-	free(epsilon);
+	//free(epsilon);
 
 	return;
 }
@@ -284,10 +285,11 @@ bbs()
 	BYTE	p[64], q[64], n[128], s[64], x[256];
 	int		num_0s, num_1s;
 
-	if ( (epsilon = (BitSequence*)calloc(tp.n, sizeof(BitSequence))) == NULL ) {
+	epsilon.resize(tp.n);
+	/*if ( (epsilon = (BitSequence*)calloc(tp.n, sizeof(BitSequence))) == NULL ) {
 		printf("Insufficient memory available.\n");
 		exit(1);
-	}
+	}*/
 	ahtopb("E65097BAEC92E70478CAF4ED0ED94E1C94B154466BFB9EC9BE37B2B0FF8526C222B76E0E915017535AE8B9207250257D0A0C87C0DACEF78E17D1EF9DC44FD91F", p, 64);
 	ahtopb("E029AEFCF8EA2C29D99CB53DD5FA9BC1D0176F5DF8D9110FD16EE21F32E37BA86FF42F00531AD5B8A43073182CC2E15F5C86E8DA059E346777C9A985F7D8A867", q, 64);
 	memset(n, 0x00, 128);
@@ -313,14 +315,14 @@ bbs()
 				epsilon[i] = 1;
 			}
 			bitsRead++;
-			if ( (i % 50000) == 0 )
-				printf("\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s);
+			//if ( (i % 50000) == 0 )
+				//printf("\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s);
 		}
 
-		fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
-		nist_test_suite();
+		//fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
+		//nist_test_suite();
 	}
-	free(epsilon);
+	//free(epsilon);
 }
 
 
@@ -333,10 +335,11 @@ micali_schnorr()
 	int		k=837, num_0s, num_1s, bitsRead, done;
 	BYTE	p[64], q[64], n[128], e[1], X[128], Y[384], Tail[105];
 
-	if ( (epsilon = (BitSequence *)calloc(tp.n, sizeof(BitSequence))) == NULL ) {
+	epsilon.resize(tp.n);
+	/*if ( (epsilon = (BitSequence *)calloc(tp.n, sizeof(BitSequence))) == NULL ) {
 		printf("Insufficient memory available.\n");
 		exit(1);
-	}
+	}*/
 	ahtopb("E65097BAEC92E70478CAF4ED0ED94E1C94B154466BFB9EC9BE37B2B0FF8526C222B76E0E915017535AE8B9207250257D0A0C87C0DACEF78E17D1EF9DC44FD91F", p, 64);
 	ahtopb("E029AEFCF8EA2C29D99CB53DD5FA9BC1D0176F5DF8D9110FD16EE21F32E37BA86FF42F00531AD5B8A43073182CC2E15F5C86E8DA059E346777C9A985F7D8A867", q, 64);
 	memset(n, 0x00, 128);
@@ -361,10 +364,10 @@ micali_schnorr()
 				bshr(X+104, 24);
 		} while ( !done );
 
-		fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
-		nist_test_suite();
+		//fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
+		//nist_test_suite();
 	}
-	free(epsilon);
+	//free(epsilon);
 }
 
 //  Uses 160 bit Xkey and no XSeed (b=160)
@@ -379,10 +382,11 @@ SHA1()
 	int		done;
 	ULONG	tx[5] = { 0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0 };
 	
-	if ( ((epsilon = (BitSequence *) calloc(tp.n,sizeof(BitSequence))) == NULL) ) {
+	epsilon.resize(tp.n);
+	/*if ( ((epsilon = (BitSequence *) calloc(tp.n,sizeof(BitSequence))) == NULL) ) {
 		printf("Insufficient memory available.\n");
 		exit(1);
-	}
+	}*/
 
 	ahtopb("ec822a619d6ed5d9492218a7a4c5b15d57c61601", Xkey, 20);
 //	ahtopb("E65097BAEC92E70478CAF4ED0ED94E1C94B15446", Xkey, 20);
@@ -450,8 +454,8 @@ SHA1()
 			add(Xkey, 20, G, 20);
 			add(Xkey, 20, One, 1);
 		} while ( !done );
-		fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
-		nist_test_suite();
+		//fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
+		//nist_test_suite();
 	}
-	free(epsilon);
+	//free(epsilon);
 }

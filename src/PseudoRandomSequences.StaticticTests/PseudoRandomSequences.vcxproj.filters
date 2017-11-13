@@ -108,6 +108,12 @@
     <ClInclude Include="statTests\include\utilities.h">
       <Filter>Header\statTests</Filter>
     </ClInclude>
+    <ClInclude Include="lipaboyLibrary\src\maths\fixed_precision_number.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="lipaboyLibrary\src\maths\precision_number.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">

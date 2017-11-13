@@ -13,7 +13,7 @@
           N O N O V E R L A P P I N G  T E M P L A T E  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-double
+std::vector<double>
 NonOverlappingTemplateMatchings(int m, int n)
 {
 	int		numOfTemplates[100] = {0, 0, 2, 4, 6, 12, 20, 40, 74, 148, 284, 568, 1116,
@@ -31,7 +31,7 @@ NonOverlappingTemplateMatchings(int m, int n)
 	char			directory[100];
 	BitSequence		*sequence = NULL;
 
-	double result;
+	std::vector<double> result;
 	int successCount = 0;
 	int failureCount = 0;
 
@@ -41,7 +41,7 @@ NonOverlappingTemplateMatchings(int m, int n)
 	if ( (Wj = (unsigned int*)calloc(N, sizeof(unsigned int))) == NULL ) {
 		printf( "\tNONOVERLAPPING TEMPLATES TESTS ABORTED DUE TO ONE OF THE FOLLOWING : \n");
 		printf( "\tInsufficient memory for required work space.\n");
-		return -1.;
+		return result;
 	}
 	lambda = (M-m+1)/pow(2, m);
 	varWj = M*(1.0/pow(2.0, m) - (2.0*m-1.0)/pow(2.0, 2.0*m));
@@ -57,7 +57,7 @@ NonOverlappingTemplateMatchings(int m, int n)
 		printf( "\tInsufficient memory for required work space.\n");
 		if ( sequence != NULL )
 			free(sequence);
-		result = -1.;
+		//result = -1.;
 	}
 	else {
 		/*fprintf(stats[TEST_NONPERIODIC], "\t\t  NONPERIODIC TEMPLATES TEST\n");
@@ -131,10 +131,11 @@ NonOverlappingTemplateMatchings(int m, int n)
 			if ( isNegative(p_value) || isGreaterThanOne(p_value) )
 				printf("\t\tWARNING:  P_VALUE IS OUT OF RANGE.\n");
 
-			if (p_value < ALPHA)
+			result.push_back(p_value);
+			/*if (p_value < ALPHA)
 				failureCount++;
 			else
-				successCount++;
+				successCount++;*/
 			//printf("Non Overlapping Template Matchings:\t%f %s %3d\n", p_value, p_value < ALPHA ? "FAILURE" : "SUCCESS", jj);
 			if ( SKIP > 1 )
 				fseek(fp, (long)(SKIP-1)*2*m, SEEK_CUR);
@@ -142,7 +143,7 @@ NonOverlappingTemplateMatchings(int m, int n)
 		}
 		/*printf("Non Overlapping Template Matchings:\tsuccess = %d of %d\n", successCount, 
 			successCount + failureCount);*/
-		result = double(successCount) / (failureCount + successCount);
+		//result = double(successCount) / (failureCount + successCount);
 	}
 	
 	//fprintf(stats[TEST_NONPERIODIC], "\n"); fflush(stats[TEST_NONPERIODIC]);

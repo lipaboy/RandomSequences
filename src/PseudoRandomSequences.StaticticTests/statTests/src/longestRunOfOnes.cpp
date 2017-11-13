@@ -114,6 +114,6 @@ LongestRunOfOnes(int n)
 		printf("WARNING:  P_VALUE IS OUT OF RANGE.\n");
 
 	//printf("Longest Runs of ones:\t\t%s\t\tp_value = %f\n\n", pval < ALPHA ? "FAILURE" : "SUCCESS", pval); //fflush(stats[TEST_LONGEST_RUN]);
-	return double(pval >= ALPHA);
+	return double(pval);
 	//fprintf(results[TEST_LONGEST_RUN], "%f\n", pval); fflush(results[TEST_LONGEST_RUN]);
 }

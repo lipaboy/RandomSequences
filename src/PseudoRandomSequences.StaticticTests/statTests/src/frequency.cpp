@@ -13,7 +13,7 @@
 
 
 
-bool
+double
 Frequency(int n)
 {
 	int		i;
@@ -39,7 +39,7 @@ Frequency(int n)
 	fprintf(results[TEST_FREQUENCY], "%f\n", p_value); fflush(results[TEST_FREQUENCY]);*/
 
 	//printf("Frequency(Monobit):\t\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value); 
-	return (p_value >= ALPHA);
+	return (p_value);
 	//fflush(stats[TEST_FREQUENCY]);
 	//printf("%f\n", p_value); fflush(results[TEST_FREQUENCY]);
 }

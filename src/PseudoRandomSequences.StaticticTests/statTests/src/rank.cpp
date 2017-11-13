@@ -81,7 +81,7 @@ Rank(int n)
 		if ( isNegative(p_value) || isGreaterThanOne(p_value) )
 			printf("WARNING:  P_VALUE IS OUT OF RANGE.\n");
 
-		result = double(p_value >= ALPHA);
+		result = double(p_value);
 	}
 
 	if (matrix != NULL) {

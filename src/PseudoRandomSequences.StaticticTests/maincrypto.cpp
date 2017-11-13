@@ -18,6 +18,7 @@
 #include <chrono>
 
 #include "statTests\include\stat_fncs.h"
+#include "lipaboyLibrary\src\maths\fixed_precision_number.h"
 
 using namespace PseudoRandomSequences;
 using namespace std::chrono;
@@ -76,7 +77,7 @@ int main(int argc, char *argv[]) {
 	inFile.open(argv[5], std::ios::in);
 	inFile >> std::skipws;
 	auto iter = std::istream_iterator<char>(inFile);
-	for (size_t i = 0; i < inputSize / 8
+	for (size_t i = 0; i < inputSize
 			&& iter != std::istream_iterator<char>()
 			; i++, iter++) {
 		// bool per char
@@ -172,7 +173,15 @@ int main(int argc, char *argv[]) {
 	if (testKey[7] == '1') {
 			// from 2 to 16
 		testNames.push_back("NonOverlappingTemplateMatchings_" + std::to_string(5));
-		testResults.push_back(NonOverlappingTemplateMatchings(5, EPSILON_SIZE));
+		auto result = (dimension <= 1) ? std::vector<double>() : NonOverlappingTemplateMatchings(5, EPSILON_SIZE);
+		double average = 0.;
+		for (auto elem : result) {
+			average += (elem >= ALPHA);
+		}
+		size_t size = result.size();
+		average /= size;
+		testResults.push_back( size == 0 ? -1. 
+			: average + size * (ALPHA - (size - 1.) / size + 1e-3) * (1. - average) );
 	}
 	if (testKey[8] == '1') {
 		testNames.push_back("OverlappingTemplateMatchings_" + std::to_string(5));
@@ -184,11 +193,14 @@ int main(int argc, char *argv[]) {
 	}
 	if (testKey[10] == '1') {
 		testNames.push_back("LinearComplexity_" + std::to_string(1 << dimension));
-		testResults.push_back(LinearComplexity(1 << dimension, EPSILON_SIZE));
+		testResults.push_back((dimension <= 3) ? -1. : LinearComplexity(1 << dimension, EPSILON_SIZE));
 	}
 	if (testKey[11] == '1') {
-		testNames.push_back("Serial_" + std::to_string(dimension));
-		testResults.push_back(Serial(dimension, EPSILON_SIZE));
+		auto res = Serial(dimension, EPSILON_SIZE);
+		testNames.push_back("Serial_" + std::to_string(dimension) + "_1");
+		testResults.push_back(res.first);
+		testNames.push_back("Serial_" + std::to_string(dimension) + "_2");
+		testResults.push_back(res.second);
 	}
 	if (testKey[12] == '1') {
 		testNames.push_back("ApproximateEntropy_" + std::to_string(dimension));
@@ -196,24 +208,47 @@ int main(int argc, char *argv[]) {
 		testResults.push_back(ApproximateEntropy(dimension, EPSILON_SIZE));
 	}
 	if (testKey[13] == '1') {
-		testNames.push_back("CumulativeSums");
-		testResults.push_back(CumulativeSums(EPSILON_SIZE));
+		auto res = CumulativeSums(EPSILON_SIZE);
+		testNames.push_back("CumulativeSums_1");
+		testResults.push_back(res.first);
+		testNames.push_back("CumulativeSums_1");
+		testResults.push_back(res.second);
 	}
 	if (testKey[14] == '1') {
 		testNames.push_back("RandomExcursions");
-		testResults.push_back(RandomExcursions(EPSILON_SIZE));
+		auto result = RandomExcursions(EPSILON_SIZE);
+		double average = 0.;
+		for (auto elem : result) {
+			average += (elem >= ALPHA);
+		}
+		size_t size = result.size();
+		average /= size;
+		testResults.push_back(size == 0 ? -1.
+			: average + size * (ALPHA - (size - 1.) / size + 1e-3) * (1. - average));
 	}
 	if (testKey[15] == '1') {		// For more longer sequences (> 1e6)
 		testNames.push_back("RandomExcursionsVariant");
-		testResults.push_back(RandomExcursionsVariant(EPSILON_SIZE));
+		auto result = RandomExcursionsVariant(EPSILON_SIZE);
+		double average = 0.;
+		for (auto elem : result) {
+			average += (elem >= ALPHA);
+		}
+		size_t size = result.size();
+		average /= size;
+		testResults.push_back(size == 0 ? -1.
+			: average + size * (ALPHA - (size - 1.) / size + 1e-3) * (1. - average));
 	}
 
 	std::ofstream resFile;
 	resFile.open(argv[7], std::ios::out | std::ios::trunc);
 
 	std::copy(testNames.begin(), testNames.end(), std::ostream_iterator<string>(resFile, "\t"));
-	resFile << endl;
-	std::copy(testResults.begin(), testResults.end(), std::ostream_iterator<double>(resFile, "\t"));
+	resFile << "data_number" << endl;
+	std::transform(testResults.begin(), testResults.end(), std::ostream_iterator<double>(resFile, "\t"),
+		[](double p_value) -> double {
+			return LipaboyLib::FixedPrecisionNumber<double, int, 1, -5>(p_value) == -1. ? -1. :
+				p_value >= ALPHA;
+		});
 	resFile << endl;
 
 	resFile.close();

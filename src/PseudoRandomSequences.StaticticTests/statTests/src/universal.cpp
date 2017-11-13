@@ -99,5 +99,5 @@ Universal(int n)
 	//fprintf(results[TEST_UNIVERSAL], "%f\n", p_value); fflush(results[TEST_UNIVERSAL]);
 	
 	free(T);
-	return (p_value >= ALPHA);
+	return (p_value);
 }

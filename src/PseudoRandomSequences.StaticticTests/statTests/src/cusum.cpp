@@ -9,7 +9,7 @@
 		    C U M U L A T I V E  S U M S  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-double
+std::pair<double, double>
 CumulativeSums(int n)
 {
 	int		S, sup, inf, z, zrev, k;
@@ -53,7 +53,7 @@ CumulativeSums(int n)
 		printf("\t\tWARNING:  P_VALUE IS OUT OF RANGE\n");
 
 	//printf("%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);
-	int p_value1 = p_value;
+	double p_value1 = p_value;
 	//fprintf(results[TEST_CUSUM], "%f\n", p_value);
 		
 	// backwards
@@ -80,6 +80,6 @@ CumulativeSums(int n)
 		printf("\t\tWARNING:  P_VALUE IS OUT OF RANGE\n");
 
 	//printf("Cumulative Sums:\t\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);// fflush(stats[TEST_CUSUM]);
-	return ((p_value >= ALPHA) + (p_value1 >= ALPHA)) / 2.;
+	return std::make_pair(p_value1, p_value);
 	//fprintf(results[TEST_CUSUM], "%f\n", p_value); fflush(results[TEST_CUSUM]);
 }

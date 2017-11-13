@@ -91,7 +91,7 @@ OverlappingTemplateMatchings(int m, int n)
 	free(sequence);
 	//printf("Overlapping Template Matrchings:%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS",
 	//	p_value); //fflush(stats[TEST_OVERLAPPING]);
-	return double(p_value >= ALPHA);
+	return double(p_value);
 //	fprintf(results[TEST_OVERLAPPING], "%f\n", p_value); fflush(results[TEST_OVERLAPPING]);
 }
 

@@ -565,6 +565,6 @@ double bookStackTestMain(int argc, const char* argv[])
 	//<< "\t\tp_value = " << p_value << endl << endl;
 	double p_value = 1 -
 		boost::math::cdf(boost::math::chi_squared_distribution<double>(1), chi);
-	return p_value >= ALPHA;
+	return p_value;
 }
 

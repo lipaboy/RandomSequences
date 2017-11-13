@@ -53,6 +53,6 @@ Runs(int n)
 		//printf("Runs (depends on Frequency):\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);// fflush(stats[TEST_RUNS]);
 		
 	}
-	return double(p_value >= ALPHA);
+	return double(p_value);
 	//fprintf(results[TEST_RUNS], "%f\n", p_value); fflush(results[TEST_RUNS]);
 }

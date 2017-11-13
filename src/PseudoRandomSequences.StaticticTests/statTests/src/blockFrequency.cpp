@@ -9,7 +9,7 @@
                     B L O C K  F R E Q U E N C Y  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-bool
+double
 BlockFrequency(int M, int n)
 {
 	int		i, j, N, blockSum;
@@ -40,6 +40,6 @@ BlockFrequency(int M, int n)
 	fprintf(stats[TEST_BLOCK_FREQUENCY], "\t\t---------------------------------------------\n");*/
 
 	//printf("Block frequency:\t\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);// fflush(stats[TEST_BLOCK_FREQUENCY]);
-	return (p_value >= ALPHA);
+	return (p_value);
 	//printf( "%f\n", p_value); fflush(results[TEST_BLOCK_FREQUENCY]);
 }

@@ -122,8 +122,9 @@ LinearComplexity(int M, int n)
 
 	free(B_);
 	free(P);
-	free(C);
+	if (C != NULL)
+		free(C);
 	free(T);
 
-	return (p_value >= ALPHA);
+	return (p_value);
 }

@@ -9,7 +9,7 @@
                      R A N D O M  E X C U R S I O N S  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-double
+std::vector<double>
 RandomExcursions(int n)
 {
 	int		b, i, j, k, J, x;
@@ -24,7 +24,7 @@ RandomExcursions(int n)
 						 {0.8750000000, 0.01562500000, 0.01367187500, 0.01196289063, 0.01046752930, 0.0732727051} };
 
 	int successCount = 0;
-	double result;
+	std::vector<double> result;
 
 	//printf("RandomExcursions:");
 
@@ -35,7 +35,7 @@ RandomExcursions(int n)
 			free(S_k);
 		if ( cycle != NULL )
 			free(cycle);
-		return -1.;
+		return result;
 	}
 	
 	J = 0; 					/* DETERMINE CYCLES */
@@ -48,7 +48,7 @@ RandomExcursions(int n)
 				printf("ERROR IN FUNCTION randomExcursions:  EXCEEDING THE MAX NUMBER OF CYCLES EXPECTED\n.");
 				free(S_k);
 				free(cycle);
-				return -1.;
+				return result;
 			}
 			cycle[J] = i;
 		}
@@ -72,7 +72,7 @@ RandomExcursions(int n)
 		printf( "\t\t---------------------------------------------\n");
 		/*for(i = 0; i < 8; i++)
 			printf( "%f\n", 0.0);*/
-		result = -1.;
+		//result = -1.;
 	}
 	else {
 		//fprintf(stats[TEST_RND_EXCURSION], "\t\t(c) Rejection Constraint = %f\n", constraint);
@@ -118,13 +118,14 @@ RandomExcursions(int n)
 			if ( isNegative(p_value) || isGreaterThanOne(p_value) )
 				printf("WARNING:  P_VALUE IS OUT OF RANGE.\n");
 
-			if (p_value >= ALPHA)
-				successCount++;
+			/*if (p_value >= ALPHA)
+				successCount++;*/
+			result.push_back(p_value);
 			
 			//fprintf(results[TEST_RND_EXCURSION], "%f\n", p_value); fflush(results[TEST_RND_EXCURSION]);
 		}
 		//printf("\t\tsuccess = %d of %d\n", successCount, 8);
-		result = double(successCount) / 8;
+		//result = double(successCount) / 8;
 	} 
 	//fprintf(stats[TEST_RND_EXCURSION], "\n"); fflush(stats[TEST_RND_EXCURSION]);
 	free(S_k);

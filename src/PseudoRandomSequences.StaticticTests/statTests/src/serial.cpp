@@ -7,7 +7,7 @@
 
 double psi2(int m, int n);
 
-bool
+std::pair<double, double>
 Serial(int m, int n)
 {
 	double	p_value1, p_value2, psim0, psim1, psim2, del1, del2;
@@ -39,7 +39,7 @@ Serial(int m, int n)
 	//printf("Serial #2:\t\t%s\t\tp_value2 = %f\n\n", p_value2 < ALPHA ? "FAILURE" : "SUCCESS", p_value2);// fflush(stats[TEST_SERIAL]);
 	//fprintf(results[TEST_SERIAL], "%f\n", p_value2); fflush(results[TEST_SERIAL]);
 
-	return (p_value1 >= ALPHA) && (p_value2 >= ALPHA);
+	return std::make_pair(p_value1, p_value2);
 }
 
 double
