@@ -64,6 +64,12 @@
     <ClCompile Include="statTests\src\utilities.cpp">
       <Filter>Source\statTests</Filter>
     </ClCompile>
+    <ClCompile Include="beaconConfigsRun.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="generatorsTestConfigRun.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="book_stack_test.h">

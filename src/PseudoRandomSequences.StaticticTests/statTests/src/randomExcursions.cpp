@@ -66,6 +66,7 @@ RandomExcursions(int n)
 
 	constraint = MAX(0.005*pow(n, 0.5), 500);
 	if (J < constraint) {
+		printf("\t\tRandom Excursions Test:\n");
 		printf("\t\t---------------------------------------------\n");
 		printf( "\t\tWARNING:  TEST NOT APPLICABLE.  THERE ARE AN\n");
 		printf("\t\t\t  INSUFFICIENT NUMBER OF CYCLES.\n");

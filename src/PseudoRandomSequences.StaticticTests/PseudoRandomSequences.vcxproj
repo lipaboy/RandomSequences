@@ -37,7 +37,9 @@
     <ClInclude Include="statTests\include\utilities.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="beaconConfigsRun.cpp" />
     <ClCompile Include="bookStackTest\bs.cpp" />
+    <ClCompile Include="generatorsTestConfigRun.cpp" />
     <ClCompile Include="maincrypto.cpp" />
     <ClCompile Include="statTests\src\approximateEntropy.cpp" />
     <ClCompile Include="statTests\src\blockFrequency.cpp" />
