@@ -1,0 +1,4 @@
+	BookStackTest_1	BookStackTest_2	BookStackTest_3	BookStackTest_4	BookStackTest_5	BookStackTest_6	BookStackTest_7	BookStackTest_8	Frequency	BlockFrequency_5	Runs	LongestRunOfOnes	Rank	DiscreteFourierTransform	NonOverlappingTemplateMatchings_5	OverlappingTemplateMatchings_5	Universal	LinearComplexity_25	Serial_5_1	Serial_5_2	ApproximateEntropy_3071635911	CumulativeSums_1	CumulativeSums_1	RandomExcursions	RandomExcursionsVariant	
+32_Kbits	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	-1	1	1	1	1	1	1	-1	-1	
+64_Kbits	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	-1	1	1	1	1	1	1	-1	-1	
+128_Kbits	1	1	1	1	1	0	1	1	1	1	1	1	1	1	1	1	-1	0	1	1	1	1	1	-1	-1	
