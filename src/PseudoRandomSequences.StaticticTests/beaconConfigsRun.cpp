@@ -111,7 +111,8 @@ int PseudoRandomSequences::beaconRun(int argc, char * argv[]) {
 
 		//----------------Tests-----------------//
 
-		runTests(epsilon, testNames, testResults, testKey, fileIndex, outFilename);
+		runTests(epsilon, testNames, (fileIndex <= firstId), testResults, testKey, 
+			outFilename + std::to_string(fileIndex) + ".tmp");
 
 		//----------------Write results-----------------//
 		{
@@ -152,18 +153,18 @@ int PseudoRandomSequences::beaconRun(int argc, char * argv[]) {
 
 void PseudoRandomSequences::runTests(std::vector<bool> const & epsilon, 
 									std::vector<std::string> & testNames,
+									bool isSaveNames,
 									std::vector<double> & testResults,
 									std::string const & testKey,
-									int fileIndex,
 									std::string const & inputFile) {
 	const int EPSILON_SIZE = epsilon.size();
 	// #Parameterized
 	if (testKey[0] == '1') {
 		// ! Each bit means 0 or 1 (you can't pass to bookStackTest 0 or 1 in whole byte for example)
-		for (int dim = 1; dim <= 8; dim++) {
+		for (int dim = 2; dim <= 8; dim *= 2) {
 			std::string sizeStr = std::to_string(EPSILON_SIZE);
 			std::string dimStr = std::to_string(dim);
-			std::string filename = (inputFile + std::to_string(fileIndex) + ".tmp");
+			std::string filename = (inputFile);
 			std::vector<const char *> arguments{ "bs.exe",
 				"-f", filename.c_str(),
 				"-n", sizeStr.c_str(),	// file size (in bits)
@@ -171,42 +172,42 @@ void PseudoRandomSequences::runTests(std::vector<bool> const & epsilon,
 													//"-b", "0",				// blank between words
 													//"-u", "32"				// size of upper part book stack
 			};
-			testNames.push_back("BookStackTest_" + dimStr);
+			if (isSaveNames) testNames.push_back("BookStackTest_" + dimStr);
 			testResults.push_back(bookStackTestMain(int(arguments.size()), &arguments[0]));
 		}
 	}
 	if (testKey[1] == '1') {
-		testNames.push_back("Frequency");
+		if (isSaveNames) testNames.push_back("Frequency");
 		testResults.push_back(Frequency(EPSILON_SIZE));
 	}
 	// #Parameterized
 	if (testKey[2] == '1') {
 		//doesn't equal frequency monobit with M = 1
-		testNames.push_back("BlockFrequency_" + std::to_string(5));
+		if (isSaveNames) testNames.push_back("BlockFrequency_" + std::to_string(5));
 		testResults.push_back(BlockFrequency(5, EPSILON_SIZE));
 	}
 	if (testKey[3] == '1') {
-		testNames.push_back("Runs");
+		if (isSaveNames) testNames.push_back("Runs");
 		testResults.push_back(Runs(EPSILON_SIZE));
 	}
 	if (testKey[4] == '1') {
-		testNames.push_back("LongestRunOfOnes");
+		if (isSaveNames) testNames.push_back("LongestRunOfOnes");
 		testResults.push_back(LongestRunOfOnes(EPSILON_SIZE));
 	}
 	if (testKey[5] == '1') {
-		testNames.push_back("Rank");
+		if (isSaveNames) testNames.push_back("Rank");
 		testResults.push_back(Rank(EPSILON_SIZE));
 	}
 	if (testKey[6] == '1') {
 		// Has a little difference between results of my own discreteFourier Test version
-		testNames.push_back("DiscreteFourierTransform");
+		if (isSaveNames) testNames.push_back("DiscreteFourierTransform");
 		testResults.push_back(DiscreteFourierTransform(EPSILON_SIZE));
 	}
 	// #Parameterized
 	if (testKey[7] == '1') {
 		int blockSize = 5;
 		// from 2 to 16
-		testNames.push_back("NonOverlappingTemplateMatchings_" + std::to_string(5));
+		if (isSaveNames) testNames.push_back("NonOverlappingTemplateMatchings_" + std::to_string(5));
 		auto result = (blockSize <= 1) ? std::vector<double>()
 			: NonOverlappingTemplateMatchings(blockSize, EPSILON_SIZE);
 		double average = 0.;
@@ -220,42 +221,42 @@ void PseudoRandomSequences::runTests(std::vector<bool> const & epsilon,
 	}
 	// #Parameterized
 	if (testKey[8] == '1') {
-		testNames.push_back("OverlappingTemplateMatchings_" + std::to_string(5));
+		if (isSaveNames) testNames.push_back("OverlappingTemplateMatchings_" + std::to_string(5));
 		testResults.push_back(OverlappingTemplateMatchings(5, EPSILON_SIZE));
 	}
 	if (testKey[9] == '1') {
-		testNames.push_back("Universal");
+		if (isSaveNames) testNames.push_back("Universal");
 		testResults.push_back(Universal(EPSILON_SIZE));
 	}
 	// #Parameterized
 	if (testKey[10] == '1') {		// think: neccessary try all the variant of blockSize (read documentation of test)
 		int blockSize = 25;
-		testNames.push_back("LinearComplexity_" + std::to_string(blockSize));
+		if (isSaveNames) testNames.push_back("LinearComplexity_" + std::to_string(blockSize));
 		testResults.push_back((blockSize <= 3) ? -1. : LinearComplexity(blockSize, EPSILON_SIZE));
 	}
 	// #Parameterized
 	if (testKey[11] == '1') {// think: neccessary try all the variant of blockSize (read documentation of test)
 		auto res = Serial(5, EPSILON_SIZE);
-		testNames.push_back("Serial_" + std::to_string(5) + "_1");
+		if (isSaveNames) testNames.push_back("Serial_" + std::to_string(5) + "_1");
 		testResults.push_back(res.first);
-		testNames.push_back("Serial_" + std::to_string(5) + "_2");
+		if (isSaveNames) testNames.push_back("Serial_" + std::to_string(5) + "_2");
 		testResults.push_back(res.second);
 	}
 	// #Parameterized
 	if (testKey[12] == '1') {// think: neccessary try all the variant of blockSize (read documentation of test)
-		testNames.push_back("ApproximateEntropy_" + std::to_string(7));
+		if (isSaveNames) testNames.push_back("ApproximateEntropy_" + std::to_string(5));
 		// (M + 1) - bit block is used to compare
-		testResults.push_back(ApproximateEntropy(7, EPSILON_SIZE));
+		testResults.push_back(ApproximateEntropy(5, EPSILON_SIZE));
 	}
 	if (testKey[13] == '1') {
 		auto res = CumulativeSums(EPSILON_SIZE);
-		testNames.push_back("CumulativeSums_1");
+		if (isSaveNames) testNames.push_back("CumulativeSums_1");
 		testResults.push_back(res.first);
-		testNames.push_back("CumulativeSums_1");
+		if (isSaveNames) testNames.push_back("CumulativeSums_1");
 		testResults.push_back(res.second);
 	}
 	if (testKey[14] == '1') {
-		testNames.push_back("RandomExcursions");
+		if (isSaveNames) testNames.push_back("RandomExcursions");
 		auto result = RandomExcursions(EPSILON_SIZE);
 		double average = 0.;
 		for (auto elem : result) {
@@ -267,7 +268,7 @@ void PseudoRandomSequences::runTests(std::vector<bool> const & epsilon,
 			: average + size * (ALPHA - (size - 1.) / size + 1e-3) * (1. - average));
 	}
 	if (testKey[15] == '1') {		// For more longer sequences (> 1e6)
-		testNames.push_back("RandomExcursionsVariant");
+		if (isSaveNames) testNames.push_back("RandomExcursionsVariant");
 		auto result = RandomExcursionsVariant(EPSILON_SIZE);
 		double average = 0.;
 		for (auto elem : result) {

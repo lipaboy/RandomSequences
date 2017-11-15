@@ -13,9 +13,9 @@ namespace PseudoRandomSequences {
 
 	void runTests(std::vector<bool> const & epsilon,
 		std::vector<std::string> & testNames,
+		bool isSaveNames,
 		std::vector<double> & testResults,
 		std::string const & testKey,
-		int fileIndex,
 		std::string const & inputFile);
 
 	int beaconRun(int argc, char * argv[]);

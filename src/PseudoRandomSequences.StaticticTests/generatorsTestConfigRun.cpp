@@ -38,125 +38,148 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 
 
 	size_t len = 0;
-	if (argc < 3 || (len = std::strlen(argv[1])) < TEST_COUNT) {
+	if (argc < 4 || (len = std::strlen(argv[1])) < TEST_COUNT) {
 		cout << "Not enough parameters ( testKey ("
 			<< TEST_COUNT << ", current = " << len << "), "
-			<< "input possibility, sequence size)"
+			<< "input possibility, first size, last size)"
 			<< endl;
 		return -1;
 	}
 
 	// TODO: add test performance for conversation and tests
 
-	std::ofstream resFile;
-	std::ofstream extraFile;
-	resFile.open("resStdGenerators.dat",
-		std::ios::out | std::ios::trunc);
-	extraFile.open("extraStdGenerators.dat",
-		std::ios::out | std::ios::trunc);
-
 	std::string inputFilename = "input";
 	// Kbits
-	size_t inputSize = 1024u * size_t(boost::lexical_cast<double>(argv[3]));
-
+	int inputOppositePossibility = static_cast<int>(
+		std::round(1.0 / boost::lexical_cast<double>(argv[2]))
+		);
+	size_t firstSize = boost::lexical_cast<size_t>(argv[3]);
+	size_t lastSize = boost::lexical_cast<size_t>(argv[4]);
 	std::vector<string> generatorNames{ "minstd_rand", 
-		"default_random_engine", "ranlux48", "random_device" };
+		"knuth_b", "ranlux48", "random_device" };
 
-	for (int i = 0; i < generatorNames.size(); i++) {
-		std::string & genName = generatorNames[i];
+	for (int iGen = 0; iGen < generatorNames.size(); iGen++) {
+		std::string & genName = generatorNames[iGen];
 
-		//-------------Input----------------//
+		
+		std::ofstream resFile;
+		std::ofstream extraFile;
+		resFile.open("resStdGenerators_" + genName + "_" + std::to_string(firstSize) 
+			+ "-" + std::to_string(lastSize) + ".dat",
+			std::ios::out | std::ios::trunc);
+		//extraFile.open("extraStdGenerators_" + genName + ".dat",
+		//	std::ios::out | std::ios::trunc);
 
-		Sequence seq;
-		// TODO: bad computation of input possibility (use another input format) (bad because 2/3)
+		for (size_t iSize = firstSize; iSize <= lastSize; iSize *= 4) {
+			size_t inputSize = 1024u * iSize;
+			
+			cout << "Sequenc size = " << inputSize << endl;
+			//-------------Input----------------//
 
-		std::minstd_rand generator;
-		//std::default_random_engine generator;
-		//std::ranlux48 generator;				//failure with normal_distribution and with chi_squared_distribution
-		//std::random_device generator;
+			//Sequence seq(inputSize);
+			std::vector<bool> epsilon(inputSize);
 
-		std::normal_distribution<double> distribution(5.0, 2.0);		//doesn't failure with random_device generator
-		//std::chi_squared_distribution<double> distribution(3.0);		//failure with random_device (number of freedoms = 3.0)
-		int inputOppositePossibility = static_cast<int>(
-			std::round(1.0 / boost::lexical_cast<double>(argv[2]))
-			);
+			vector<double> testResults;
+			vector<string> testNames = { "" };
+			vector<double> currResults;
+			std::string outFilename = "out.tmp";
+			string testKey(argv[1]);
 
-		if (get)
-		std::generate_n(std::back_inserter(seq), inputSize,
-			[&inputOppositePossibility, &generator, &distribution, &inputSize]() -> bool {
-			return (int(std::round(distribution(generator))) % inputOppositePossibility == 0);
-		});
+			currResults.reserve(60u);
+			int traversalCount = (epsilon.size() < static_cast<int>(1e5)) ? 10 : 10;
+			for (int jTraver = 0; jTraver < traversalCount; jTraver++) 
+			{
+				// TODO: bad computation of input possibility (use another input format) (bad because 2/3)
+				std::normal_distribution<double> distribution(4.5, 2.0);		//doesn't failure with random_device generator
+				//std::chi_squared_distribution<double> distribution(3.0);		//failure with random_device (number of freedoms = 3.0)
 
-		Sequence result;
-		uint32_t dimension = uint32_t(boost::lexical_cast<double>(argv[1]));
-		//MatrixRandomConverter<> converter(dimension);
-		//result = converter.converse(seq);
-		result = std::move(seq);
-		cout << endl << "Seq size = " << result.size() << endl;
+				if ("minstd_rand" == genName) {
+					std::minstd_rand generator;
+					std::generate_n(epsilon.begin(), inputSize,
+						[&inputOppositePossibility, &generator, &distribution, &inputSize]() -> bool {
+						return (int(std::round(distribution(generator))) % inputOppositePossibility == 0);
+					});
+				}
+				else if ("knuth_b" == genName) {
+					std::knuth_b generator;
+					std::generate_n(epsilon.begin(), inputSize,
+						[&inputOppositePossibility, &generator, &distribution, &inputSize]() -> bool {
+						return (int(std::round(distribution(generator))) % inputOppositePossibility == 0);
+					});
+				}
+				else if ("ranlux48" == genName) {
+					std::ranlux48 generator;	//failure with normal_distribution and with chi_squared_distribution
+					std::generate_n(epsilon.begin(), inputSize,
+						[&inputOppositePossibility, &generator, &distribution, &inputSize]() -> bool {
+						return (int(std::round(distribution(generator))) % inputOppositePossibility == 0);
+					});
+				}
+				else if ("random_device" == genName) {
+					std::random_device generator;
+					std::generate_n(epsilon.begin(), inputSize,
+						[&inputOppositePossibility, &generator, &distribution, &inputSize]() -> bool {
+						return (int(std::round(distribution(generator))) % inputOppositePossibility == 0);
+					});
+				}
+				else {
+					continue;
+				}
 
-		//-------------Output----------------//
-		std::string outFilename = "out";
-		{
-			std::ofstream outFile;
-			outFile.open(outFilename + std::to_string(fileIndex) + ".tmp", std::ios::out | std::ios::trunc);
-			//std::copy(result.begin(), result.end(), std::ostream_iterator<bool>(outFile, ""));
-			auto outIter = std::ostream_iterator<char>(outFile);
-			int bitPos = 0;
-			char buffer = 0;
-			for (auto val : result) {
-				buffer |= val << (bitPos++);
-				if (bitPos >= 8) {
-					bitPos = 0;
-					*(outIter++) = buffer;
-					buffer = 0;
+				//-------------Output----------------//
+			
+				{
+					std::ofstream outFile;
+					outFile.open(outFilename, std::ios::out | std::ios::trunc);
+					//std::copy(result.begin(), result.end(), std::ostream_iterator<bool>(outFile, ""));
+					auto outIter = std::ostream_iterator<char>(outFile);
+					int bitPos = 0;
+					char buffer = 0;
+					for (auto val : epsilon) {
+						buffer |= val << (bitPos++);
+						if (bitPos >= 8) {
+							bitPos = 0;
+							*(outIter++) = buffer;
+							buffer = 0;
+						}
+					}
+					if (bitPos > 0)
+						*(outIter) = buffer;
+					outFile.close();
+				}
+
+				//----------------Tests-----------------//
+				{
+					runTests(epsilon, testNames, false, currResults, testKey, outFilename);
+					if (jTraver == 0)
+						testResults.assign(currResults.size(), 0);
+					std::transform(currResults.begin(), currResults.end(), testResults.begin(),
+						testResults.begin(),
+						[](double p_value, double count) -> double { return (std::abs(p_value - -1.) < 1e-5)
+											? count : (p_value < ALPHA) + count; }
+					);
+					currResults.clear();
 				}
 			}
-			if (bitPos > 0)
-				*(outIter) = buffer;
-			outFile.close();
-		}
 
-		string testKey(argv[1]);
-		epsilon = std::move(result);
-		const int EPSILON_SIZE = int(epsilon.size());
-
-		vector<string> testNames = { "" };
-		vector<double> testResults;
-
-		runTests(epsilon, testNames, testResults, testKey, fileIndex, outFilename);
-
-		//----------------Write results-----------------//
-		{
-			if (fileIndex <= firstId) {
-				std::copy(testNames.begin(), testNames.end(), std::ostream_iterator<string>(resFile, "\t"));
+			//----------------Write results-----------------//
+			{
+				if (iSize <= firstSize) {
+					std::copy(testNames.begin(), testNames.end(), std::ostream_iterator<string>(resFile, "\t"));
+					resFile << endl;
+				}
+				resFile << iSize << "_Kbits\t";
+				std::copy(testResults.begin(), testResults.end(), std::ostream_iterator<double>(resFile, "\t"));
 				resFile << endl;
 			}
-			resFile << fileIndex << "_Kbits\t";
-			std::transform(testResults.begin(), testResults.end(), std::ostream_iterator<double>(resFile, "\t"),
-				[](double p_value) -> double {
-				return LipaboyLib::FixedPrecisionNumber<double, int, 1, -5>(p_value) == -1. ? -1. :
-					p_value >= ALPHA;
-			});
-			resFile << endl;
-		}
-		//----------------Extra infos-----------------//
-		{
-			if (fileIndex <= firstId) {
-				std::copy(testNames.begin(), testNames.end(), std::ostream_iterator<string>(extraFile, "\t"));
-				extraFile << endl;
-			}
-			extraFile << fileIndex << "_Kbits\t";
-			std::copy(testResults.begin(), testResults.end(), std::ostream_iterator<double>(extraFile, "\t"));
-			extraFile << endl;
-		}
+			//----------------Extra infos-----------------//
 
-		resFile.flush();
-		extraFile.flush();
-		testNames.clear();
-		testResults.clear();
+			resFile.flush();
+			//extraFile.flush();
+		}
+		resFile.close();
+		//extraFile.close();
 	}
-	resFile.close();
-	extraFile.close();
+	
 
 	return 0;
 }
