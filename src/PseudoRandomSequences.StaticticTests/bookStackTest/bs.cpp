@@ -442,7 +442,7 @@ double bookStackTestMain(int argc, const char* argv[])
 #endif
 	string ff;
 	__int64 nn = ((__int64)(1) << 60) - 1;
-	long ww = 32, bb = 0, uu;
+	long long ww = 32, bb = 0, uu;
 	bool blankfirst = false;
 	long bflag = 0, bflag2 = 0;
 
@@ -532,7 +532,7 @@ double bookStackTestMain(int argc, const char* argv[])
 	else
 		input = stdin;
 
-	if (bflag2 == 0) uu = 1 << (ww / 2);
+	if (bflag2 == 0) uu = 1LL << (ww / 2);
 
 	if (nn <= 1) { printf("ERROR: Sample size is to small.\n"); Quit(); }
 	if ((ww < 1) || (ww > 32)) { printf("ERROR: w (=%d) is not acceptable.\n", ww); Quit(); }
@@ -552,9 +552,9 @@ double bookStackTestMain(int argc, const char* argv[])
 	double chi = pbs->Run();
 
 	//if(!qq) cout << "  Sample size: " << (pbs->SampleSize * ww) <<" bits (" << pbs->SampleSize << " words) \n";
-	if (!qq)
-		if (pbs->SampleSize * uu / ((__int64)(1) << ww) < 5)
-			printf("WARNING: The (SampleSize*u/(2^w) >= 5) is not true!\n");
+	//if (!qq)
+		//if (pbs->SampleSize * uu / ((__int64)(1) << ww) < 5)
+		//	printf("WARNING: The (SampleSize*u/(2^w) >= 5) is not true!\n");
 
 	flush(cout);
 

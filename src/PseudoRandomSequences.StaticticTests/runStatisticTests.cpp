@@ -26,24 +26,35 @@ void PseudoRandomSequences::runTests(std::vector<bool> const & epsilon,
 	bool isSaveNames,
 	std::vector<double> & testResults,
 	std::string const & testKey,
-	std::string const & inputFile) {
+	std::string const & inputFile) 
+{
+	using std::string;
+
 	const int EPSILON_SIZE = int(epsilon.size());
 	// #Parameterized
 	if (testKey[0] == '1') {
 		// ! Each bit means 0 or 1 (you can't pass to bookStackTest 0 or 1 in whole byte for example)
-		for (int dim = 2; dim <= 8; dim *= 2) {
-			std::string sizeStr = std::to_string(EPSILON_SIZE);
-			std::string dimStr = std::to_string(dim);
-			std::string filename = (inputFile);
-			std::vector<const char *> arguments{ "bs.exe",
-				"-f", filename.c_str(),
-				"-n", sizeStr.c_str(),	// file size (in bits)
-				"-w", dimStr.c_str(),				// word size (or alphabet symbol length (see yourself book stack version)
-													//"-b", "0",				// blank between words
-													//"-u", "32"				// size of upper part book stack
-			};
-			if (isSaveNames) testNames.push_back("BookStackTest_" + dimStr);
-			testResults.push_back(bookStackTestMain(int(arguments.size()), &arguments[0]));
+		for (int upperPart = 0; upperPart < 3; upperPart++) {
+			for (uint64_t dim = 8; dim <= 32; dim *= 2) {	//8, 16, 32
+				string sizeStr = std::to_string(EPSILON_SIZE);
+				string dimStr = std::to_string(dim);
+				uint64_t upperPartSize = (upperPart == 0) ? 16LL
+					: ((upperPart == 1) ? (1LL << (dim / 2)) : (1LL << (dim - 1)));
+				string upperPartStr = std::to_string(upperPartSize);
+				string filename = (inputFile);
+				std::vector<const char *> arguments{ "bs.exe",
+					"-f", filename.c_str(),
+					"-n", sizeStr.c_str(),	// file size (in bits)
+					"-w", dimStr.c_str(),				// word size (or alphabet symbol length (see yourself book stack version)
+					//"-b", "0",				// blank between words
+					"-u", upperPartStr.c_str()				// size of upper part book stack
+				};
+				if (upperPartSize > (1LL << 28))
+					continue;
+				//std::cout << "up=" << upperPartStr << ", dim = " << dimStr << std::endl;
+				if (isSaveNames) testNames.push_back("BookStackTest_" + dimStr);
+				testResults.push_back(bookStackTestMain(int(arguments.size()), &arguments[0]));
+			}
 		}
 	}
 	if (testKey[1] == '1') {
@@ -125,28 +136,28 @@ void PseudoRandomSequences::runTests(std::vector<bool> const & epsilon,
 		if (isSaveNames) testNames.push_back("CumulativeSums_1");
 		testResults.push_back(res.second);
 	}
-	if (testKey[14] == '1') {
-		if (isSaveNames) testNames.push_back("RandomExcursions");
-		auto result = RandomExcursions(EPSILON_SIZE, epsilon);
-		double average = 0.;
-		for (auto elem : result) {
-			average += (elem >= ALPHA);
-		}
-		size_t size = result.size();
-		average /= size;
-		testResults.push_back(size == 0 ? -1.
-			: average + size * (ALPHA - (size - 1.) / size + 1e-3) * (1. - average));
-	}
-	if (testKey[15] == '1') {		// For more longer sequences (> 1e6)
-		if (isSaveNames) testNames.push_back("RandomExcursionsVariant");
-		auto result = RandomExcursionsVariant(EPSILON_SIZE, epsilon);
-		double average = 0.;
-		for (auto elem : result) {
-			average += (elem >= ALPHA);
-		}
-		size_t size = result.size();
-		average /= size;
-		testResults.push_back(size == 0 ? -1.
-			: average + size * (ALPHA - (size - 1.) / size + 1e-3) * (1. - average));
-	}
+	//if (testKey[14] == '1') {
+	//	if (isSaveNames) testNames.push_back("RandomExcursions");
+	//	auto result = RandomExcursions(EPSILON_SIZE, epsilon);
+	//	double average = 0.;
+	//	for (auto elem : result) {
+	//		average += (elem >= ALPHA);
+	//	}
+	//	size_t size = result.size();
+	//	average /= size;
+	//	testResults.push_back(size == 0 ? -1.
+	//		: average + size * (ALPHA - (size - 1.) / size + 1e-3) * (1. - average));
+	//}
+	//if (testKey[15] == '1') {		// For more longer sequences (> 1e6)
+	//	if (isSaveNames) testNames.push_back("RandomExcursionsVariant");
+	//	auto result = RandomExcursionsVariant(EPSILON_SIZE, epsilon);
+	//	double average = 0.;
+	//	for (auto elem : result) {
+	//		average += (elem >= ALPHA);
+	//	}
+	//	size_t size = result.size();
+	//	average /= size;
+	//	testResults.push_back(size == 0 ? -1.
+	//		: average + size * (ALPHA - (size - 1.) / size + 1e-3) * (1. - average));
+	//}
 }
