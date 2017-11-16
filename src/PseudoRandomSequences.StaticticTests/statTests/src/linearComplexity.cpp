@@ -6,7 +6,7 @@
 #include "../include/cephes.h"  
 
 double
-LinearComplexity(int M, int n)
+LinearComplexity(int M, int n, std::vector<bool> const & epsilon)
 {
 	int       i, ii, j, d, N, L, m, N_, parity, sign, K = 6;
 	double    p_value, T_, mean, nu[7], chi2;

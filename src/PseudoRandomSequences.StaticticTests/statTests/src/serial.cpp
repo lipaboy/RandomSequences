@@ -5,16 +5,16 @@
 #include "../include/externs.h"
 #include "../include/cephes.h"  
 
-double psi2(int m, int n);
+double psi2(int m, int n, std::vector<bool> const & epsilon);
 
 std::pair<double, double>
-Serial(int m, int n)
+Serial(int m, int n, std::vector<bool> const & epsilon)
 {
 	double	p_value1, p_value2, psim0, psim1, psim2, del1, del2;
 	
-	psim0 = psi2(m, n);
-	psim1 = psi2(m-1, n);
-	psim2 = psi2(m-2, n);
+	psim0 = psi2(m, n, epsilon);
+	psim1 = psi2(m-1, n, epsilon);
+	psim2 = psi2(m-2, n, epsilon);
 	del1 = psim0 - psim1;
 	del2 = psim0 - 2.0*psim1 + psim2;
 	p_value1 = cephes_igamc(pow(2, m-1)/2, del1/2.0);
@@ -43,7 +43,7 @@ Serial(int m, int n)
 }
 
 double
-psi2(int m, int n)
+psi2(int m, int n, std::vector<bool> const & epsilon)
 {
 	int				i, j, k, powLen;
 	double			sum, numOfBlocks;

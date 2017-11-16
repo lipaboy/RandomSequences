@@ -10,7 +10,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 double
-Runs(int n)
+Runs(int n, std::vector<bool> const & epsilon)
 {
 	int		S, k;
 	double	pi, V, erfc_arg, p_value;

@@ -57,13 +57,16 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 	size_t lastSize = boost::lexical_cast<size_t>(argv[4]);
 	std::vector<string> generatorNames{ "minstd_rand", 
 		"knuth_b", "ranlux48", "random_device" };
+	std::minstd_rand generatorMinstdRand;
+	std::knuth_b generatorKnuthB;
+	std::ranlux48 generatorRanlux48;	//failure with normal_distribution and with chi_squared_distribution
+	std::random_device generatorRandomDevice;
 
 	for (int iGen = 0; iGen < generatorNames.size(); iGen++) {
 		std::string & genName = generatorNames[iGen];
-
 		
 		std::ofstream resFile;
-		std::ofstream extraFile;
+	//	std::ofstream extraFile;
 		resFile.open("resStdGenerators_" + genName + "_" + std::to_string(firstSize) 
 			+ "-" + std::to_string(lastSize) + ".dat",
 			std::ios::out | std::ios::trunc);
@@ -73,7 +76,8 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 		for (size_t iSize = firstSize; iSize <= lastSize; iSize *= 4) {
 			size_t inputSize = 1024u * iSize;
 			
-			cout << "Sequenc size = " << inputSize << endl;
+			cout << genName << endl;
+			cout << "Sequence size = " << inputSize << endl;
 			//-------------Input----------------//
 
 			//Sequence seq(inputSize);
@@ -94,36 +98,35 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 				//std::chi_squared_distribution<double> distribution(3.0);		//failure with random_device (number of freedoms = 3.0)
 
 				if ("minstd_rand" == genName) {
-					std::minstd_rand generator;
 					std::generate_n(epsilon.begin(), inputSize,
-						[&inputOppositePossibility, &generator, &distribution, &inputSize]() -> bool {
-						return (int(std::round(distribution(generator))) % inputOppositePossibility == 0);
+						[&inputOppositePossibility, &generatorMinstdRand, &distribution, &inputSize]() -> bool {
+						return (int(std::round(distribution(generatorMinstdRand))) % inputOppositePossibility == 0);
 					});
 				}
 				else if ("knuth_b" == genName) {
-					std::knuth_b generator;
 					std::generate_n(epsilon.begin(), inputSize,
-						[&inputOppositePossibility, &generator, &distribution, &inputSize]() -> bool {
-						return (int(std::round(distribution(generator))) % inputOppositePossibility == 0);
+						[&inputOppositePossibility, &generatorKnuthB, &distribution, &inputSize]() -> bool {
+						return (int(std::round(distribution(generatorKnuthB))) % inputOppositePossibility == 0);
 					});
 				}
 				else if ("ranlux48" == genName) {
-					std::ranlux48 generator;	//failure with normal_distribution and with chi_squared_distribution
 					std::generate_n(epsilon.begin(), inputSize,
-						[&inputOppositePossibility, &generator, &distribution, &inputSize]() -> bool {
-						return (int(std::round(distribution(generator))) % inputOppositePossibility == 0);
+						[&inputOppositePossibility, &generatorRanlux48, &distribution, &inputSize]() -> bool {
+						return (int(std::round(distribution(generatorRanlux48))) % inputOppositePossibility == 0);
 					});
 				}
 				else if ("random_device" == genName) {
-					std::random_device generator;
 					std::generate_n(epsilon.begin(), inputSize,
-						[&inputOppositePossibility, &generator, &distribution, &inputSize]() -> bool {
-						return (int(std::round(distribution(generator))) % inputOppositePossibility == 0);
+						[&inputOppositePossibility, &generatorRandomDevice, &distribution, &inputSize]() -> bool {
+						return (int(std::round(distribution(generatorRandomDevice))) % inputOppositePossibility == 0);
 					});
 				}
 				else {
 					continue;
 				}
+
+				std::copy(epsilon.begin(), epsilon.begin() + 3, std::ostream_iterator<bool>(cout, ""));
+				std::cout << std::endl;
 
 				//-------------Output----------------//
 			

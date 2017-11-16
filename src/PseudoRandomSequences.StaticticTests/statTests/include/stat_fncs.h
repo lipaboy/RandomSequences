@@ -18,20 +18,20 @@ void  __ogg_fdrfftf(int n, double *X, double *wsave, int *ifac);
 
 double bookStackTestMain(int argc, const char* argv[]);
 
-double	Frequency(int n);
-double	BlockFrequency(int M, int n);
-std::pair<double, double> 	CumulativeSums(int n);
-double	Runs(int n);
-double	LongestRunOfOnes(int n);
-double	Rank(int n);
-double	DiscreteFourierTransform(int n);
-std::vector<double>	NonOverlappingTemplateMatchings(int m, int n);
-double	OverlappingTemplateMatchings(int m, int n);
-double	Universal(int n);
-double	ApproximateEntropy(int m, int n);
-std::vector<double>	RandomExcursions(int n);
-std::vector<double>	RandomExcursionsVariant(int n);
-double	LinearComplexity(int M, int n);
-std::pair<double, double>	Serial(int m, int n);
+double	Frequency(int n, std::vector<bool> const & epsilon);
+double	BlockFrequency(int M, int n, std::vector<bool> const & epsilon);
+std::pair<double, double> 	CumulativeSums(int n, std::vector<bool> const & epsilon);
+double	Runs(int n, std::vector<bool> const & epsilon);
+double	LongestRunOfOnes(int n, std::vector<bool> const & epsilon);
+double	Rank(int n, std::vector<bool> const & epsilon);
+double	DiscreteFourierTransform(int n, std::vector<bool> const & epsilon);
+std::vector<double>	NonOverlappingTemplateMatchings(int m, int n, std::vector<bool> const & epsilon);
+double	OverlappingTemplateMatchings(int m, int n, std::vector<bool> const & epsilon);
+double	Universal(int n, std::vector<bool> const & epsilon);
+double	ApproximateEntropy(int m, int n, std::vector<bool> const & epsilon);
+std::vector<double>	RandomExcursions(int n, std::vector<bool> const & epsilon);
+std::vector<double>	RandomExcursionsVariant(int n, std::vector<bool> const & epsilon);
+double	LinearComplexity(int M, int n, std::vector<bool> const & epsilon);
+std::pair<double, double>	Serial(int m, int n, std::vector<bool> const & epsilon);
 
 #endif //STAT_FNCS_H

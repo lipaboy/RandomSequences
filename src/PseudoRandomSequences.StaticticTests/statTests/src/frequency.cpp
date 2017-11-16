@@ -14,7 +14,7 @@
 
 
 double
-Frequency(int n)
+Frequency(int n, std::vector<bool> const & epsilon)
 {
 	int		i;
 	double	f, s_obs, p_value, sum, sqrt2 = 1.41421356237309504880;

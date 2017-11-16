@@ -12,7 +12,7 @@
 double	Pr(int u, double eta);
 
 double
-OverlappingTemplateMatchings(int m, int n)
+OverlappingTemplateMatchings(int m, int n, std::vector<bool> const & epsilon)
 {
 	int				i, k, match;
 	double			W_obs, eta, sum, chi2, p_value, lambda;

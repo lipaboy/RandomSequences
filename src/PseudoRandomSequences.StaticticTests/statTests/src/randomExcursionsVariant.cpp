@@ -10,7 +10,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 std::vector<double>
-RandomExcursionsVariant(int n)
+RandomExcursionsVariant(int n, std::vector<bool> const & epsilon)
 {
 	int		i, p, J, x, constraint, count, *S_k;
 	int		stateX[18] = { -9, -8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7, 8, 9 };

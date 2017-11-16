@@ -11,7 +11,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 double
-LongestRunOfOnes(int n)
+LongestRunOfOnes(int n, std::vector<bool> const & epsilon)
 {
 	double			pval, chi2, pi[7];
 	int				run, v_n_obs, N, i, j, K, M, V[7];

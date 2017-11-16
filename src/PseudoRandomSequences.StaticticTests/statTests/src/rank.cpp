@@ -11,7 +11,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 double
-Rank(int n)
+Rank(int n, std::vector<bool> const & epsilon)
 {
 	int			N, i, k, r;
 	double		p_value, product, chi_squared, arg1, p_32, p_31, p_30, R, F_32, F_31, F_30;
@@ -44,7 +44,7 @@ Rank(int n)
 		F_32 = 0;
 		F_31 = 0;
 		for (k = 0; k < N; k++) {			/* FOR EACH 32x32 MATRIX   */
-			def_matrix(32, 32, matrix, k);
+			def_matrix(32, 32, matrix, k, epsilon);
 #if (DISPLAY_MATRICES == 1)
 			display_matrix(32, 32, matrix);
 #endif

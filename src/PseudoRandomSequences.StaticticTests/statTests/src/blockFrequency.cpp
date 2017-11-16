@@ -10,7 +10,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 double
-BlockFrequency(int M, int n)
+BlockFrequency(int M, int n, std::vector<bool> const & epsilon)
 {
 	int		i, j, N, blockSum;
 	double	p_value, sum, pi, v, chi_squared;

@@ -295,7 +295,7 @@ double TBookStack::Run()
 		}
 	}
 	SampleSize = i;
-	if (!qq) printf("\n");
+	//if (!qq) printf("\n");
 
 	if (SampleSize > 0)
 	{

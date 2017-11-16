@@ -17,7 +17,7 @@
 
 
 double
-DiscreteFourierTransform(int n)
+DiscreteFourierTransform(int n, std::vector<bool> const & epsilon)
 {
 	double	p_value, upperBound, percentile, N_l, N_o, d, *m = NULL, *X = NULL, *wsave = NULL;
 	int		i, count, ifac[15];

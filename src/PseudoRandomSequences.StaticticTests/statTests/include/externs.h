@@ -8,7 +8,7 @@
                    G L O B A L   D A T A  S T R U C T U R E S 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-extern std::vector<bool>	epsilon;				// BIT STREAM
+//extern std::vector<bool>	epsilon;				// BIT STREAM
 extern TP			tp;						// TEST PARAMETER STRUCTURE
 //extern FILE			*stats[NUMOFTESTS+1];	// FILE OUTPUT STREAM
 //extern FILE			*results[NUMOFTESTS+1];	// FILE OUTPUT STREAM

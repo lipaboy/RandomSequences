@@ -10,7 +10,7 @@ R A N K  A L G O R I T H M  R O U T I N E S
 #define	MATRIX_FORWARD_ELIMINATION	0
 #define	MATRIX_BACKWARD_ELIMINATION	1
 
- std::vector<bool>	epsilon;				// BIT STREAM
+ //std::vector<bool>	epsilon;				// BIT STREAM
  TP			tp;						// TEST PARAMETER STRUCTURE
 
 int
@@ -147,7 +147,7 @@ create_matrix(int M, int Q)
 }
 
 void
-def_matrix(int M, int Q, BitSequence **m,int k)
+def_matrix(int M, int Q, BitSequence **m,int k, std::vector<bool> const & epsilon)
 {
 	int		i,j;
 	

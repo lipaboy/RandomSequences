@@ -70,6 +70,9 @@
     <ClCompile Include="generatorsTestConfigRun.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="runStatisticTests.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="book_stack_test.h">

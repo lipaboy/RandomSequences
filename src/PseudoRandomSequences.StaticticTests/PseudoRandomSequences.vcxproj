@@ -41,6 +41,7 @@
     <ClCompile Include="bookStackTest\bs.cpp" />
     <ClCompile Include="generatorsTestConfigRun.cpp" />
     <ClCompile Include="maincrypto.cpp" />
+    <ClCompile Include="runStatisticTests.cpp" />
     <ClCompile Include="statTests\src\approximateEntropy.cpp" />
     <ClCompile Include="statTests\src\blockFrequency.cpp" />
     <ClCompile Include="statTests\src\cephes.cpp" />
