@@ -29,6 +29,8 @@ void PseudoRandomSequences::runTests(std::vector<bool> const & epsilon,
 	std::string const & inputFile) 
 {
 	using std::string;
+	using std::cout;
+	using std::endl;
 
 	const int EPSILON_SIZE = int(epsilon.size());
 	// #Parameterized
@@ -52,89 +54,142 @@ void PseudoRandomSequences::runTests(std::vector<bool> const & epsilon,
 				if (upperPartSize > (1LL << 28))
 					continue;
 				//std::cout << "up=" << upperPartStr << ", dim = " << dimStr << std::endl;
-				if (isSaveNames) testNames.push_back("BookStackTest_" + dimStr);
+				if (isSaveNames) testNames.push_back("BookStackTest_" + dimStr + "_" + upperPartStr);
 				testResults.push_back(bookStackTestMain(int(arguments.size()), &arguments[0]));
 			}
 		}
 	}
 	if (testKey[1] == '1') {
+		auto start = clock();
 		if (isSaveNames) testNames.push_back("Frequency");
 		testResults.push_back(Frequency(EPSILON_SIZE, epsilon));
+		//cout << "Time: " << clock() - start << endl;
 	}
 	// #Parameterized
 	if (testKey[2] == '1') {
+		auto start = clock();
+		const int min = 2, avg = EPSILON_SIZE / 4, max = EPSILON_SIZE / 2;
 		//doesn't equal frequency monobit with M = 1
-		if (isSaveNames) testNames.push_back("BlockFrequency_" + std::to_string(5));
-		testResults.push_back(BlockFrequency(5, EPSILON_SIZE, epsilon));
+		if (isSaveNames) testNames.push_back("BlockFrequency_" + std::to_string(min));
+		testResults.push_back(BlockFrequency(min, EPSILON_SIZE, epsilon));
+		if (isSaveNames) testNames.push_back("BlockFrequency_" + std::to_string(avg));
+		testResults.push_back(BlockFrequency(avg, EPSILON_SIZE, epsilon));
+		if (isSaveNames) testNames.push_back("BlockFrequency_" + std::to_string(max));
+		testResults.push_back(BlockFrequency(max, EPSILON_SIZE, epsilon));
+		//cout << "Time: " << clock() - start << endl;
 	}
 	if (testKey[3] == '1') {
+		auto start = clock();
 		if (isSaveNames) testNames.push_back("Runs");
 		testResults.push_back(Runs(EPSILON_SIZE, epsilon));
+		//cout << "Time: " << clock() - start << endl;
 	}
 	if (testKey[4] == '1') {
+		auto start = clock();
 		if (isSaveNames) testNames.push_back("LongestRunOfOnes");
 		testResults.push_back(LongestRunOfOnes(EPSILON_SIZE, epsilon));
+		//cout << "Time: " << clock() - start << endl;
 	}
 	if (testKey[5] == '1') {
+		auto start = clock();
 		if (isSaveNames) testNames.push_back("Rank");
 		testResults.push_back(Rank(EPSILON_SIZE, epsilon));
+		//cout << "Time: " << clock() - start << endl;
 	}
 	if (testKey[6] == '1') {
+		auto start = clock();
 		// Has a little difference between results of my own discreteFourier Test version
 		if (isSaveNames) testNames.push_back("DiscreteFourierTransform");
 		testResults.push_back(DiscreteFourierTransform(EPSILON_SIZE, epsilon));
+		cout << "Time: " << clock() - start << endl;
 	}
+	// #Slow test
 	// #Parameterized
-	if (testKey[7] == '1') {
-		int blockSize = 5;
+	if (testKey[7] == '1') {	// TODO: need to check
+		auto start = clock();
+		//2 - is minimum (depends on existing files)
+		std::vector<int> blockSizes { 3 };
 		// from 2 to 16
-		if (isSaveNames) testNames.push_back("NonOverlappingTemplateMatchings_" + std::to_string(5));
-		auto result = (blockSize <= 1) ? std::vector<double>()
-			: NonOverlappingTemplateMatchings(blockSize, EPSILON_SIZE, epsilon);
-		double average = 0.;
-		for (auto elem : result) {
-			average += (elem >= ALPHA);
+		for (auto param : blockSizes) {
+			if (isSaveNames) testNames.push_back("NonOverlappingTemplateMatchings_" 
+				+ std::to_string(param));
+			std::vector<double> temp;
+			temp = NonOverlappingTemplateMatchings(param, EPSILON_SIZE, epsilon);
+			double average = 0.;
+			for (auto elem : temp) {
+				average += (elem >= ALPHA);
+			}
+			const size_t size = temp.size();
+			average /= size;
+			// TODO: here
+			testResults.push_back(size == 0 ? -1.
+				: average + size * (ALPHA - (size - 1.) / size + 1e-3) * (1. - average));
 		}
-		size_t size = result.size();
-		average /= size;
-		testResults.push_back(size == 0 ? -1.
-			: average + size * (ALPHA - (size - 1.) / size + 1e-3) * (1. - average));
+		cout << "Time: " << clock() - start << endl;
 	}
 	// #Parameterized
 	if (testKey[8] == '1') {
-		if (isSaveNames) testNames.push_back("OverlappingTemplateMatchings_" + std::to_string(5));
-		testResults.push_back(OverlappingTemplateMatchings(5, EPSILON_SIZE, epsilon));
+		auto start = clock();
+		std::vector<int> blockSizes { 2, EPSILON_SIZE / 2, EPSILON_SIZE };		// TODO: CHECK
+		for (auto param : blockSizes) {
+			if (isSaveNames) testNames.push_back("OverlappingTemplateMatchings_" + std::to_string(param));
+			testResults.push_back(OverlappingTemplateMatchings(param, EPSILON_SIZE, epsilon));
+		}
+		cout << "Time: " << clock() - start << endl;
 	}
 	if (testKey[9] == '1') {
-		if (isSaveNames) testNames.push_back("Universal");
-		testResults.push_back(Universal(EPSILON_SIZE, epsilon));
+		auto start = clock();
+		if (EPSILON_SIZE >= 387840) {
+			if (isSaveNames) testNames.push_back("Universal");
+			testResults.push_back(Universal(EPSILON_SIZE, epsilon));
+		}
+		//cout << "Time: " << clock() - start << endl;
 	}
 	// #Parameterized
-	if (testKey[10] == '1') {		// think: neccessary try all the variant of blockSize (read documentation of test)
-		int blockSize = 25;
-		if (isSaveNames) testNames.push_back("LinearComplexity_" + std::to_string(blockSize));
-		testResults.push_back((blockSize <= 3) ? -1. : LinearComplexity(blockSize, EPSILON_SIZE, epsilon));
-	}
+	//if (testKey[10] == '1') {		// think: neccessary try all the variant of blockSize (read documentation of test)
+	//	int sqrtSize = int(std::floor(std::sqrt(EPSILON_SIZE)));
+	//	std::vector<int> blockSizes{ 8, sqrtSize / 2, sqrtSize};	// must be > 3
+	//	for (auto param : blockSizes) {
+	//		if (isSaveNames) testNames.push_back("LinearComplexity_" + std::to_string(param));
+	//		testResults.push_back(LinearComplexity(param, EPSILON_SIZE, epsilon));
+	//	}
+	//}
+	// #Slow
 	// #Parameterized
 	if (testKey[11] == '1') {// think: neccessary try all the variant of blockSize (read documentation of test)
-		auto res = Serial(5, EPSILON_SIZE, epsilon);
-		if (isSaveNames) testNames.push_back("Serial_" + std::to_string(5) + "_1");
-		testResults.push_back(res.first);
-		if (isSaveNames) testNames.push_back("Serial_" + std::to_string(5) + "_2");
-		testResults.push_back(res.second);
+		auto start = clock();
+		int logSize = int(std::floor(std::log2(EPSILON_SIZE)) - 2);
+		std::vector<int> blockSizes{ 3};
+		for (auto param : blockSizes) {
+			auto res = Serial(param, EPSILON_SIZE, epsilon);
+			if (isSaveNames) testNames.push_back("Serial_" + std::to_string(param) + "_1");
+			testResults.push_back(res.first);
+			if (isSaveNames) testNames.push_back("Serial_" + std::to_string(param) + "_2");
+			testResults.push_back(res.second);
+		}
+		cout << "Time: " << clock() - start << endl;
 	}
+	// #Slow
 	// #Parameterized
 	if (testKey[12] == '1') {// think: neccessary try all the variant of blockSize (read documentation of test)
-		if (isSaveNames) testNames.push_back("ApproximateEntropy_" + std::to_string(5));
-		// (M + 1) - bit block is used to compare
-		testResults.push_back(ApproximateEntropy(5, EPSILON_SIZE, epsilon));
+		auto start = clock();
+		int logSize = int(std::floor(std::log2(EPSILON_SIZE)) - 5);
+		std::vector<int> blockSizes{ 1 };
+		for (auto param : blockSizes) {
+			if (isSaveNames) testNames.push_back("ApproximateEntropy_" + std::to_string(param));
+			// (M + 1) - bit block is used to compare
+			testResults.push_back(ApproximateEntropy(param, EPSILON_SIZE, epsilon));
+		}
+		cout << "Time: " << clock() - start << endl;
 	}
 	if (testKey[13] == '1') {
+		auto start = clock();
 		auto res = CumulativeSums(EPSILON_SIZE, epsilon);
 		if (isSaveNames) testNames.push_back("CumulativeSums_1");
 		testResults.push_back(res.first);
-		if (isSaveNames) testNames.push_back("CumulativeSums_1");
+		if (isSaveNames) testNames.push_back("CumulativeSums_2");
 		testResults.push_back(res.second);
+		//cout << "Time: " << clock() - start << endl;
 	}
 	//if (testKey[14] == '1') {
 	//	if (isSaveNames) testNames.push_back("RandomExcursions");

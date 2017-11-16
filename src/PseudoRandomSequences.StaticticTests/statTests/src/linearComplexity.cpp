@@ -30,7 +30,6 @@ LinearComplexity(int M, int n, std::vector<bool> const & epsilon)
 		return -1.;
 	}
 
-
 	//fprintf(stats[TEST_LINEARCOMPLEXITY], "-----------------------------------------------------\n");
 	//fprintf(stats[TEST_LINEARCOMPLEXITY], "\tL I N E A R  C O M P L E X I T Y\n");
 	//fprintf(stats[TEST_LINEARCOMPLEXITY], "-----------------------------------------------------\n");
@@ -122,8 +121,7 @@ LinearComplexity(int M, int n, std::vector<bool> const & epsilon)
 
 	free(B_);
 	free(P);
-	if (C != NULL)
-		free(C);
+	free(C);
 	free(T);
 
 	return (p_value);

@@ -55,8 +55,12 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 		);
 	size_t firstSize = boost::lexical_cast<size_t>(argv[3]);
 	size_t lastSize = boost::lexical_cast<size_t>(argv[4]);
-	std::vector<string> generatorNames{ "minstd_rand", 
-		"knuth_b", "ranlux48", "random_device" };
+	std::vector<string> generatorNames{ 
+		"minstd_rand", 
+		//"knuth_b", 
+		"ranlux48", 
+		//"random_device" 
+	};
 	std::minstd_rand generatorMinstdRand;
 	std::knuth_b generatorKnuthB;
 	std::ranlux48 generatorRanlux48;	//failure with normal_distribution and with chi_squared_distribution
@@ -152,7 +156,8 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 
 				//----------------Tests-----------------//
 				{
-					runTests(epsilon, testNames, false, currResults, testKey, outFilename);
+					runTests(epsilon, testNames, (iSize <= firstSize) && (jTraver <= 0), 
+						currResults, testKey, outFilename);
 					if (jTraver == 0)
 						testResults.assign(currResults.size(), 0);
 					std::transform(currResults.begin(), currResults.end(), testResults.begin(),
@@ -177,6 +182,7 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 			//----------------Extra infos-----------------//
 
 			resFile.flush();
+			testNames.clear();
 			//extraFile.flush();
 		}
 		resFile.close();
