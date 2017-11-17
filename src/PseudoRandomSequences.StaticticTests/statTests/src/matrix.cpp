@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-//#include "../include/externs.h"
+#include "../include/externs.h"
 #include "../include/matrix.h"
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -147,13 +147,13 @@ create_matrix(int M, int Q)
 }
 
 void
-def_matrix(int M, int Q, BitSequence **m,int k, std::vector<bool> const & epsilon)
+def_matrix(int M, int Q, BitSequence **m,int k, BoolAnyRange epsilon)
 {
 	int		i,j;
 	
 	for ( i=0; i<M; i++ ) 
 		for ( j=0; j<Q; j++ )
-			m[i][j] = epsilon[k*(M*Q)+j+i*M];
+			m[i][j] = epsilon.advance_begin(k*(M*Q)+j+i*M).front();
 }
 
 void

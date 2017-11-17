@@ -5,6 +5,7 @@
 #include "../include/externs.h"
 #include "../include/utilities.h"
 #include "../include/cephes.h"  
+#include "../include/stat_fncs.h"
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                O V E R L A P P I N G  T E M P L A T E  T E S T
@@ -12,7 +13,7 @@
 double	Pr(int u, double eta);
 
 double
-OverlappingTemplateMatchings(int m, int n, std::vector<bool> const & epsilon)
+OverlappingTemplateMatchings(int m, int n, BoolAnyRange epsilon)
 {
 	int				i, k, match;
 	double			W_obs, eta, sum, chi2, p_value, lambda;
@@ -49,7 +50,7 @@ OverlappingTemplateMatchings(int m, int n, std::vector<bool> const & epsilon)
 		for ( j=0; j<M-m+1; j++ ) {
 			match = 1;
 			for ( k=0; k<m; k++ ) {
-				if ( sequence[k] != epsilon[i*M+j+k] )
+				if ( sequence[k] != epsilon.advance_begin(i*M+j+k).front() )
 					match = 0;
 			}
 			if ( match == 1 )

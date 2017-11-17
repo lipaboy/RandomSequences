@@ -4,13 +4,14 @@
 #include <stdlib.h>
 #include "../include/externs.h"
 #include "../include/cephes.h"  
+#include "../include/stat_fncs.h"
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                      R A N D O M  E X C U R S I O N S  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 std::vector<double>
-RandomExcursions(int n, std::vector<bool> const & epsilon)
+RandomExcursions(int n, BoolAnyRange epsilon)
 {
 	int		b, i, j, k, J, x;
 	int		cycleStart, cycleStop, *cycle = NULL, *S_k = NULL;
@@ -39,9 +40,9 @@ RandomExcursions(int n, std::vector<bool> const & epsilon)
 	}
 	
 	J = 0; 					/* DETERMINE CYCLES */
-	S_k[0] = 2*(int)epsilon[0] - 1;
+	S_k[0] = 2*(int)epsilon.front() - 1;
 	for( i=1; i<n; i++ ) {
-		S_k[i] = S_k[i-1] + 2*epsilon[i] - 1;
+		S_k[i] = S_k[i-1] + 2*epsilon.advance_begin(i).front() - 1;
 		if ( S_k[i] == 0 ) {
 			J++;
 			if ( J > MAX(1000, n/100) ) {

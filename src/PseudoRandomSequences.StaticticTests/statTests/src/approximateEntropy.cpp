@@ -5,13 +5,14 @@
 #include "../include/externs.h"
 #include "../include/utilities.h"
 #include "../include/cephes.h"  
+#include "../include/stat_fncs.h"
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                 A P P R O X I M A T E  E N T R O P Y   T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 double
-ApproximateEntropy(int m, int n, std::vector<bool> const & epsilon)
+ApproximateEntropy(int m, int n, BoolAnyRange epsilon)
 {
 	int				i, j, k, r, blockSize, seqLength, powLen, index;
 	double			sum, numOfBlocks, ApEn[2], apen, chi_squared, p_value;
@@ -44,7 +45,7 @@ ApproximateEntropy(int m, int n, std::vector<bool> const & epsilon)
 				k = 1;
 				for ( j=0; j<blockSize; j++ ) {
 					k <<= 1;
-					if ( (int)epsilon[(i+j) % seqLength] == 1 )
+					if ( (int)epsilon.advance_begin((i+j) % seqLength).front() == 1 )
 						k++;
 				}
 				P[k-1]++;

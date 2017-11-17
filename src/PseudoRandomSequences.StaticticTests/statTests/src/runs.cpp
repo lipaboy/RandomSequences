@@ -4,20 +4,21 @@
 #include <stdlib.h>
 #include "../include/externs.h"
 #include "../include/cephes.h"
+#include "../include/stat_fncs.h"
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                               R U N S  T E S T 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 double
-Runs(int n, std::vector<bool> const & epsilon)
+Runs(int n, BoolAnyRange epsilon)
 {
 	int		S, k;
 	double	pi, V, erfc_arg, p_value;
 
 	S = 0;
 	for ( k=0; k<n; k++ )
-		if ( epsilon[k] )
+		if ( epsilon.advance_begin(k).front() )
 			S++;
 	pi = (double)S / (double)n;
 
@@ -31,7 +32,7 @@ Runs(int n, std::vector<bool> const & epsilon)
 
 		V = 1;
 		for ( k=1; k<n; k++ )
-			if ( epsilon[k] != epsilon[k-1] )
+			if ( epsilon.advance_begin(k).front() != epsilon.advance_begin(k - 1).front() )
 				V++;
 	
 		erfc_arg = fabs(V - 2.0 * n * pi * (1-pi)) / (2.0 * pi * (1-pi) * sqrt(2*n));

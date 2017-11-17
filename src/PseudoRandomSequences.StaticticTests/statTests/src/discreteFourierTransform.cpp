@@ -17,7 +17,7 @@
 
 
 double
-DiscreteFourierTransform(int n, std::vector<bool> const & epsilon)
+DiscreteFourierTransform(int n, BoolAnyRange epsilon)
 {
 	double	p_value, upperBound, percentile, N_l, N_o, d, *m = NULL, *X = NULL, *wsave = NULL;
 	int		i, count, ifac[15];
@@ -36,7 +36,7 @@ DiscreteFourierTransform(int n, std::vector<bool> const & epsilon)
 			return -1.;
 	}
 	for ( i=0; i<n; i++ )
-		X[i] = 2*(int)epsilon[i] - 1;
+		X[i] = 2*(int)epsilon.advance_begin(i).front() - 1;
 		//X[i] = 2* getRand(i) - 1;
 		//X[i] = 2 * (int)seq[i] - 1;
 	

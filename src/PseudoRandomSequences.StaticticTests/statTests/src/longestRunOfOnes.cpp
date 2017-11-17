@@ -11,7 +11,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 double
-LongestRunOfOnes(int n, std::vector<bool> const & epsilon)
+LongestRunOfOnes(int n, BoolAnyRange epsilon)
 {
 	double			pval, chi2, pi[7];
 	int				run, v_n_obs, N, i, j, K, M, V[7];
@@ -61,7 +61,7 @@ LongestRunOfOnes(int n, std::vector<bool> const & epsilon)
 		v_n_obs = 0;
 		run = 0;
 		for ( j=0; j<M; j++ ) {
-			if ( epsilon[i*M+j] == 1 ) {
+			if ( epsilon.advance_begin(i*M+j).front() == 1 ) {
 				run++;
 				if ( run > v_n_obs )
 					v_n_obs = run;

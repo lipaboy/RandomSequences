@@ -4,11 +4,12 @@
 #include <stdlib.h>
 #include "../include/externs.h"
 #include "../include/cephes.h"  
+#include "../include/stat_fncs.h"
 
-double psi2(int m, int n, std::vector<bool> const & epsilon);
+double psi2(int m, int n, BoolAnyRange epsilon);
 
 std::pair<double, double>
-Serial(int m, int n, std::vector<bool> const & epsilon)
+Serial(int m, int n, BoolAnyRange epsilon)
 {
 	double	p_value1, p_value2, psim0, psim1, psim2, del1, del2;
 	
@@ -43,7 +44,7 @@ Serial(int m, int n, std::vector<bool> const & epsilon)
 }
 
 double
-psi2(int m, int n, std::vector<bool> const & epsilon)
+psi2(int m, int n, BoolAnyRange epsilon)
 {
 	int				i, j, k, powLen;
 	double			sum, numOfBlocks;
@@ -63,9 +64,9 @@ psi2(int m, int n, std::vector<bool> const & epsilon)
 	for ( i=0; i<numOfBlocks; i++ ) {		 /* COMPUTE FREQUENCY */
 		k = 1;
 		for ( j=0; j<m; j++ ) {
-			if ( epsilon[(i+j)%n] == 0 )
+			if ( epsilon.advance_begin((i+j)%n).front() == 0 )
 				k *= 2;
-			else if ( epsilon[(i+j)%n] == 1 )
+			else if (epsilon.advance_begin((i + j) % n).front() == 1 )
 				k = 2*k+1;
 		}
 		P[k-1]++;

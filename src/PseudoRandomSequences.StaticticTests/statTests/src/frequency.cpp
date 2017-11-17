@@ -14,14 +14,14 @@
 
 
 double
-Frequency(int n, std::vector<bool> const & epsilon)
+Frequency(int n, BoolAnyRange epsilon)
 {
 	int		i;
 	double	f, s_obs, p_value, sum, sqrt2 = 1.41421356237309504880;
 	
 	sum = 0.0;
 	for ( i=0; i<n; i++ )
-		sum += 2*(int)epsilon[i]-1;
+		sum += 2*(int)epsilon.advance_begin(i).front() - 1;
 		//sum += 2 * (int)getRand(i) - 1;
 	s_obs = fabs(sum)/sqrt(n);
 	f = s_obs/sqrt2;

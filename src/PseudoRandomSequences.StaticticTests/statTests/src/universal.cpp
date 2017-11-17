@@ -5,13 +5,14 @@
 #include "../include/externs.h"
 #include "../include/utilities.h"
 #include "../include/cephes.h"
+#include "../include/stat_fncs.h"
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                          U N I V E R S A L  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 double
-Universal(int n, std::vector<bool> const & epsilon)
+Universal(int n, BoolAnyRange epsilon)
 {
 	int		i, j, p, L, Q, K;
 	double	arg, sqrt2, sigma, phi, sum, p_value, c;
@@ -63,13 +64,13 @@ Universal(int n, std::vector<bool> const & epsilon)
 	for ( i=1; i<=Q; i++ ) {		/* INITIALIZE TABLE */
 		decRep = 0;
 		for ( j=0; j<L; j++ )
-			decRep += epsilon[(i-1)*L+j] * (long)pow(2, L-1-j);
+			decRep += epsilon.advance_begin((i-1)*L+j).front() * (long)pow(2, L-1-j);
 		T[decRep] = i;
 	}
 	for ( i=Q+1; i<=Q+K; i++ ) { 	/* PROCESS BLOCKS */
 		decRep = 0;
 		for ( j=0; j<L; j++ )
-			decRep += epsilon[(i-1)*L+j] * (long)pow(2, L-1-j);
+			decRep += epsilon.advance_begin((i - 1)*L + j).front() * (long)pow(2, L-1-j);
 		sum += log(i - T[decRep])/log(2);
 		T[decRep] = i;
 	}

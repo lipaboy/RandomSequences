@@ -5,13 +5,14 @@
 #include "../include/externs.h"
 //#include "../include/cephes.h"
 #include "../include/matrix.h"
+#include "../include/stat_fncs.h"
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                               R A N K  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 double
-Rank(int n, std::vector<bool> const & epsilon)
+Rank(int n, BoolAnyRange epsilon)
 {
 	int			N, i, k, r;
 	double		p_value, product, chi_squared, arg1, p_32, p_31, p_30, R, F_32, F_31, F_30;

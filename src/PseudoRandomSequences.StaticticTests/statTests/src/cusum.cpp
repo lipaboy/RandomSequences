@@ -4,13 +4,14 @@
 #include <string.h>
 #include "../include/externs.h"
 #include "../include/cephes.h"
+#include "../include/stat_fncs.h"
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 		    C U M U L A T I V E  S U M S  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 std::pair<double, double>
-CumulativeSums(int n, std::vector<bool> const & epsilon)
+CumulativeSums(int n, BoolAnyRange epsilon)
 {
 	int		S, sup, inf, z, zrev, k;
 	double	sum1, sum2, p_value;
@@ -19,7 +20,7 @@ CumulativeSums(int n, std::vector<bool> const & epsilon)
 	sup = 0;
 	inf = 0;
 	for ( k=0; k<n; k++ ) {
-		epsilon[k] ? S++ : S--;
+		epsilon.advance_begin(k).front() ? S++ : S--;
 		if ( S > sup )
 			sup++;
 		if ( S < inf )
