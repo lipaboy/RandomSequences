@@ -49,6 +49,8 @@
     <ClCompile Include="statTests\src\dfft.cpp" />
     <ClCompile Include="statTests\src\discreteFourierTransform.cpp" />
     <ClCompile Include="statTests\src\frequency.cpp" />
+    <ClCompile Include="statTests\src\generators.cpp" />
+    <ClCompile Include="statTests\src\genutils.cpp" />
     <ClCompile Include="statTests\src\linearComplexity.cpp" />
     <ClCompile Include="statTests\src\longestRunOfOnes.cpp" />
     <ClCompile Include="statTests\src\matrix.cpp" />

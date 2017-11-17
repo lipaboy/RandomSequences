@@ -8,10 +8,18 @@
 
 #include "externs.h"
 #include <vector>
+#include <boost\range\any_range.hpp>
 
 //#define _CRT_SECURE_NO_WARNINGS
 
 // TODO: move all the tests into namespace
+
+typedef boost::any_range<
+	bool,
+	boost::bidirectional_traversal_tag,
+	bool,
+	std::ptrdiff_t
+> BoolAnyRange;
 
 void  __ogg_fdrffti(int n, double *wsave, int *ifac);
 void  __ogg_fdrfftf(int n, double *X, double *wsave, int *ifac);

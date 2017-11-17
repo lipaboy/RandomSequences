@@ -18,6 +18,7 @@
 
 #include "statTests\include\stat_fncs.h"
 #include "lipaboyLibrary\src\maths\fixed_precision_number.h"
+#include "statTests\include\generators.h"
 
 using namespace PseudoRandomSequences;
 using namespace std::chrono;
@@ -27,6 +28,12 @@ using namespace std::chrono;
 typedef std::vector<bool> Sequence;
 
 const int TEST_COUNT = 16;
+
+namespace {
+	std::vector<bool> generateSequence(std::string generatorName) {
+		return std::vector<bool>();
+	}
+}
 
 int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 	time_t t;
@@ -56,10 +63,15 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 	size_t firstSize = boost::lexical_cast<size_t>(argv[3]);
 	size_t lastSize = boost::lexical_cast<size_t>(argv[4]);
 	std::vector<string> generatorNames{ 
-		"minstd_rand", 
-		//"knuth_b", 
-		"ranlux48", 
-		//"random_device" 
+		//"minstd_rand", 
+			//"knuth_b", 
+		//"ranlux48", 
+			//"random_device",
+		"lcg",
+		"SHA1",
+		//"modExp",
+		//"bbs",
+		//"exclusiveOR"
 	};
 	std::minstd_rand generatorMinstdRand;
 	std::knuth_b generatorKnuthB;
@@ -101,32 +113,47 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 				std::normal_distribution<double> distribution(4.5, 2.0);		//doesn't failure with random_device generator
 				//std::chi_squared_distribution<double> distribution(3.0);		//failure with random_device (number of freedoms = 3.0)
 
-				if ("minstd_rand" == genName) {
-					std::generate_n(epsilon.begin(), inputSize,
-						[&inputOppositePossibility, &generatorMinstdRand, &distribution, &inputSize]() -> bool {
-						return (int(std::round(distribution(generatorMinstdRand))) % inputOppositePossibility == 0);
-					});
-				}
-				else if ("knuth_b" == genName) {
-					std::generate_n(epsilon.begin(), inputSize,
-						[&inputOppositePossibility, &generatorKnuthB, &distribution, &inputSize]() -> bool {
-						return (int(std::round(distribution(generatorKnuthB))) % inputOppositePossibility == 0);
-					});
-				}
-				else if ("ranlux48" == genName) {
-					std::generate_n(epsilon.begin(), inputSize,
-						[&inputOppositePossibility, &generatorRanlux48, &distribution, &inputSize]() -> bool {
-						return (int(std::round(distribution(generatorRanlux48))) % inputOppositePossibility == 0);
-					});
-				}
-				else if ("random_device" == genName) {
-					std::generate_n(epsilon.begin(), inputSize,
-						[&inputOppositePossibility, &generatorRandomDevice, &distribution, &inputSize]() -> bool {
-						return (int(std::round(distribution(generatorRandomDevice))) % inputOppositePossibility == 0);
-					});
-				}
-				else {
-					continue;
+				// Generator factory
+				{
+					if ("minstd_rand" == genName) {
+						std::generate_n(epsilon.begin(), inputSize,
+							[&inputOppositePossibility, &generatorMinstdRand, &distribution, &inputSize]() -> bool {
+							return (int(std::round(distribution(generatorMinstdRand))) % inputOppositePossibility == 0);
+						});
+					}
+					else if ("knuth_b" == genName) {
+						std::generate_n(epsilon.begin(), inputSize,
+							[&inputOppositePossibility, &generatorKnuthB, &distribution, &inputSize]() -> bool {
+							return (int(std::round(distribution(generatorKnuthB))) % inputOppositePossibility == 0);
+						});
+					}
+					else if ("ranlux48" == genName) {
+						std::generate_n(epsilon.begin(), inputSize,
+							[&inputOppositePossibility, &generatorRanlux48, &distribution, &inputSize]() -> bool {
+							return (int(std::round(distribution(generatorRanlux48))) % inputOppositePossibility == 0);
+						});
+					}
+					else if ("random_device" == genName) {
+						std::generate_n(epsilon.begin(), inputSize,
+							[&inputOppositePossibility, &generatorRandomDevice, &distribution, &inputSize]() -> bool {
+							return (int(std::round(distribution(generatorRandomDevice))) % inputOppositePossibility == 0);
+						});
+					}
+					else {
+						tp.n = inputSize;
+						if ("lcg" == genName)
+							epsilon = lcg();
+						else if ("SHA1" == genName)
+							epsilon = SHA1();
+						else if ("modExp" == genName)
+							epsilon = modExp();
+						else if ("bbs" == genName)
+							epsilon = bbs();
+						else if ("exclusiveOR" == genName)
+							epsilon = exclusiveOR();
+						else
+							continue;
+					}
 				}
 
 				std::copy(epsilon.begin(), epsilon.begin() + 3, std::ostream_iterator<bool>(cout, ""));

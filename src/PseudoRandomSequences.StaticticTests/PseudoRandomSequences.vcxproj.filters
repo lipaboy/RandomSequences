@@ -73,6 +73,12 @@
     <ClCompile Include="runStatisticTests.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="statTests\src\generators.cpp">
+      <Filter>Source\statTests</Filter>
+    </ClCompile>
+    <ClCompile Include="statTests\src\genutils.cpp">
+      <Filter>Source\statTests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="book_stack_test.h">

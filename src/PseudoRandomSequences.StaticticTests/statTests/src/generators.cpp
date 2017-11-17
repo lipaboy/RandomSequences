@@ -41,13 +41,15 @@ lcg_rand(int N, double SEED, double* DUNIF, int NDIM)
 	return SEED;
 }
 
-void
+std::vector<bool>
 lcg()
 {
 	double	*DUNIF, SEED;
 	int		i, counter;
 	unsigned bit;
 	int		num_0s, num_1s, v, bitsRead;
+
+	std::vector<bool> epsilon;
 
 	SEED = 23482349.0;
 	epsilon.resize(tp.n);
@@ -79,15 +81,16 @@ lcg()
 	}
 	free(DUNIF);
 	//free(epsilon);
+	return std::move(epsilon);
 }
 
 
-void
+std::vector<bool>
 quadRes1()
 {
 	int		k, num_0s, num_1s, bitsRead, done;
 	BYTE	p[64], g[64], x[128];
-	
+	std::vector<bool> epsilon;
 	epsilon.resize(tp.n);
 
 	ahtopb("987b6a6bf2c56a97291c445409920032499f9ee7ad128301b5d0254aa1a9633fdbd378d40149f1e23a13849f3d45992f5c4c6b7104099bc301f6005f9d8115e1", p, 64);
@@ -105,23 +108,23 @@ quadRes1()
 			memset(x, 0x00, 128);
 			ModMult(x, g, 64, g, 64, p,64);
 			memcpy(g, x+64, 64);
-			done = convertToBits(g, 512, tp.n, &num_0s, &num_1s, &bitsRead);
+			done = convertToBits(g, 512, tp.n, &num_0s, &num_1s, &bitsRead, epsilon);
 		} while ( !done );
 		//fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
 		//nist_test_suite();
 	}
 	//free(epsilon);
 
-	return;
+	return std::move(epsilon);
 }
 
-void
+std::vector<bool>
 quadRes2()
 {
 	BYTE	g[64], x[129], t1[65];
 	BYTE	One[1], Two, Three[1];
 	int		k, num_0s, num_1s, bitsRead, done;
-	
+	std::vector<bool> epsilon;
 	epsilon.resize(tp.n);
 	/*if ( ((epsilon = (BitSequence *)calloc(tp.n, sizeof(BitSequence))) == NULL) ) {
 		printf("Insufficient memory available.\n");
@@ -146,22 +149,22 @@ quadRes2()
 			Mult(x, t1, 65, g, 64);		/* x(2x+3) */
 			add(x, 129, One, 1);		/* x(2x+3)+1 */
 			memcpy(g, x+65, 64);
-			done = convertToBits(g, 512, tp.n, &num_0s, &num_1s, &bitsRead);
+			done = convertToBits(g, 512, tp.n, &num_0s, &num_1s, &bitsRead, epsilon);
 		} while ( !done) ;
 		//fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
 		//nist_test_suite();
 	}
 	//free(epsilon);
 
-	return;
+	return std::move(epsilon);
 }
 
-void
+std::vector<bool>
 cubicRes()
 {
 	BYTE	g[64], tmp[128], x[192];
 	int		k, num_0s, num_1s, bitsRead, done;
-	
+	std::vector<bool> epsilon;
 	epsilon.resize(tp.n);
 	/*if ( ((epsilon = (BitSequence *)calloc(tp.n, sizeof(BitSequence))) == NULL) ) {
 		printf("Insufficient memory available.\n");
@@ -181,17 +184,17 @@ cubicRes()
 			Mult(tmp, g, 64, g, 64);
 			Mult(x, tmp, 128, g, 64); // Don't need to mod by 2^512, just take low 64 bytes
 			memcpy(g, x+128, 64);
-			done = convertToBits(g, 512, tp.n, &num_0s, &num_1s, &bitsRead);
+			done = convertToBits(g, 512, tp.n, &num_0s, &num_1s, &bitsRead, epsilon);
 		} while ( !done );
 		//fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
 		//nist_test_suite();
 	}
 	//free(epsilon);
 
-	return;
+	return std::move(epsilon);
 }
 
-void
+std::vector<bool>
 exclusiveOR()
 {
 	int		i, num_0s, num_1s, bitsRead;
@@ -201,6 +204,7 @@ exclusiveOR()
 		printf("Insufficient memory available.\n");
 		exit(1);
 	}*/
+	std::vector<bool> epsilon;
 	epsilon.resize(tp.n);
 
 	memcpy(bit_sequence, "0001011011011001000101111001001010011011101101000100000010101111111010100100001010110110000000000100110000101110011111111100111", 127);
@@ -240,16 +244,16 @@ exclusiveOR()
 	}
 	//free(epsilon);
 		
-	return;
+	return std::move(epsilon);
 }
 
 
-void
+std::vector<bool>
 modExp()
 {
 	int		k, num_0s, num_1s, bitsRead, done;
 	BYTE	p[64], g[64], x[192], y[20];
-
+	std::vector<bool> epsilon;
 	epsilon.resize(tp.n);
 	/*if ( (epsilon = (BitSequence *)calloc(tp.n, sizeof(BitSequence))) == NULL ) {
 		printf("Insufficient memory available.\n");
@@ -267,7 +271,7 @@ modExp()
 		do {
 			memset(x, 0x00, 128);
 			ModExp(x, g, 64, y, 20, p, 64);	      /* NOTE:  g must be less than p */
-			done = convertToBits(x, 512, tp.n, &num_0s, &num_1s, &bitsRead);
+			done = convertToBits(x, 512, tp.n, &num_0s, &num_1s, &bitsRead, epsilon);
 			memcpy(y, x+44, 20);
 			} while ( !done );
 		//fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
@@ -275,16 +279,16 @@ modExp()
 	}
 	//free(epsilon);
 
-	return;
+	return std::move(epsilon);
 }
 
-void
+std::vector<bool>
 bbs()
 {
 	int		i, v, bitsRead;
 	BYTE	p[64], q[64], n[128], s[64], x[256];
 	int		num_0s, num_1s;
-
+	std::vector<bool> epsilon;
 	epsilon.resize(tp.n);
 	/*if ( (epsilon = (BitSequence*)calloc(tp.n, sizeof(BitSequence))) == NULL ) {
 		printf("Insufficient memory available.\n");
@@ -323,18 +327,19 @@ bbs()
 		//nist_test_suite();
 	}
 	//free(epsilon);
+	return std::move(epsilon);
 }
 
 
 // The exponent, e, is set to 11
 // This results in k = 837 and r = 187
-void
+std::vector<bool>
 micali_schnorr()
 {
 	long	i, j;
 	int		k=837, num_0s, num_1s, bitsRead, done;
 	BYTE	p[64], q[64], n[128], e[1], X[128], Y[384], Tail[105];
-
+	std::vector<bool> epsilon;
 	epsilon.resize(tp.n);
 	/*if ( (epsilon = (BitSequence *)calloc(tp.n, sizeof(BitSequence))) == NULL ) {
 		printf("Insufficient memory available.\n");
@@ -357,7 +362,7 @@ micali_schnorr()
 			memcpy(Tail, Y+23, 105);
 			for ( j=0; j<3; j++ )
 				bshl(Tail, 105);
-			done = convertToBits(Tail, k, tp.n, &num_0s, &num_1s, &bitsRead);
+			done = convertToBits(Tail, k, tp.n, &num_0s, &num_1s, &bitsRead, epsilon);
 			memset(X, 0x00, 128);
 			memcpy(X+104, Y, 24);
 			for ( j=0; j<5; j++ )
@@ -368,11 +373,12 @@ micali_schnorr()
 		//nist_test_suite();
 	}
 	//free(epsilon);
+	return std::move(epsilon);
 }
 
 //  Uses 160 bit Xkey and no XSeed (b=160)
 //  This is the generic form of the generator found on the last page of the Change Notice for FIPS 186-2
-void
+std::vector<bool>
 SHA1()
 {
 	ULONG	A, B, C, D, E, temp, Wbuff[16];
@@ -381,7 +387,7 @@ SHA1()
 	int		i, num_0s, num_1s, bitsRead;
 	int		done;
 	ULONG	tx[5] = { 0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0 };
-	
+	std::vector<bool> epsilon;
 	epsilon.resize(tp.n);
 	/*if ( ((epsilon = (BitSequence *) calloc(tp.n,sizeof(BitSequence))) == NULL) ) {
 		printf("Insufficient memory available.\n");
@@ -450,7 +456,7 @@ SHA1()
 #endif
 			// End: SHA Steps A-E
 
-			done = convertToBits(G, 160, tp.n, &num_0s, &num_1s, &bitsRead);
+			done = convertToBits(G, 160, tp.n, &num_0s, &num_1s, &bitsRead, epsilon);
 			add(Xkey, 20, G, 20);
 			add(Xkey, 20, One, 1);
 		} while ( !done );
@@ -458,4 +464,5 @@ SHA1()
 		//nist_test_suite();
 	}
 	//free(epsilon);
+	return std::move(epsilon);
 }

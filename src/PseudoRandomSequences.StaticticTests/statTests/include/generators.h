@@ -1,17 +1,17 @@
-
+#include <vector>
 
 //#include	"../include/sha.h"
 
-void	lcg();
+std::vector<bool>	lcg();
 double	lcg_rand(int, double, double*, int);
-void	quadRes1();
-void	quadRes2();
-void	cubicRes();
-void	exclusiveOR();
-void	modExp();
-void	bbs();
-void	micali_schnorr();
-void	SHA1();
+std::vector<bool>	quadRes1();
+std::vector<bool>	quadRes2();
+std::vector<bool>	cubicRes();
+std::vector<bool>	exclusiveOR();
+std::vector<bool>	modExp();
+std::vector<bool>	bbs();
+std::vector<bool>	micali_schnorr();
+std::vector<bool>	SHA1();
 
 
 /* The circular shifts. */
