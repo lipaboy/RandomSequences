@@ -21,7 +21,7 @@
 
 using namespace PseudoRandomSequences;
 
-void PseudoRandomSequences::runTests(std::vector<bool> const & epsilon,
+void PseudoRandomSequences::runTests(BoolAnyRange epsilon,
 	std::vector<std::string> & testNames,
 	bool isSaveNames,
 	std::vector<double> & testResults,

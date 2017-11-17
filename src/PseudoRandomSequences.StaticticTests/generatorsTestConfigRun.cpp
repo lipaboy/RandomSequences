@@ -82,22 +82,46 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 		std::string & genName = generatorNames[iGen];
 		
 		std::ofstream resFile;
-	//	std::ofstream extraFile;
+		//std::ofstream extraFile;
 		resFile.open("resStdGenerators_" + genName + "_" + std::to_string(firstSize) 
 			+ "-" + std::to_string(lastSize) + ".dat",
 			std::ios::out | std::ios::trunc);
 		//extraFile.open("extraStdGenerators_" + genName + ".dat",
 		//	std::ios::out | std::ios::trunc);
 
-		for (size_t iSize = firstSize; iSize <= lastSize; iSize *= 4) {
+		//--------------------Container---------------------//
+
+		const int TRAVERSAL_COUNT_LARGE = 10;
+		const int TRAVERSAL_COUNT_SMALL = 10;
+		const size_t TRAVERSAL_THRESHOLD = size_t(1e5);
+		size_t step = 4;
+		std::vector<bool> epsilon;
+		tp.n = 0;
+		for (size_t jSize = firstSize; jSize <= lastSize; jSize *= step) {
+			tp.n += jSize * 1024u * (jSize < TRAVERSAL_THRESHOLD) ? TRAVERSAL_COUNT_LARGE
+				: TRAVERSAL_COUNT_SMALL;
+		}
+		if ("lcg" == genName)
+			epsilon = lcg();
+		else if ("SHA1" == genName)
+			epsilon = SHA1();
+		else if ("modExp" == genName)
+			epsilon = modExp();
+		else if ("bbs" == genName)
+			epsilon = bbs();
+		else if ("exclusiveOR" == genName)
+			epsilon = exclusiveOR();
+
+		BoolAnyRange epsilonRange = epsilon;
+
+		for (size_t iSize = firstSize; iSize <= lastSize; iSize *= step) {
 			size_t inputSize = 1024u * iSize;
 			
 			cout << genName << endl;
 			cout << "Sequence size = " << inputSize << endl;
 			//-------------Input----------------//
 
-			//Sequence seq(inputSize);
-			std::vector<bool> epsilon(inputSize);
+			//epsilon.resize(inputSize);
 
 			vector<double> testResults;
 			vector<string> testNames = { "" };
@@ -106,7 +130,8 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 			string testKey(argv[1]);
 
 			currResults.reserve(60u);
-			int traversalCount = (epsilon.size() < static_cast<int>(1e5)) ? 10 : 10;
+			int traversalCount = (std::distance(epsilonRange.begin(), epsilonRange.end()) < TRAVERSAL_THRESHOLD) ? TRAVERSAL_COUNT_LARGE
+				: TRAVERSAL_COUNT_SMALL;
 			for (int jTraver = 0; jTraver < traversalCount; jTraver++) 
 			{
 				// TODO: bad computation of input possibility (use another input format) (bad because 2/3)
@@ -116,50 +141,36 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 				// Generator factory
 				{
 					if ("minstd_rand" == genName) {
-						std::generate_n(epsilon.begin(), inputSize,
+						std::generate(epsilonRange.begin(), epsilonRange.end(),
 							[&inputOppositePossibility, &generatorMinstdRand, &distribution, &inputSize]() -> bool {
 							return (int(std::round(distribution(generatorMinstdRand))) % inputOppositePossibility == 0);
 						});
 					}
 					else if ("knuth_b" == genName) {
-						std::generate_n(epsilon.begin(), inputSize,
+						std::generate(epsilonRange.begin(), epsilonRange.end(),
 							[&inputOppositePossibility, &generatorKnuthB, &distribution, &inputSize]() -> bool {
 							return (int(std::round(distribution(generatorKnuthB))) % inputOppositePossibility == 0);
 						});
 					}
 					else if ("ranlux48" == genName) {
-						std::generate_n(epsilon.begin(), inputSize,
+						std::generate(epsilonRange.begin(), epsilonRange.end(),
 							[&inputOppositePossibility, &generatorRanlux48, &distribution, &inputSize]() -> bool {
 							return (int(std::round(distribution(generatorRanlux48))) % inputOppositePossibility == 0);
 						});
 					}
 					else if ("random_device" == genName) {
-						std::generate_n(epsilon.begin(), inputSize,
+						std::generate(epsilonRange.begin(), epsilonRange.end(),
 							[&inputOppositePossibility, &generatorRandomDevice, &distribution, &inputSize]() -> bool {
 							return (int(std::round(distribution(generatorRandomDevice))) % inputOppositePossibility == 0);
 						});
 					}
-					else {
-						tp.n = inputSize;
-						if ("lcg" == genName)
-							epsilon = lcg();
-						else if ("SHA1" == genName)
-							epsilon = SHA1();
-						else if ("modExp" == genName)
-							epsilon = modExp();
-						else if ("bbs" == genName)
-							epsilon = bbs();
-						else if ("exclusiveOR" == genName)
-							epsilon = exclusiveOR();
-						else
-							continue;
-					}
 				}
 
-				std::copy(epsilon.begin(), epsilon.begin() + 3, std::ostream_iterator<bool>(cout, ""));
+				std::copy(epsilonRange.begin(), epsilonRange.advance_begin(3).begin(), 
+					std::ostream_iterator<bool>(cout, ""));
 				std::cout << std::endl;
 
-				//-------------Output----------------//
+				//-------------Output (for bookStackTest)----------------//
 			
 				{
 					std::ofstream outFile;

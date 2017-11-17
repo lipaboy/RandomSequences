@@ -11,7 +11,7 @@ namespace PseudoRandomSequences {
 	const uint32_t MAX_DIMENSION = sizeof(Word) * 8;
 	using AlphabetType = std::bitset<MAX_DIMENSION>;
 
-	void runTests(std::vector<bool> const & epsilon,
+	void runTests(BoolAnyRange epsilon,
 		std::vector<std::string> & testNames,
 		bool isSaveNames,
 		std::vector<double> & testResults,
