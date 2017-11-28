@@ -17,7 +17,7 @@
 
 
 double
-DiscreteFourierTransform(int n, BoolAnyRange epsilon)
+DiscreteFourierTransform(int n, BoolIterator epsilon)
 {
 	double	p_value, upperBound, percentile, N_l, N_o, d, *m = NULL, *X = NULL, *wsave = NULL;
 	int		i, count, ifac[15];
@@ -36,8 +36,8 @@ DiscreteFourierTransform(int n, BoolAnyRange epsilon)
 			return -1.;
 	}
 	for ( i=0; i<n; i++ )
-		X[i] = 2*(int)epsilon.advance_begin(i).front() - 1;
-		//X[i] = 2* getRand(i) - 1;
+		X[i] = 2 * (int)*(epsilon++) - 1;
+		//X[i] = 2 * getRand(i) - 1;
 		//X[i] = 2 * (int)seq[i] - 1;
 	
 	__ogg_fdrffti(n, wsave, ifac);		/* INITIALIZE WORK ARRAYS */
@@ -49,7 +49,7 @@ DiscreteFourierTransform(int n, BoolAnyRange epsilon)
 		m[i+1] = sqrt(pow(X[2*i+1],2)+pow(X[2*i+2],2)); 
 	count = 0;				       /* CONFIDENCE INTERVAL */
 	upperBound = sqrt(2.995732274*n);
-	for ( i=0; i<n/2; i++ )
+	for ( i=0; i < n/2; i++ )
 		if ( m[i] < upperBound )
 			count++;
 	percentile = (double)count/(n/2)*100;

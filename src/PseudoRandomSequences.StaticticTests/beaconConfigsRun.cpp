@@ -112,7 +112,7 @@ int PseudoRandomSequences::beaconRun(int argc, char * argv[]) {
 
 		//----------------Tests-----------------//
 
-		runTests(epsilon, testNames, (fileIndex <= firstId), testResults, testKey, 
+		runTests(epsilon.begin(), epsilon.end(), testNames, (fileIndex <= firstId), testResults, testKey, 
 			outFilename + std::to_string(fileIndex) + ".tmp");
 
 		//----------------Write results-----------------//

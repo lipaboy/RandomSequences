@@ -14,7 +14,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 std::vector<double>
-NonOverlappingTemplateMatchings(int m, int n, BoolAnyRange epsilon)
+NonOverlappingTemplateMatchings(int m, int n, BoolIterator epsilon)
 {
 	int		numOfTemplates[100] = {0, 0, 2, 4, 6, 12, 20, 40, 74, 148, 284, 568, 1116,
 						2232, 4424, 8848, 17622, 35244, 70340, 140680, 281076, 562152};
@@ -105,7 +105,9 @@ NonOverlappingTemplateMatchings(int m, int n, BoolAnyRange epsilon)
 				for ( j=0; j<M-m+1; j++ ) {
 					match = 1;
 					for ( k=0; k<m; k++ ) {
-						if ( (int)sequence[k] != (int)epsilon.advance_begin(i*M+j+k).front() ) {
+						auto iter = epsilon;
+						std::advance(iter, i * M + j + k);
+						if ( (int)sequence[k] != (int)*iter) {
 							match = 0;
 							break;
 						}

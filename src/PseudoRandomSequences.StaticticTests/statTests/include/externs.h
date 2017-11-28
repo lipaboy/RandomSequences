@@ -9,12 +9,14 @@
                    G L O B A L   D A T A  S T R U C T U R E S 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-typedef boost::any_range<
-	bool,
-	boost::bidirectional_traversal_tag,
-	bool,
-	std::ptrdiff_t
-> BoolAnyRange;
+//typedef boost::any_range<
+//	bool,
+//	boost::bidirectional_traversal_tag,
+//	bool &,
+//	std::ptrdiff_t
+//> BoolAnyRange;
+
+typedef std::vector<bool>::iterator BoolIterator;
 
 //extern std::vector<bool>	epsilon;				// BIT STREAM
 extern TP			tp;						// TEST PARAMETER STRUCTURE

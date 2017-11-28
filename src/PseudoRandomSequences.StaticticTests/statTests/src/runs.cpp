@@ -11,14 +11,15 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 double
-Runs(int n, BoolAnyRange epsilon)
+Runs(int n, BoolIterator epsilon)
 {
 	int		S, k;
 	double	pi, V, erfc_arg, p_value;
 
 	S = 0;
+	BoolIterator epsilonTemp = epsilon;
 	for ( k=0; k<n; k++ )
-		if ( epsilon.advance_begin(k).front() )
+		if (*(epsilonTemp++))
 			S++;
 	pi = (double)S / (double)n;
 
@@ -31,9 +32,11 @@ Runs(int n, BoolAnyRange epsilon)
 	else {
 
 		V = 1;
-		for ( k=1; k<n; k++ )
-			if ( epsilon.advance_begin(k).front() != epsilon.advance_begin(k - 1).front() )
+		for (k = 1; k < n; k++) {
+			bool prev = *epsilon;
+			if (prev != *(++epsilon))
 				V++;
+		}
 	
 		erfc_arg = fabs(V - 2.0 * n * pi * (1-pi)) / (2.0 * pi * (1-pi) * sqrt(2*n));
 		p_value = erfc(erfc_arg);

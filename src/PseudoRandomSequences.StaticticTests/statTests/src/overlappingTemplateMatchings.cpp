@@ -13,7 +13,7 @@
 double	Pr(int u, double eta);
 
 double
-OverlappingTemplateMatchings(int m, int n, BoolAnyRange epsilon)
+OverlappingTemplateMatchings(int m, int n, BoolIterator epsilon)
 {
 	int				i, k, match;
 	double			W_obs, eta, sum, chi2, p_value, lambda;
@@ -50,7 +50,10 @@ OverlappingTemplateMatchings(int m, int n, BoolAnyRange epsilon)
 		for ( j=0; j<M-m+1; j++ ) {
 			match = 1;
 			for ( k=0; k<m; k++ ) {
-				if ( sequence[k] != epsilon.advance_begin(i*M+j+k).front() )
+				auto iter = epsilon;
+				std::advance(iter, i * M + j + k);
+				bool elem;
+				if ( sequence[k] != *iter )
 					match = 0;
 			}
 			if ( match == 1 )

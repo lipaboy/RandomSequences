@@ -12,7 +12,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 double
-ApproximateEntropy(int m, int n, BoolAnyRange epsilon)
+ApproximateEntropy(int m, int n, BoolIterator epsilon)
 {
 	int				i, j, k, r, blockSize, seqLength, powLen, index;
 	double			sum, numOfBlocks, ApEn[2], apen, chi_squared, p_value;
@@ -45,7 +45,9 @@ ApproximateEntropy(int m, int n, BoolAnyRange epsilon)
 				k = 1;
 				for ( j=0; j<blockSize; j++ ) {
 					k <<= 1;
-					if ( (int)epsilon.advance_begin((i+j) % seqLength).front() == 1 )
+					auto iter = epsilon;
+					std::advance(iter, (i + j) % seqLength);
+					if ( (int)*iter == 1 )
 						k++;
 				}
 				P[k-1]++;

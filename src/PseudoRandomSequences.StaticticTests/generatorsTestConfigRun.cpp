@@ -29,11 +29,11 @@ typedef std::vector<bool> Sequence;
 
 const int TEST_COUNT = 16;
 
-namespace {
-	std::vector<bool> generateSequence(std::string generatorName) {
-		return std::vector<bool>();
-	}
-}
+//namespace {
+//	std::vector<bool> generateSequence(std::string generatorName) {
+//		return std::vector<bool>();
+//	}
+//}
 
 int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 	time_t t;
@@ -56,6 +56,7 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 	// TODO: add test performance for conversation and tests
 
 	std::string inputFilename = "input";
+	// TODO: bad computation of input possibility (use another input format) (bad because 2/3)
 	// Kbits
 	int inputOppositePossibility = static_cast<int>(
 		std::round(1.0 / boost::lexical_cast<double>(argv[2]))
@@ -94,13 +95,16 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 		const int TRAVERSAL_COUNT_LARGE = 10;
 		const int TRAVERSAL_COUNT_SMALL = 10;
 		const size_t TRAVERSAL_THRESHOLD = size_t(1e5);
-		size_t step = 4;
+		size_t stepIterSize = 4;		// the step of size iteration (traversal step)
 		std::vector<bool> epsilon;
 		tp.n = 0;
-		for (size_t jSize = firstSize; jSize <= lastSize; jSize *= step) {
+		for (size_t jSize = firstSize; jSize <= lastSize; jSize *= stepIterSize) {
 			tp.n += jSize * 1024u * (jSize < TRAVERSAL_THRESHOLD) ? TRAVERSAL_COUNT_LARGE
 				: TRAVERSAL_COUNT_SMALL;
 		}
+
+		bool isStdGenerators = false;
+		// TODO: Too much memory allocations
 		if ("lcg" == genName)
 			epsilon = lcg();
 		else if ("SHA1" == genName)
@@ -111,17 +115,27 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 			epsilon = bbs();
 		else if ("exclusiveOR" == genName)
 			epsilon = exclusiveOR();
+		else
+			isStdGenerators = true;
 
-		BoolAnyRange epsilonRange = epsilon;
+		class MyBoolRange {
+		private:
+			BoolIterator _begin, _end;
+		public:
+			MyBoolRange(BoolIterator beg, BoolIterator end) : _begin(beg), _end(end) {}
+			BoolIterator const & begin() { return _begin; }
+			BoolIterator const & end() { return _end; }
+		} epsilonRange = { epsilon.begin(), epsilon.end() };
 
-		for (size_t iSize = firstSize; iSize <= lastSize; iSize *= step) {
+		for (size_t iSize = firstSize; iSize <= lastSize; iSize *= stepIterSize) {
 			size_t inputSize = 1024u * iSize;
 			
 			cout << genName << endl;
 			cout << "Sequence size = " << inputSize << endl;
 			//-------------Input----------------//
 
-			//epsilon.resize(inputSize);
+			if (isStdGenerators)
+				epsilon.resize(inputSize);
 
 			vector<double> testResults;
 			vector<string> testNames = { "" };
@@ -134,12 +148,10 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 				: TRAVERSAL_COUNT_SMALL;
 			for (int jTraver = 0; jTraver < traversalCount; jTraver++) 
 			{
-				// TODO: bad computation of input possibility (use another input format) (bad because 2/3)
-				std::normal_distribution<double> distribution(4.5, 2.0);		//doesn't failure with random_device generator
-				//std::chi_squared_distribution<double> distribution(3.0);		//failure with random_device (number of freedoms = 3.0)
-
 				// Generator factory
 				{
+					std::normal_distribution<double> distribution(4.5, 2.0);		//doesn't failure with random_device generator
+					//std::chi_squared_distribution<double> distribution(3.0);		//failure with random_device (number of freedoms = 3.0)
 					if ("minstd_rand" == genName) {
 						std::generate(epsilonRange.begin(), epsilonRange.end(),
 							[&inputOppositePossibility, &generatorMinstdRand, &distribution, &inputSize]() -> bool {
@@ -164,13 +176,18 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 							return (int(std::round(distribution(generatorRandomDevice))) % inputOppositePossibility == 0);
 						});
 					}
+					else {
+						
+					}
 				}
 
-				std::copy(epsilonRange.begin(), epsilonRange.advance_begin(3).begin(), 
+				auto iterEnd = epsilonRange.begin();
+				std::advance(iterEnd, 3);
+				std::copy(epsilonRange.begin(), iterEnd,
 					std::ostream_iterator<bool>(cout, ""));
 				std::cout << std::endl;
 
-				//-------------Output (for bookStackTest)----------------//
+				//-------------Output in file (for bookStackTest)----------------//
 			
 				{
 					std::ofstream outFile;
@@ -179,7 +196,7 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 					auto outIter = std::ostream_iterator<char>(outFile);
 					int bitPos = 0;
 					char buffer = 0;
-					for (auto val : epsilon) {
+					for (auto val : epsilonRange) {
 						buffer |= val << (bitPos++);
 						if (bitPos >= 8) {
 							bitPos = 0;
@@ -194,7 +211,8 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 
 				//----------------Tests-----------------//
 				{
-					runTests(epsilon, testNames, (iSize <= firstSize) && (jTraver <= 0), 
+					runTests(epsilon.begin(), epsilon.end(), testNames, 
+						(iSize <= firstSize) && (jTraver <= 0), 
 						currResults, testKey, outFilename);
 					if (jTraver == 0)
 						testResults.assign(currResults.size(), 0);

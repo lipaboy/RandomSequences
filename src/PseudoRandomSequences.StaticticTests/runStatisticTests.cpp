@@ -1,11 +1,10 @@
 #include "pseudoRandomSequences.h"
 
 #include <iterator>
-#include <bitset>
 #include <string>
-#include <array>
 #include <cmath>
 #include <random>
+#include <algorithm>
 
 #include <iostream>
 #include <fstream>
@@ -21,7 +20,9 @@
 
 using namespace PseudoRandomSequences;
 
-void PseudoRandomSequences::runTests(BoolAnyRange epsilon,
+void PseudoRandomSequences::runTests(
+	BoolIterator epsilonBegin,
+	BoolIterator epsilonEnd,
 	std::vector<std::string> & testNames,
 	bool isSaveNames,
 	std::vector<double> & testResults,
@@ -32,7 +33,7 @@ void PseudoRandomSequences::runTests(BoolAnyRange epsilon,
 	using std::cout;
 	using std::endl;
 
-	const int EPSILON_SIZE = int(epsilon.size());
+	const int EPSILON_SIZE = int(std::distance(epsilonBegin, epsilonEnd));
 	// #Parameterized
 	if (testKey[0] == '1') {
 		// ! Each bit means 0 or 1 (you can't pass to bookStackTest 0 or 1 in whole byte for example)
@@ -62,7 +63,7 @@ void PseudoRandomSequences::runTests(BoolAnyRange epsilon,
 	if (testKey[1] == '1') {
 		auto start = clock();
 		if (isSaveNames) testNames.push_back("Frequency");
-		testResults.push_back(Frequency(EPSILON_SIZE, epsilon));
+		testResults.push_back(Frequency(EPSILON_SIZE, epsilonBegin));
 		//cout << "Time: " << clock() - start << endl;
 	}
 	// #Parameterized
@@ -71,36 +72,36 @@ void PseudoRandomSequences::runTests(BoolAnyRange epsilon,
 		const int min = 2, avg = EPSILON_SIZE / 4, max = EPSILON_SIZE / 2;
 		//doesn't equal frequency monobit with M = 1
 		if (isSaveNames) testNames.push_back("BlockFrequency_" + std::to_string(min));
-		testResults.push_back(BlockFrequency(min, EPSILON_SIZE, epsilon));
+		testResults.push_back(BlockFrequency(min, EPSILON_SIZE, epsilonBegin));
 		if (isSaveNames) testNames.push_back("BlockFrequency_" + std::to_string(avg));
-		testResults.push_back(BlockFrequency(avg, EPSILON_SIZE, epsilon));
+		testResults.push_back(BlockFrequency(avg, EPSILON_SIZE, epsilonBegin));
 		if (isSaveNames) testNames.push_back("BlockFrequency_" + std::to_string(max));
-		testResults.push_back(BlockFrequency(max, EPSILON_SIZE, epsilon));
+		testResults.push_back(BlockFrequency(max, EPSILON_SIZE, epsilonBegin));
 		//cout << "Time: " << clock() - start << endl;
 	}
 	if (testKey[3] == '1') {
 		auto start = clock();
 		if (isSaveNames) testNames.push_back("Runs");
-		testResults.push_back(Runs(EPSILON_SIZE, epsilon));
+		testResults.push_back(Runs(EPSILON_SIZE, epsilonBegin));
 		//cout << "Time: " << clock() - start << endl;
 	}
 	if (testKey[4] == '1') {
 		auto start = clock();
 		if (isSaveNames) testNames.push_back("LongestRunOfOnes");
-		testResults.push_back(LongestRunOfOnes(EPSILON_SIZE, epsilon));
+		testResults.push_back(LongestRunOfOnes(EPSILON_SIZE, epsilonBegin));
 		//cout << "Time: " << clock() - start << endl;
 	}
 	if (testKey[5] == '1') {
 		auto start = clock();
 		if (isSaveNames) testNames.push_back("Rank");
-		testResults.push_back(Rank(EPSILON_SIZE, epsilon));
+		testResults.push_back(Rank(EPSILON_SIZE, epsilonBegin));
 		//cout << "Time: " << clock() - start << endl;
 	}
 	if (testKey[6] == '1') {
 		auto start = clock();
 		// Has a little difference between results of my own discreteFourier Test version
 		if (isSaveNames) testNames.push_back("DiscreteFourierTransform");
-		testResults.push_back(DiscreteFourierTransform(EPSILON_SIZE, epsilon));
+		testResults.push_back(DiscreteFourierTransform(EPSILON_SIZE, epsilonBegin));
 		cout << "Time: " << clock() - start << endl;
 	}
 	// #Slow test
@@ -114,7 +115,7 @@ void PseudoRandomSequences::runTests(BoolAnyRange epsilon,
 			if (isSaveNames) testNames.push_back("NonOverlappingTemplateMatchings_" 
 				+ std::to_string(param));
 			std::vector<double> temp;
-			temp = NonOverlappingTemplateMatchings(param, EPSILON_SIZE, epsilon);
+			temp = NonOverlappingTemplateMatchings(param, EPSILON_SIZE, epsilonBegin);
 			double average = 0.;
 			for (auto elem : temp) {
 				average += (elem >= ALPHA);
@@ -133,7 +134,7 @@ void PseudoRandomSequences::runTests(BoolAnyRange epsilon,
 		std::vector<int> blockSizes { 2, EPSILON_SIZE / 2, EPSILON_SIZE };		// TODO: CHECK
 		for (auto param : blockSizes) {
 			if (isSaveNames) testNames.push_back("OverlappingTemplateMatchings_" + std::to_string(param));
-			testResults.push_back(OverlappingTemplateMatchings(param, EPSILON_SIZE, epsilon));
+			testResults.push_back(OverlappingTemplateMatchings(param, EPSILON_SIZE, epsilonBegin));
 		}
 		cout << "Time: " << clock() - start << endl;
 	}
@@ -141,7 +142,7 @@ void PseudoRandomSequences::runTests(BoolAnyRange epsilon,
 		auto start = clock();
 		if (EPSILON_SIZE >= 387840) {
 			if (isSaveNames) testNames.push_back("Universal");
-			testResults.push_back(Universal(EPSILON_SIZE, epsilon));
+			testResults.push_back(Universal(EPSILON_SIZE, epsilonBegin));
 		}
 		//cout << "Time: " << clock() - start << endl;
 	}
@@ -151,7 +152,7 @@ void PseudoRandomSequences::runTests(BoolAnyRange epsilon,
 	//	std::vector<int> blockSizes{ 8, sqrtSize / 2, sqrtSize};	// must be > 3
 	//	for (auto param : blockSizes) {
 	//		if (isSaveNames) testNames.push_back("LinearComplexity_" + std::to_string(param));
-	//		testResults.push_back(LinearComplexity(param, EPSILON_SIZE, epsilon));
+	//		testResults.push_back(LinearComplexity(param, EPSILON_SIZE, epsilonBegin));
 	//	}
 	//}
 	// #Slow
@@ -161,7 +162,7 @@ void PseudoRandomSequences::runTests(BoolAnyRange epsilon,
 		int logSize = int(std::floor(std::log2(EPSILON_SIZE)) - 2);
 		std::vector<int> blockSizes{ 3};
 		for (auto param : blockSizes) {
-			auto res = Serial(param, EPSILON_SIZE, epsilon);
+			auto res = Serial(param, EPSILON_SIZE, epsilonBegin);
 			if (isSaveNames) testNames.push_back("Serial_" + std::to_string(param) + "_1");
 			testResults.push_back(res.first);
 			if (isSaveNames) testNames.push_back("Serial_" + std::to_string(param) + "_2");
@@ -178,13 +179,13 @@ void PseudoRandomSequences::runTests(BoolAnyRange epsilon,
 		for (auto param : blockSizes) {
 			if (isSaveNames) testNames.push_back("ApproximateEntropy_" + std::to_string(param));
 			// (M + 1) - bit block is used to compare
-			testResults.push_back(ApproximateEntropy(param, EPSILON_SIZE, epsilon));
+			testResults.push_back(ApproximateEntropy(param, EPSILON_SIZE, epsilonBegin));
 		}
 		cout << "Time: " << clock() - start << endl;
 	}
 	if (testKey[13] == '1') {
 		auto start = clock();
-		auto res = CumulativeSums(EPSILON_SIZE, epsilon);
+		auto res = CumulativeSums(EPSILON_SIZE, epsilonBegin);
 		if (isSaveNames) testNames.push_back("CumulativeSums_1");
 		testResults.push_back(res.first);
 		if (isSaveNames) testNames.push_back("CumulativeSums_2");
@@ -193,7 +194,7 @@ void PseudoRandomSequences::runTests(BoolAnyRange epsilon,
 	}
 	//if (testKey[14] == '1') {
 	//	if (isSaveNames) testNames.push_back("RandomExcursions");
-	//	auto result = RandomExcursions(EPSILON_SIZE, epsilon);
+	//	auto result = RandomExcursions(EPSILON_SIZE, epsilonBegin);
 	//	double average = 0.;
 	//	for (auto elem : result) {
 	//		average += (elem >= ALPHA);
@@ -205,7 +206,7 @@ void PseudoRandomSequences::runTests(BoolAnyRange epsilon,
 	//}
 	//if (testKey[15] == '1') {		// For more longer sequences (> 1e6)
 	//	if (isSaveNames) testNames.push_back("RandomExcursionsVariant");
-	//	auto result = RandomExcursionsVariant(EPSILON_SIZE, epsilon);
+	//	auto result = RandomExcursionsVariant(EPSILON_SIZE, epsilonBegin);
 	//	double average = 0.;
 	//	for (auto elem : result) {
 	//		average += (elem >= ALPHA);

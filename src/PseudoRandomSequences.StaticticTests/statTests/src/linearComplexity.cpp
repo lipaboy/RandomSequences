@@ -7,7 +7,7 @@
 #include "../include/stat_fncs.h"
 
 double
-LinearComplexity(int M, int n, BoolAnyRange epsilon)
+LinearComplexity(int M, int n, BoolIterator epsilon)
 {
 	int       i, ii, j, d, N, L, m, N_, parity, sign, K = 6;
 	double    p_value, T_, mean, nu[7], chi2;
@@ -61,9 +61,14 @@ LinearComplexity(int M, int n, BoolAnyRange epsilon)
 		/* DETERMINE LINEAR COMPLEXITY */
 		N_ = 0;
 		while ( N_ < M ) {
-			d = (int)epsilon.advance_begin(ii*M + N_).front();
-			for ( i=1; i<=L; i++ )
-				d += C[i] * epsilon.advance_begin(ii*M+N_-i).front();
+			auto iter = epsilon;
+			std::advance(iter, ii*M + N_);
+			d = (int)(*iter);
+			for (i = 1; i <= L; i++) {
+				iter = epsilon;
+				std::advance(iter, ii*M + N_ - i);
+				d += C[i] * (*iter);
+			}
 			d = d%2;
 			if ( d == 1 ) {
 				for ( i=0; i<M; i++ ) {

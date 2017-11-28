@@ -19,20 +19,20 @@ void  __ogg_fdrfftf(int n, double *X, double *wsave, int *ifac);
 
 double bookStackTestMain(int argc, const char* argv[]);
 
-double	Frequency(int n, BoolAnyRange epsilon);
-double	BlockFrequency(int M, int n, BoolAnyRange epsilon);
-std::pair<double, double> 	CumulativeSums(int n, BoolAnyRange epsilon);
-double	Runs(int n, BoolAnyRange epsilon);
-double	LongestRunOfOnes(int n, BoolAnyRange epsilon);
-double	Rank(int n, BoolAnyRange epsilon);
-double	DiscreteFourierTransform(int n, BoolAnyRange epsilon);
-std::vector<double>	NonOverlappingTemplateMatchings(int m, int n, BoolAnyRange epsilon);
-double	OverlappingTemplateMatchings(int m, int n, BoolAnyRange epsilon);
-double	Universal(int n, BoolAnyRange epsilon);
-double	ApproximateEntropy(int m, int n, BoolAnyRange epsilon);
-std::vector<double>	RandomExcursions(int n, BoolAnyRange epsilon);
-std::vector<double>	RandomExcursionsVariant(int n, BoolAnyRange epsilon);
-double	LinearComplexity(int M, int n, BoolAnyRange epsilon);
-std::pair<double, double>	Serial(int m, int n, BoolAnyRange epsilon);
+double	Frequency(int n, BoolIterator epsilon);
+double	BlockFrequency(int M, int n, BoolIterator epsilon);
+std::pair<double, double> 	CumulativeSums(int n, BoolIterator epsilon);
+double	Runs(int n, BoolIterator epsilon);
+double	LongestRunOfOnes(int n, BoolIterator epsilon);
+double	Rank(int n, BoolIterator epsilon);
+double	DiscreteFourierTransform(int n, BoolIterator epsilon);
+std::vector<double>	NonOverlappingTemplateMatchings(int m, int n, BoolIterator epsilon);
+double	OverlappingTemplateMatchings(int m, int n, BoolIterator epsilon);
+double	Universal(int n, BoolIterator epsilon);
+double	ApproximateEntropy(int m, int n, BoolIterator epsilon);
+std::vector<double>	RandomExcursions(int n, BoolIterator epsilon);
+std::vector<double>	RandomExcursionsVariant(int n, BoolIterator epsilon);
+double	LinearComplexity(int M, int n, BoolIterator epsilon);
+std::pair<double, double>	Serial(int m, int n, BoolIterator epsilon);
 
 #endif //STAT_FNCS_H

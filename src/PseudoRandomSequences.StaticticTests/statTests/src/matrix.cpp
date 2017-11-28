@@ -147,13 +147,16 @@ create_matrix(int M, int Q)
 }
 
 void
-def_matrix(int M, int Q, BitSequence **m,int k, BoolAnyRange epsilon)
+def_matrix(int M, int Q, BitSequence **m,int k, BoolIterator epsilon)
 {
 	int		i,j;
 	
 	for ( i=0; i<M; i++ ) 
-		for ( j=0; j<Q; j++ )
-			m[i][j] = epsilon.advance_begin(k*(M*Q)+j+i*M).front();
+		for (j = 0; j < Q; j++) {
+			auto iter = epsilon;
+			std::advance(iter, k * (M * Q) + j + i * M);
+			m[i][j] = *iter;
+		}
 }
 
 void

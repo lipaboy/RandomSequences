@@ -10,7 +10,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 double
-BlockFrequency(int M, int n, BoolAnyRange epsilon)
+BlockFrequency(int M, int n, BoolIterator epsilon)
 {
 	int		i, j, N, blockSum;
 	double	p_value, sum, pi, v, chi_squared;
@@ -21,7 +21,7 @@ BlockFrequency(int M, int n, BoolAnyRange epsilon)
 	for ( i=0; i<N; i++ ) {
 		blockSum = 0;
 		for ( j=0; j<M; j++ )
-			blockSum += epsilon.advance_begin(j+i*M).front();
+			blockSum += *(epsilon++);
 		pi = (double)blockSum/(double)M;
 		v = pi - 0.5;
 		sum += v*v;

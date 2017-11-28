@@ -12,7 +12,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 double
-Universal(int n, BoolAnyRange epsilon)
+Universal(int n, BoolIterator epsilon)
 {
 	int		i, j, p, L, Q, K;
 	double	arg, sqrt2, sigma, phi, sum, p_value, c;
@@ -63,14 +63,20 @@ Universal(int n, BoolAnyRange epsilon)
 		T[i] = 0;
 	for ( i=1; i<=Q; i++ ) {		/* INITIALIZE TABLE */
 		decRep = 0;
-		for ( j=0; j<L; j++ )
-			decRep += epsilon.advance_begin((i-1)*L+j).front() * (long)pow(2, L-1-j);
+		for (j = 0; j < L; j++) {
+			auto iter = epsilon;
+			std::advance(iter, (i - 1)*L + j);
+			decRep += (*iter) * (long)pow(2, L - 1 - j);
+		}
 		T[decRep] = i;
 	}
 	for ( i=Q+1; i<=Q+K; i++ ) { 	/* PROCESS BLOCKS */
 		decRep = 0;
-		for ( j=0; j<L; j++ )
-			decRep += epsilon.advance_begin((i - 1)*L + j).front() * (long)pow(2, L-1-j);
+		for (j = 0; j < L; j++) {
+			auto iter = epsilon;
+			std::advance(iter, (i - 1)*L + j);
+			decRep += (*iter) * (long)pow(2, L - 1 - j);
+		}
 		sum += log(i - T[decRep])/log(2);
 		T[decRep] = i;
 	}

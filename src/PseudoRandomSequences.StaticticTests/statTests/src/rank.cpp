@@ -12,7 +12,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 double
-Rank(int n, BoolAnyRange epsilon)
+Rank(int n, BoolIterator epsilon)
 {
 	int			N, i, k, r;
 	double		p_value, product, chi_squared, arg1, p_32, p_31, p_30, R, F_32, F_31, F_30;

@@ -11,7 +11,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 std::vector<double>
-RandomExcursionsVariant(int n, BoolAnyRange epsilon)
+RandomExcursionsVariant(int n, BoolIterator epsilon)
 {
 	int		i, p, J, x, constraint, count, *S_k;
 	int		stateX[18] = { -9, -8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
@@ -27,9 +27,9 @@ RandomExcursionsVariant(int n, BoolAnyRange epsilon)
 		return result;
 	}
 	J = 0;
-	S_k[0] = 2*(int)epsilon.front() - 1;
+	S_k[0] = 2*(int)*epsilon - 1;
 	for ( i=1; i<n; i++ ) {
-		S_k[i] = S_k[i-1] + 2*epsilon.advance_begin(i).front() - 1;
+		S_k[i] = S_k[i-1] + 2 * (*epsilon++) - 1;
 		if ( S_k[i] == 0 )
 			J++;
 	}

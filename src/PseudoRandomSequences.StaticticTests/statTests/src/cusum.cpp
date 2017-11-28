@@ -11,7 +11,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 std::pair<double, double>
-CumulativeSums(int n, BoolAnyRange epsilon)
+CumulativeSums(int n, BoolIterator epsilon)
 {
 	int		S, sup, inf, z, zrev, k;
 	double	sum1, sum2, p_value;
@@ -20,7 +20,7 @@ CumulativeSums(int n, BoolAnyRange epsilon)
 	sup = 0;
 	inf = 0;
 	for ( k=0; k<n; k++ ) {
-		epsilon.advance_begin(k).front() ? S++ : S--;
+		*(epsilon++) ? S++ : S--;
 		if ( S > sup )
 			sup++;
 		if ( S < inf )

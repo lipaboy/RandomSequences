@@ -6,10 +6,10 @@
 #include "../include/cephes.h"  
 #include "../include/stat_fncs.h"
 
-double psi2(int m, int n, BoolAnyRange epsilon);
+double psi2(int m, int n, BoolIterator epsilon);
 
 std::pair<double, double>
-Serial(int m, int n, BoolAnyRange epsilon)
+Serial(int m, int n, BoolIterator epsilon)
 {
 	double	p_value1, p_value2, psim0, psim1, psim2, del1, del2;
 	
@@ -44,7 +44,7 @@ Serial(int m, int n, BoolAnyRange epsilon)
 }
 
 double
-psi2(int m, int n, BoolAnyRange epsilon)
+psi2(int m, int n, BoolIterator epsilon)
 {
 	int				i, j, k, powLen;
 	double			sum, numOfBlocks;
@@ -64,9 +64,11 @@ psi2(int m, int n, BoolAnyRange epsilon)
 	for ( i=0; i<numOfBlocks; i++ ) {		 /* COMPUTE FREQUENCY */
 		k = 1;
 		for ( j=0; j<m; j++ ) {
-			if ( epsilon.advance_begin((i+j)%n).front() == 0 )
+			auto iter = epsilon;
+			std::advance(iter, (i + j) % n);
+			if ( *iter == 0 )
 				k *= 2;
-			else if (epsilon.advance_begin((i + j) % n).front() == 1 )
+			else if (*iter == 1 )
 				k = 2*k+1;
 		}
 		P[k-1]++;

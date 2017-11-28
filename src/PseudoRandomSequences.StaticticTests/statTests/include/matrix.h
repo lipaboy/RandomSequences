@@ -14,7 +14,7 @@ int				swap_rows(int i, int index, int Q, BitSequence **A);
 int				determine_rank(int m, int M, int Q, BitSequence **A);
 BitSequence**	create_matrix(int M, int Q);
 //void			display_matrix(int M, int Q, BitSequence **m);
-void			def_matrix(int M, int Q, BitSequence **m,int k, BoolAnyRange epsilon);
+void			def_matrix(int M, int Q, BitSequence **m,int k, BoolIterator epsilon);
 void			delete_matrix(int M, BitSequence **matrix);
 
 #endif //STAT_TESTS_MATRIX_H
