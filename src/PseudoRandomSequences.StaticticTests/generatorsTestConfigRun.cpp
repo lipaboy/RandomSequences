@@ -29,11 +29,16 @@ typedef std::vector<bool> Sequence;
 
 const int TEST_COUNT = 16;
 
-//namespace {
-//	std::vector<bool> generateSequence(std::string generatorName) {
-//		return std::vector<bool>();
-//	}
-//}
+namespace {
+	class MyBoolRange {
+	private:
+		BoolIterator _begin, _end;
+	public:
+		MyBoolRange(BoolIterator beg, BoolIterator end) : _begin(beg), _end(end) {}
+		BoolIterator const & begin() { return _begin; }
+		BoolIterator const & end() { return _end; }
+	};
+}
 
 int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 	time_t t;
@@ -92,15 +97,15 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 
 		//--------------------Container---------------------//
 
-		const int TRAVERSAL_COUNT_LARGE = 10;
-		const int TRAVERSAL_COUNT_SMALL = 10;
+		const int TRAVERSAL_COUNT_LARGE = 3;
+		const int TRAVERSAL_COUNT_SMALL = TRAVERSAL_COUNT_LARGE;
 		const size_t TRAVERSAL_THRESHOLD = size_t(1e5);
 		size_t stepIterSize = 4;		// the step of size iteration (traversal step)
 		std::vector<bool> epsilon;
 		tp.n = 0;
 		for (size_t jSize = firstSize; jSize <= lastSize; jSize *= stepIterSize) {
-			tp.n += jSize * 1024u * (jSize < TRAVERSAL_THRESHOLD) ? TRAVERSAL_COUNT_LARGE
-				: TRAVERSAL_COUNT_SMALL;
+			tp.n += jSize * 1024u * ((jSize < TRAVERSAL_THRESHOLD) ? TRAVERSAL_COUNT_LARGE
+				: TRAVERSAL_COUNT_SMALL);
 		}
 
 		bool isStdGenerators = false;
@@ -118,19 +123,14 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 		else
 			isStdGenerators = true;
 
-		class MyBoolRange {
-		private:
-			BoolIterator _begin, _end;
-		public:
-			MyBoolRange(BoolIterator beg, BoolIterator end) : _begin(beg), _end(end) {}
-			BoolIterator const & begin() { return _begin; }
-			BoolIterator const & end() { return _end; }
-		} epsilonRange = { epsilon.begin(), epsilon.end() };
+		MyBoolRange epsilonRange = { epsilon.begin(), epsilon.end() };
 
+		size_t accumulatorSize = 0u;
 		for (size_t iSize = firstSize; iSize <= lastSize; iSize *= stepIterSize) {
 			size_t inputSize = 1024u * iSize;
 			
-			cout << genName << endl;
+			cout << ">-----------------------New Size-----------------------<" << endl;
+			cout << endl << genName << endl;
 			cout << "Sequence size = " << inputSize << endl;
 			//-------------Input----------------//
 
@@ -177,27 +177,33 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 						});
 					}
 					else {
-						
+						auto iterBegin = epsilon.begin();
+						auto iterEnd = epsilon.begin();
+						std::advance(iterBegin, accumulatorSize);
+						std::advance(iterEnd, accumulatorSize + inputSize);
+						epsilonRange = MyBoolRange(iterBegin, iterEnd);
+						accumulatorSize += inputSize;
 					}
 				}
 
-				auto iterEnd = epsilonRange.begin();
-				std::advance(iterEnd, 3);
-				std::copy(epsilonRange.begin(), iterEnd,
-					std::ostream_iterator<bool>(cout, ""));
-				std::cout << std::endl;
+				{
+					auto iterEnd = epsilonRange.begin();
+					std::advance(iterEnd, 10);
+					std::copy(epsilonRange.begin(), iterEnd,
+						std::ostream_iterator<bool>(cout, ""));
+					std::cout << std::endl;
+				}
 
 				//-------------Output in file (for bookStackTest)----------------//
 			
 				{
 					std::ofstream outFile;
 					outFile.open(outFilename, std::ios::out | std::ios::trunc);
-					//std::copy(result.begin(), result.end(), std::ostream_iterator<bool>(outFile, ""));
 					auto outIter = std::ostream_iterator<char>(outFile);
 					int bitPos = 0;
 					char buffer = 0;
-					for (auto val : epsilonRange) {
-						buffer |= val << (bitPos++);
+					for (auto iter = epsilonRange.begin(); iter != epsilonRange.end(); iter++) {
+						buffer |= (*iter) << (bitPos++);
 						if (bitPos >= 8) {
 							bitPos = 0;
 							*(outIter++) = buffer;
@@ -211,7 +217,7 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 
 				//----------------Tests-----------------//
 				{
-					runTests(epsilon.begin(), epsilon.end(), testNames, 
+					runTests(epsilonRange.begin(), epsilonRange.end(), testNames, 
 						(iSize <= firstSize) && (jTraver <= 0), 
 						currResults, testKey, outFilename);
 					if (jTraver == 0)

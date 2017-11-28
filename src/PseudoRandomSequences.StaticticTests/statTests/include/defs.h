@@ -57,7 +57,7 @@
 typedef bool	BitSequence;
 
 typedef struct _testParameters {
-	int		n;
+	size_t		n;
 	int		blockFrequencyBlockLength;
 	int		nonOverlappingTemplateBlockLength;
 	int		overlappingTemplateBlockLength;
