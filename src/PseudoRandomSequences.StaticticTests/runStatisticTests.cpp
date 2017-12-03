@@ -55,7 +55,8 @@ void PseudoRandomSequences::runTests(
 				if (upperPartSize > (1LL << 28))
 					continue;
 				//std::cout << "up=" << upperPartStr << ", dim = " << dimStr << std::endl;
-				if (isSaveNames) testNames.push_back("BookStackTest_" + dimStr + "_" + upperPartStr);
+				if (isSaveNames) 
+					testNames.push_back("BookStackTest_" + dimStr + "dim_" + upperPartStr + "up");
 				testResults.push_back(bookStackTestMain(int(arguments.size()), &arguments[0]));
 			}
 		}
@@ -155,7 +156,7 @@ void PseudoRandomSequences::runTests(
 	//		testResults.push_back(LinearComplexity(param, EPSILON_SIZE, epsilonBegin));
 	//	}
 	//}
-	// #Slow
+	// #TheSlowest
 	// #Parameterized
 	if (testKey[11] == '1') {// think: neccessary try all the variant of blockSize (read documentation of test)
 		auto start = clock();

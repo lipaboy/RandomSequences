@@ -74,7 +74,7 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 		//"ranlux48", 
 			//"random_device",
 		"lcg",
-		"SHA1",
+		//"SHA1",
 		//"modExp",
 		//"bbs",
 		//"exclusiveOR"
@@ -84,6 +84,7 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 	std::ranlux48 generatorRanlux48;	//failure with normal_distribution and with chi_squared_distribution
 	std::random_device generatorRandomDevice;
 
+	auto wholeTimeExpend = clock();
 	for (int iGen = 0; iGen < generatorNames.size(); iGen++) {
 		std::string & genName = generatorNames[iGen];
 		
@@ -103,6 +104,7 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 		size_t stepIterSize = 4;		// the step of size iteration (traversal step)
 		std::vector<bool> epsilon;
 		tp.n = 0;
+		tp.numOfBitStreams = 1;
 		for (size_t jSize = firstSize; jSize <= lastSize; jSize *= stepIterSize) {
 			tp.n += jSize * 1024u * ((jSize < TRAVERSAL_THRESHOLD) ? TRAVERSAL_COUNT_LARGE
 				: TRAVERSAL_COUNT_SMALL);
@@ -250,6 +252,8 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 		resFile.close();
 		//extraFile.close();
 	}
+
+	cout << endl << "Whole time expend: " << (clock() - wholeTimeExpend) / 1000 << "sec." << endl;
 	
 
 	return 0;
