@@ -8,17 +8,27 @@
 
 #include <iostream>
 #include <fstream>
-#include <time.h>
 #include <stdlib.h>
 #include <iomanip>
 #include <limits>
 #include <cmath>
 #include <chrono>
 
-#include "statTests\include\stat_fncs.h"
-#include "lipaboyLibrary\src\maths\fixed_precision_number.h"
+#include "statTests/include/stat_fncs.h"
+#include "lipaboyLibrary/src/maths/fixed_precision_number.h"
 
 using namespace PseudoRandomSequences;
+
+    int PseudoRandomSequences::my_get_current_clock_time() {
+#ifdef __GNUC__
+       struct tms curr;
+       long clocks_per_sec = sysconf(_SC_CLK_TCK);
+       times(&curr);
+       return (int)std::round(curr.tms_utime / (double)clocks_per_sec * 1000.);
+#else   //Windows
+       return clock();
+#endif
+   }
 
 void PseudoRandomSequences::runTests(
 	BoolIterator epsilonBegin,
@@ -36,7 +46,7 @@ void PseudoRandomSequences::runTests(
 	const int EPSILON_SIZE = int(std::distance(epsilonBegin, epsilonEnd));
 	// #Parameterized
 	if (testKey[0] == '1') {
-		auto start = clock();
+        auto start = my_get_current_clock_time();
 		// ! Each bit means 0 or 1 (you can't pass to bookStackTest 0 or 1 in whole byte for example)
 		for (int upperPart = 0; upperPart < 3; upperPart++) {
 			for (uint64_t dim = 8; dim <= 32; dim *= 2) {	//8, 16, 32
@@ -61,17 +71,17 @@ void PseudoRandomSequences::runTests(
 				testResults.push_back(bookStackTestMain(int(arguments.size()), &arguments[0]));
 			}
 		}
-		cout << "Time: " << clock() - start << endl;
+        cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	if (testKey[1] == '1') {
-		auto start = clock();
+        auto start = my_get_current_clock_time();
 		if (isSaveNames) testNames.push_back("Frequency");
 		testResults.push_back(Frequency(EPSILON_SIZE, epsilonBegin));
-		//cout << "Time: " << clock() - start << endl;
+        //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	// #Parameterized
 	if (testKey[2] == '1') {
-		auto start = clock();
+        auto start = my_get_current_clock_time();
 		const int min = 2, avg = EPSILON_SIZE / 4, max = EPSILON_SIZE / 2;
 		//doesn't equal frequency monobit with M = 1
 		if (isSaveNames) testNames.push_back("BlockFrequency_" + std::to_string(min));
@@ -80,37 +90,37 @@ void PseudoRandomSequences::runTests(
 		testResults.push_back(BlockFrequency(avg, EPSILON_SIZE, epsilonBegin));
 		if (isSaveNames) testNames.push_back("BlockFrequency_" + std::to_string(max));
 		testResults.push_back(BlockFrequency(max, EPSILON_SIZE, epsilonBegin));
-		//cout << "Time: " << clock() - start << endl;
+        //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	if (testKey[3] == '1') {
-		auto start = clock();
+        auto start = my_get_current_clock_time();
 		if (isSaveNames) testNames.push_back("Runs");
 		testResults.push_back(Runs(EPSILON_SIZE, epsilonBegin));
-		//cout << "Time: " << clock() - start << endl;
+        //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	if (testKey[4] == '1') {
-		auto start = clock();
+        auto start = my_get_current_clock_time();
 		if (isSaveNames) testNames.push_back("LongestRunOfOnes");
 		testResults.push_back(LongestRunOfOnes(EPSILON_SIZE, epsilonBegin));
-		//cout << "Time: " << clock() - start << endl;
+        //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	if (testKey[5] == '1') {
-		auto start = clock();
+        auto start = my_get_current_clock_time();
 		if (isSaveNames) testNames.push_back("Rank");
 		testResults.push_back(Rank(EPSILON_SIZE, epsilonBegin));
-		//cout << "Time: " << clock() - start << endl;
+        //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	if (testKey[6] == '1') {
-		auto start = clock();
+        auto start = my_get_current_clock_time();
 		// Has a little difference between results of my own discreteFourier Test version
 		if (isSaveNames) testNames.push_back("DiscreteFourierTransform");
 		testResults.push_back(DiscreteFourierTransform(EPSILON_SIZE, epsilonBegin));
-		cout << "Time: " << clock() - start << endl;
+        cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	// #Slow test
 	// #Parameterized
 	if (testKey[7] == '1') {	// TODO: need to check
-		auto start = clock();
+        auto start = my_get_current_clock_time();
 		//2 - is minimum (depends on existing files)
 		std::vector<int> blockSizes { 3 };
 		// from 2 to 16
@@ -129,25 +139,25 @@ void PseudoRandomSequences::runTests(
 			testResults.push_back(size == 0 ? -1.
 				: average + size * (ALPHA - (size - 1.) / size + 1e-3) * (1. - average));
 		}
-		cout << "Time: " << clock() - start << endl;
+        cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	// #Parameterized
 	if (testKey[8] == '1') {
-		auto start = clock();
+        auto start = my_get_current_clock_time();
 		std::vector<int> blockSizes { 2, EPSILON_SIZE / 2, EPSILON_SIZE };		// TODO: CHECK
 		for (auto param : blockSizes) {
 			if (isSaveNames) testNames.push_back("OverlappingTemplateMatchings_" + std::to_string(param));
 			testResults.push_back(OverlappingTemplateMatchings(param, EPSILON_SIZE, epsilonBegin));
 		}
-		cout << "Time: " << clock() - start << endl;
+        cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	if (testKey[9] == '1') {
-		auto start = clock();
+        auto start = my_get_current_clock_time();
 		if (EPSILON_SIZE >= 387840) {
 			if (isSaveNames) testNames.push_back("Universal");
 			testResults.push_back(Universal(EPSILON_SIZE, epsilonBegin));
 		}
-		//cout << "Time: " << clock() - start << endl;
+        //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	// #Parameterized
 	//if (testKey[10] == '1') {		// think: neccessary try all the variant of blockSize (read documentation of test)
@@ -161,7 +171,7 @@ void PseudoRandomSequences::runTests(
 	// #TheSlowest
 	// #Parameterized
 	if (testKey[11] == '1') {// think: neccessary try all the variant of blockSize (read documentation of test)
-		auto start = clock();
+        auto start = my_get_current_clock_time();
 		int logSize = int(std::floor(std::log2(EPSILON_SIZE)) - 2);
 		std::vector<int> blockSizes{ 3 };
 		for (auto param : blockSizes) {
@@ -172,12 +182,12 @@ void PseudoRandomSequences::runTests(
 			if (isSaveNames) testNames.push_back("Serial_" + std::to_string(param) + "_2");
 			testResults.push_back(res.second);
 		}
-		cout << "Time: " << clock() - start << endl;
+        cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	// #Slow
 	// #Parameterized
 	if (testKey[12] == '1') {// think: neccessary try all the variant of blockSize (read documentation of test)
-		auto start = clock();
+        auto start = my_get_current_clock_time();
 		int logSize = int(std::floor(std::log2(EPSILON_SIZE)) - 5);
 		std::vector<int> blockSizes{ 1 };
 		for (auto param : blockSizes) {
@@ -185,16 +195,16 @@ void PseudoRandomSequences::runTests(
 			// (M + 1) - bit block is used to compare
 			testResults.push_back(ApproximateEntropy(param, EPSILON_SIZE, epsilonBegin));
 		}
-		cout << "Time: " << clock() - start << endl;
+        cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	if (testKey[13] == '1') {
-		auto start = clock();
+        auto start = my_get_current_clock_time();
 		auto res = CumulativeSums(EPSILON_SIZE, epsilonBegin);
 		if (isSaveNames) testNames.push_back("CumulativeSums_1");
 		testResults.push_back(res.first);
 		if (isSaveNames) testNames.push_back("CumulativeSums_2");
 		testResults.push_back(res.second);
-		//cout << "Time: " << clock() - start << endl;
+        //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	//if (testKey[14] == '1') {
 	//	if (isSaveNames) testNames.push_back("RandomExcursions");

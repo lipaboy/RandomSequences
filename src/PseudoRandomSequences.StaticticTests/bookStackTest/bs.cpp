@@ -8,6 +8,7 @@ Written by Alexey Lubkin
 #include <string>
 #include <sstream>
 #include <boost/math/distributions/chi_squared.hpp>
+#include <stdio.h>
 
 
 #if (defined _MSC_VER) || (defined __BORLANDC__)
@@ -18,7 +19,19 @@ Written by Alexey Lubkin
 
 #ifdef __GNUC__
 #include <unistd.h>
+#include <errno.h>
 #define __int64 long long
+
+typedef int errno_t;
+errno_t fopen_s(FILE **f, const char *name, const char *mode) {
+    errno_t ret = 0;
+    assert(f);
+    *f = fopen(name, mode);
+    /* Can't be sure about 1-to-1 mapping of errno and MS' errno_t */
+    if (!*f)
+        ret = errno;
+    return ret;
+}
 #endif
 
 using namespace std;
@@ -535,9 +548,9 @@ double bookStackTestMain(int argc, const char* argv[])
 	if (bflag2 == 0) uu = 1 << (ww / 2);
 
 	if (nn <= 1) { printf("ERROR: Sample size is to small.\n"); Quit(); }
-	if ((ww < 1) || (ww > 32)) { printf("ERROR: w (=%d) is not acceptable.\n", ww); Quit(); }
-	if ((bb < 0) || (bb > 32)) { printf("ERROR: b (=%d) is not acceptable.\n", bb); Quit(); }
-	if ((uu < 1) || (uu >= (__int64)(1) << ww)) { printf("ERROR: u (=%d) is not acceptable.\n", uu); Quit(); }
+    if ((ww < 1) || (ww > 32)) { printf("ERROR: w (=%ld) is not acceptable.\n", ww); Quit(); }
+    if ((bb < 0) || (bb > 32)) { printf("ERROR: b (=%ld) is not acceptable.\n", bb); Quit(); }
+    if ((uu < 1) || (uu >= (__int64)(1) << ww)) { printf("ERROR: u (=%ld) is not acceptable.\n", uu); Quit(); }
 	nn /= ww;
 
 	blankfirst = bflag == 3;

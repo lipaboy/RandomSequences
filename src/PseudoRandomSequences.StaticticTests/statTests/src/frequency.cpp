@@ -2,9 +2,9 @@
 #include <math.h>
 #include <string.h>
 //#include "../include/externs.h"
-#include "..\include\defs.h"
-#include "..\include\assess.h"
-#include "..\include\stat_fncs.h"
+#include "../include/defs.h"
+#include "../include/assess.h"
+#include "../include/stat_fncs.h"
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -27,19 +27,19 @@ Frequency(int n, BoolIterator epsilon)
 	f = s_obs/sqrt2;
 	p_value = erfc(f);
 
-	//fprintf(stats[TEST_FREQUENCY], "\t\t\t      FREQUENCY TEST\n");
-	//fprintf(stats[TEST_FREQUENCY], "\t\t---------------------------------------------\n");
-	//fprintf(stats[TEST_FREQUENCY], "\t\tCOMPUTATIONAL INFORMATION:\n");
-	//fprintf(stats[TEST_FREQUENCY], "\t\t---------------------------------------------\n");
-	//fprintf(stats[TEST_FREQUENCY], "\t\t(a) The nth partial sum = %d\n", (int)sum);
-	//fprintf(stats[TEST_FREQUENCY], "\t\t(b) S_n/n               = %f\n", sum/n);
-	//fprintf(stats[TEST_FREQUENCY], "\t\t---------------------------------------------\n");
+    //fprintf(stats[TEST_FREQUENCY], "\t/t/t      FREQUENCY TEST/n");
+    //fprintf(stats[TEST_FREQUENCY], "\t/t---------------------------------------------\n");
+    //fprintf(stats[TEST_FREQUENCY], "\t/tCOMPUTATIONAL INFORMATION:\n");
+    //fprintf(stats[TEST_FREQUENCY], "\t/t---------------------------------------------\n");
+    //fprintf(stats[TEST_FREQUENCY], "\t/t(a) The nth partial sum = %d/n", (int)sum);
+    //fprintf(stats[TEST_FREQUENCY], "\t/t(b) S_n/n               = %f/n", sum/n);
+    //fprintf(stats[TEST_FREQUENCY], "\t/t---------------------------------------------\n");
 
-	/*fprintf(stats[TEST_FREQUENCY], "%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value); fflush(stats[TEST_FREQUENCY]);
-	fprintf(results[TEST_FREQUENCY], "%f\n", p_value); fflush(results[TEST_FREQUENCY]);*/
+    /*fprintf(stats[TEST_FREQUENCY], "%s/t/tp_value = %f/n/n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value); fflush(stats[TEST_FREQUENCY]);
+    fprintf(results[TEST_FREQUENCY], "%f/n", p_value); fflush(results[TEST_FREQUENCY]);*/
 
-	//printf("Frequency(Monobit):\t\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value); 
+    //printf("Frequency(Monobit):\t/t%s/t/tp_value = %f/n/n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);
 	return (p_value);
 	//fflush(stats[TEST_FREQUENCY]);
-	//printf("%f\n", p_value); fflush(results[TEST_FREQUENCY]);
+    //printf("%f/n", p_value); fflush(results[TEST_FREQUENCY]);
 }

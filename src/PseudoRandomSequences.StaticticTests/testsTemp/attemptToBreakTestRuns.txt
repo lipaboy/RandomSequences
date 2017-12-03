@@ -1,7 +1,0 @@
-static int i = 0;
-		static double K = 1;
-		if (i % K == 0) {
-			i = 0;
-			K = K + 1;
-		}
-		return ((i++) % K) < (K / 2);

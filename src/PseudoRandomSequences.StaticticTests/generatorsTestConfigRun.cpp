@@ -16,9 +16,9 @@
 #include <cmath>
 #include <chrono>
 
-#include "statTests\include\stat_fncs.h"
-#include "lipaboyLibrary\src\maths\fixed_precision_number.h"
-#include "statTests\include\generators.h"
+#include "statTests/include/stat_fncs.h"
+#include "lipaboyLibrary/src/maths/fixed_precision_number.h"
+#include "statTests/include/generators.h"
 
 using namespace PseudoRandomSequences;
 using namespace std::chrono;
@@ -42,7 +42,7 @@ namespace {
 
 int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 	time_t t;
-	std::srand(unsigned int(std::time(&t)));
+    std::srand((unsigned int)(std::time(&t)));
 	using std::string;
 	using std::vector;
 	using std::cout;
@@ -84,7 +84,7 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 	std::ranlux48 generatorRanlux48;	//failure with normal_distribution and with chi_squared_distribution
 	std::random_device generatorRandomDevice;
 
-	auto wholeTimeExpend = clock();
+    auto wholeTimeExpend = my_get_current_clock_time();
 	for (int iGen = 0; iGen < generatorNames.size(); iGen++) {
 		std::string & genName = generatorNames[iGen];
 		
@@ -230,17 +230,17 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 											? count : (p_value < ALPHA) + count; }
 					);
 					currResults.clear();
-				}
+                }
 			}
 
 			//----------------Write results-----------------//
 			{
 				if (iSize <= firstSize) {
-					std::copy(testNames.begin(), testNames.end(), std::ostream_iterator<string>(resFile, "\t"));
+                    std::copy(testNames.begin(), testNames.end(), std::ostream_iterator<string>(resFile, "\t"));
 					resFile << endl;
 				}
-				resFile << iSize << "_Kbits\t";
-				std::copy(testResults.begin(), testResults.end(), std::ostream_iterator<double>(resFile, "\t"));
+                resFile << iSize << "_Kbits\t";
+                std::copy(testResults.begin(), testResults.end(), std::ostream_iterator<double>(resFile, "\t"));
 				resFile << endl;
 			}
 			//----------------Extra infos-----------------//
@@ -253,7 +253,8 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 		//extraFile.close();
 	}
 
-	cout << endl << "Whole time expend: " << (clock() - wholeTimeExpend) / 1000 << "sec." << endl;
+    cout << endl << "Whole time expend: " << (my_get_current_clock_time() - wholeTimeExpend) / 1000.
+         << "sec." << endl;
 	
 
 	return 0;

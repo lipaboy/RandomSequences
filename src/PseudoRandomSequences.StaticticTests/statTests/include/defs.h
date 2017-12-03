@@ -54,6 +54,8 @@
 
 //----------typedef unsigned char BitSequence;
 
+#include <stdlib.h>
+
 typedef bool	BitSequence;
 
 typedef struct _testParameters {

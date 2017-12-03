@@ -16,8 +16,8 @@
 #include <cmath>
 #include <chrono>
 
-#include "statTests\include\stat_fncs.h"
-#include "lipaboyLibrary\src\maths\fixed_precision_number.h"
+#include "statTests/include/stat_fncs.h"
+#include "lipaboyLibrary/src/maths/fixed_precision_number.h"
 
 using namespace PseudoRandomSequences;
 using namespace std::chrono;
@@ -30,7 +30,7 @@ const int TEST_COUNT = 16;
 
 int PseudoRandomSequences::beaconRun(int argc, char * argv[]) {
 	time_t t;
-	std::srand(unsigned int(std::time(&t)));
+    std::srand((unsigned int)(std::time(&t)));
 	using std::string;
 	using std::vector;
 	using std::cout;

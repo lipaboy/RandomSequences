@@ -45,9 +45,9 @@ NonOverlappingTemplateMatchings(int m, int n, BoolIterator epsilon)
 	}
 	lambda = (M-m+1)/pow(2, m);
 	varWj = M*(1.0/pow(2.0, m) - (2.0*m-1.0)/pow(2.0, 2.0*m));
-	sprintf_s(directory, "templates\\template%d", m);
+    sprintf(directory, "templates/template%d", m);
 
-	fopen_s(&fp, directory, "r");
+    fp = fopen(directory, "r");
 	if ( ((isNegative(lambda)) || (isZero(lambda))) ||
 		 (fp == NULL) ||
 		 ((sequence = (BitSequence *) calloc(m, sizeof(BitSequence))) == NULL) ) {
@@ -93,7 +93,7 @@ NonOverlappingTemplateMatchings(int m, int n, BoolIterator epsilon)
 			sum = 0;
 
 			for ( k=0; k<m; k++ ) {
-				fscanf_s(fp, "%d", &bit);		//! forbide for removing
+                fscanf(fp, "%d", &bit);		//! forbide for removing
 				sequence[k] = bit;
 			}
 			for ( k=0; k<=K; k++ )

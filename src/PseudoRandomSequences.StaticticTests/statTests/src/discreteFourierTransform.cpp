@@ -6,9 +6,9 @@
 //#include "../include/utilities.h"
 //#include "cephes.h"
 
-#include "..\include\defs.h"
-#include "..\include\assess.h"
-#include "..\include\stat_fncs.h"
+#include "../include/defs.h"
+#include "../include/assess.h"
+#include "../include/stat_fncs.h"
 
 #include <vector>
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -32,7 +32,7 @@ DiscreteFourierTransform(int n, BoolIterator epsilon)
 				free(wsave);
 			if( m != NULL )
 				free(m);
-			printf("DiscreteFourierTrans : failure by malloc\n");
+            printf("DiscreteFourierTrans : failure by malloc/n");
 			return -1.;
 	}
 	for ( i=0; i<n; i++ )
@@ -58,20 +58,20 @@ DiscreteFourierTransform(int n, BoolIterator epsilon)
 	d = (N_l - N_o)/sqrt(n/4.0*0.95*0.05);
 	p_value = erfc(fabs(d)/sqrt(2.0));
 
-	/*fprintf(stats[TEST_FFT], "\t\t\t\tFFT TEST\n");
-	fprintf(stats[TEST_FFT], "\t\t-------------------------------------------\n");
-	fprintf(stats[TEST_FFT], "\t\tCOMPUTATIONAL INFORMATION:\n");
-	fprintf(stats[TEST_FFT], "\t\t-------------------------------------------\n");
-	fprintf(stats[TEST_FFT], "\t\t(a) Percentile = %f\n", percentile);
-	fprintf(stats[TEST_FFT], "\t\t(b) N_l        = %f\n", N_l);
-	fprintf(stats[TEST_FFT], "\t\t(c) N_o        = %f\n", N_o);
-	fprintf(stats[TEST_FFT], "\t\t(d) d          = %f\n", d);
-	fprintf(stats[TEST_FFT], "\t\t-------------------------------------------\n");
+    /*fprintf(stats[TEST_FFT], "\t/t/t/tFFT TEST/n");
+    fprintf(stats[TEST_FFT], "\t/t-------------------------------------------\n");
+    fprintf(stats[TEST_FFT], "\t/tCOMPUTATIONAL INFORMATION:\n");
+    fprintf(stats[TEST_FFT], "\t/t-------------------------------------------\n");
+    fprintf(stats[TEST_FFT], "\t/t(a) Percentile = %f/n", percentile);
+    fprintf(stats[TEST_FFT], "\t/t(b) N_l        = %f/n", N_l);
+    fprintf(stats[TEST_FFT], "\t/t(c) N_o        = %f/n", N_o);
+    fprintf(stats[TEST_FFT], "\t/t(d) d          = %f/n", d);
+    fprintf(stats[TEST_FFT], "\t/t-------------------------------------------\n");
 
-	fprintf(stats[TEST_FFT], "%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);
-	fprintf(results[TEST_FFT], "%f\n", p_value);*/
+    fprintf(stats[TEST_FFT], "%s/t/tp_value = %f/n/n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);
+    fprintf(results[TEST_FFT], "%f/n", p_value);*/
 
-	//printf( "DiscreteFourier:\t\t%s\t\tp_value = %.15lf\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);
+    //printf( "DiscreteFourier:\t/t%s/t/tp_value = %.15lf/n/n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);
 	
 
 	free(X);
