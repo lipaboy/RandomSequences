@@ -52,7 +52,6 @@ OverlappingTemplateMatchings(int m, int n, BoolIterator epsilon)
 			for ( k=0; k<m; k++ ) {
 				auto iter = epsilon;
 				std::advance(iter, i * M + j + k);
-				bool elem;
 				if ( sequence[k] != *iter )
 					match = 0;
 			}

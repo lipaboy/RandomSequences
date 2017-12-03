@@ -93,18 +93,18 @@ NonOverlappingTemplateMatchings(int m, int n, BoolIterator epsilon)
 			sum = 0;
 
 			for ( k=0; k<m; k++ ) {
-				fscanf_s(fp, "%d", &bit);
+				fscanf_s(fp, "%d", &bit);		//! forbide for removing
 				sequence[k] = bit;
-				//fprintf(stats[TEST_NONPERIODIC], "%d", sequence[k]);
 			}
-			//fprintf(stats[TEST_NONPERIODIC], " ");
 			for ( k=0; k<=K; k++ )
 				nu[k] = 0;
-			for ( i=0; i<N; i++ ) {
+// max threads == 8
+#pragma omp parallel for private(W_obs, match, i, j, k)
+			for ( i=0; i < N; i++ ) {
 				W_obs = 0;
-				for ( j=0; j<M-m+1; j++ ) {
+				for ( j=0; j < M - m + 1; j++) {
 					match = 1;
-					for ( k=0; k<m; k++ ) {
+					for ( k=0; k < m; k++ ) {
 						auto iter = epsilon;
 						std::advance(iter, i * M + j + k);
 						if ( (int)sequence[k] != (int)*iter) {
@@ -122,33 +122,18 @@ NonOverlappingTemplateMatchings(int m, int n, BoolIterator epsilon)
 			sum = 0;
 			chi2 = 0.0;                                   /* Compute Chi Square */
 			for ( i=0; i<N; i++ ) {
-				/*if ( m == 10 )
-					fprintf(stats[TEST_NONPERIODIC], "%3d  ", Wj[i]);
-				else
-					fprintf(stats[TEST_NONPERIODIC], "%4d ", Wj[i]);*/
 				chi2 += pow(((double)Wj[i] - lambda)/pow(varWj, 0.5), 2);
 			}
 			p_value = cephes_igamc(N/2.0, chi2/2.0);
+			printf("chi = %f\n", chi2);
 		
 			if ( isNegative(p_value) || isGreaterThanOne(p_value) )
 				printf("\t\tWARNING:  P_VALUE IS OUT OF RANGE.\n");
 
 			result.push_back(p_value);
-			/*if (p_value < ALPHA)
-				failureCount++;
-			else
-				successCount++;*/
-			//printf("Non Overlapping Template Matchings:\t%f %s %3d\n", p_value, p_value < ALPHA ? "FAILURE" : "SUCCESS", jj);
-			if ( SKIP > 1 )
-				fseek(fp, (long)(SKIP-1)*2*m, SEEK_CUR);
-			//fprintf(results[TEST_NONPERIODIC], "%f\n", p_value); fflush(results[TEST_NONPERIODIC]);
 		}
-		/*printf("Non Overlapping Template Matchings:\tsuccess = %d of %d\n", successCount, 
-			successCount + failureCount);*/
-		//result = double(successCount) / (failureCount + successCount);
 	}
 	
-	//fprintf(stats[TEST_NONPERIODIC], "\n"); fflush(stats[TEST_NONPERIODIC]);
 	if ( sequence != NULL )
 		free(sequence);
 

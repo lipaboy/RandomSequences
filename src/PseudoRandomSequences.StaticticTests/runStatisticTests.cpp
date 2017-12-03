@@ -36,6 +36,7 @@ void PseudoRandomSequences::runTests(
 	const int EPSILON_SIZE = int(std::distance(epsilonBegin, epsilonEnd));
 	// #Parameterized
 	if (testKey[0] == '1') {
+		auto start = clock();
 		// ! Each bit means 0 or 1 (you can't pass to bookStackTest 0 or 1 in whole byte for example)
 		for (int upperPart = 0; upperPart < 3; upperPart++) {
 			for (uint64_t dim = 8; dim <= 32; dim *= 2) {	//8, 16, 32
@@ -60,6 +61,7 @@ void PseudoRandomSequences::runTests(
 				testResults.push_back(bookStackTestMain(int(arguments.size()), &arguments[0]));
 			}
 		}
+		cout << "Time: " << clock() - start << endl;
 	}
 	if (testKey[1] == '1') {
 		auto start = clock();
@@ -161,9 +163,10 @@ void PseudoRandomSequences::runTests(
 	if (testKey[11] == '1') {// think: neccessary try all the variant of blockSize (read documentation of test)
 		auto start = clock();
 		int logSize = int(std::floor(std::log2(EPSILON_SIZE)) - 2);
-		std::vector<int> blockSizes{ 3};
+		std::vector<int> blockSizes{ 2 };
 		for (auto param : blockSizes) {
-			auto res = Serial(param, EPSILON_SIZE, epsilonBegin);
+			auto res = 
+				Serial(param, EPSILON_SIZE, epsilonBegin);
 			if (isSaveNames) testNames.push_back("Serial_" + std::to_string(param) + "_1");
 			testResults.push_back(res.first);
 			if (isSaveNames) testNames.push_back("Serial_" + std::to_string(param) + "_2");

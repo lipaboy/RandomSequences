@@ -61,6 +61,7 @@ psi2(int m, int n, BoolIterator epsilon)
 	}
 	for ( i=1; i<powLen-1; i++ )
 		P[i] = 0;	  /* INITIALIZE NODES */
+//#pragma omp parallel for
 	for ( i=0; i<numOfBlocks; i++ ) {		 /* COMPUTE FREQUENCY */
 		k = 1;
 		for ( j=0; j<m; j++ ) {
@@ -74,6 +75,7 @@ psi2(int m, int n, BoolIterator epsilon)
 		P[k-1]++;
 	}
 	sum = 0.0;
+//#pragma omp parallel for reduction(+:sum)
 	for ( i=(int)pow(2, m)-1; i<(int)pow(2, m+1)-1; i++ )
 		sum += pow(P[i], 2);
 	sum = (sum * pow(2, m)/(double)n) - (double)n;

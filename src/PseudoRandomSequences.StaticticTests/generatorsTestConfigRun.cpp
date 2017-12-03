@@ -98,7 +98,7 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 
 		//--------------------Container---------------------//
 
-		const int TRAVERSAL_COUNT_LARGE = 3;
+		const int TRAVERSAL_COUNT_LARGE = 1;
 		const int TRAVERSAL_COUNT_SMALL = TRAVERSAL_COUNT_LARGE;
 		const size_t TRAVERSAL_THRESHOLD = size_t(1e5);
 		size_t stepIterSize = 4;		// the step of size iteration (traversal step)
