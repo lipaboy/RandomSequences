@@ -46,8 +46,8 @@ Serial(int m, int n, BoolIterator epsilon)
 double
 psi2(int m, int n, BoolIterator epsilon)
 {
-	int				i, j, k, powLen;
-	double			sum, numOfBlocks;
+	int				i, j, k, powLen, numOfBlocks;
+	double			sum;
 	unsigned int	*P;
 	
 	if ( (m == 0) || (m == -1) )
@@ -59,17 +59,19 @@ psi2(int m, int n, BoolIterator epsilon)
 		//fflush(stats[TEST_SERIAL]);
 		return 0.0;
 	}
+//#pragma omp parallel for
 	for ( i=1; i<powLen-1; i++ )
 		P[i] = 0;	  /* INITIALIZE NODES */
-//#pragma omp parallel for
-	for ( i=0; i<numOfBlocks; i++ ) {		 /* COMPUTE FREQUENCY */
+
+#pragma omp parallel for private(j, k)
+	for (int i=0; i < numOfBlocks; i++ ) {		 /* COMPUTE FREQUENCY */
 		k = 1;
 		for ( j=0; j<m; j++ ) {
 			auto iter = epsilon;
 			std::advance(iter, (i + j) % n);
 			if ( *iter == 0 )
 				k *= 2;
-			else if (*iter == 1 )
+			else //if (*iter == 1 )
 				k = 2*k+1;
 		}
 		P[k-1]++;

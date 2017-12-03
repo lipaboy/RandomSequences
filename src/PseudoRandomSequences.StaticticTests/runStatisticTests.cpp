@@ -163,7 +163,7 @@ void PseudoRandomSequences::runTests(
 	if (testKey[11] == '1') {// think: neccessary try all the variant of blockSize (read documentation of test)
 		auto start = clock();
 		int logSize = int(std::floor(std::log2(EPSILON_SIZE)) - 2);
-		std::vector<int> blockSizes{ 2 };
+		std::vector<int> blockSizes{ 3 };
 		for (auto param : blockSizes) {
 			auto res = 
 				Serial(param, EPSILON_SIZE, epsilonBegin);

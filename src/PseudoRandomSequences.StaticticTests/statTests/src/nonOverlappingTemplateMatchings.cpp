@@ -99,7 +99,7 @@ NonOverlappingTemplateMatchings(int m, int n, BoolIterator epsilon)
 			for ( k=0; k<=K; k++ )
 				nu[k] = 0;
 // max threads == 8
-#pragma omp parallel for private(W_obs, match, i, j, k)
+#pragma omp parallel for private(W_obs, match, j, k)
 			for ( i=0; i < N; i++ ) {
 				W_obs = 0;
 				for ( j=0; j < M - m + 1; j++) {
@@ -125,7 +125,7 @@ NonOverlappingTemplateMatchings(int m, int n, BoolIterator epsilon)
 				chi2 += pow(((double)Wj[i] - lambda)/pow(varWj, 0.5), 2);
 			}
 			p_value = cephes_igamc(N/2.0, chi2/2.0);
-			printf("chi = %f\n", chi2);
+			//printf("chi = %f\n", chi2);		//logging
 		
 			if ( isNegative(p_value) || isGreaterThanOne(p_value) )
 				printf("\t\tWARNING:  P_VALUE IS OUT OF RANGE.\n");
