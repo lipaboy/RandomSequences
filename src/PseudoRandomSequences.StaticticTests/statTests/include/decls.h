@@ -8,7 +8,7 @@
                    G L O B A L   D A T A  S T R U C T U R E S 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-BitSequence	*epsilon;				// BIT STREAM
+//BitSequence	*epsilon;				// BIT STREAM
 TP			tp;						// TEST PARAMETER STRUCTURE
 //FILE		*stats[NUMOFTESTS+1];	// FILE OUTPUT STREAM
 //FILE		*results[NUMOFTESTS+1];	// FILE OUTPUT STREAM

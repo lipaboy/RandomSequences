@@ -5,14 +5,15 @@
 #include "../include/externs.h"
 #include "../include/utilities.h"
 #include "../include/cephes.h"  
+#include "../include/stat_fncs.h"
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                O V E R L A P P I N G  T E M P L A T E  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 double	Pr(int u, double eta);
 
-void
-OverlappingTemplateMatchings(int m, int n)
+double
+OverlappingTemplateMatchings(int m, int n, BoolIterator epsilon)
 {
 	int				i, k, match;
 	double			W_obs, eta, sum, chi2, p_value, lambda;
@@ -29,6 +30,7 @@ OverlappingTemplateMatchings(int m, int n)
 		printf( "\t\t    OVERLAPPING TEMPLATE OF ALL ONES TEST\n");
 		printf( "\t\t---------------------------------------------\n");
 		printf( "\t\tTEMPLATE DEFINITION:  Insufficient memory, Overlapping Template Matchings test aborted!\n");
+		return -1.;
 	}
 	else
 		for ( i=0; i<m; i++ )
@@ -48,7 +50,9 @@ OverlappingTemplateMatchings(int m, int n)
 		for ( j=0; j<M-m+1; j++ ) {
 			match = 1;
 			for ( k=0; k<m; k++ ) {
-				if ( sequence[k] != epsilon[i*M+j+k] )
+				auto iter = epsilon;
+				std::advance(iter, i * M + j + k);
+				if ( sequence[k] != *iter )
 					match = 0;
 			}
 			if ( match == 1 )
@@ -88,8 +92,9 @@ OverlappingTemplateMatchings(int m, int n)
 		printf( "WARNING:  P_VALUE IS OUT OF RANGE.\n");
 
 	free(sequence);
-	printf("Overlapping Template Matrchings:%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS",
-		p_value); //fflush(stats[TEST_OVERLAPPING]);
+	//printf("Overlapping Template Matrchings:%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS",
+	//	p_value); //fflush(stats[TEST_OVERLAPPING]);
+	return double(p_value);
 //	fprintf(results[TEST_OVERLAPPING], "%f\n", p_value); fflush(results[TEST_OVERLAPPING]);
 }
 

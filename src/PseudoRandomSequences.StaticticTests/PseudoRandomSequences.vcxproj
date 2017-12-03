@@ -21,6 +21,8 @@
   <ItemGroup>
     <ClInclude Include="book_stack_test.h" />
     <ClInclude Include="discrete_fourier_transform_test.h" />
+    <ClInclude Include="lipaboyLibrary\src\maths\fixed_precision_number.h" />
+    <ClInclude Include="lipaboyLibrary\src\maths\precision_number.h" />
     <ClInclude Include="pseudoRandomSequences.h" />
     <ClInclude Include="statTests\include\assess.h" />
     <ClInclude Include="statTests\include\cephes.h" />
@@ -35,8 +37,11 @@
     <ClInclude Include="statTests\include\utilities.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="beaconConfigsRun.cpp" />
     <ClCompile Include="bookStackTest\bs.cpp" />
+    <ClCompile Include="generatorsTestConfigRun.cpp" />
     <ClCompile Include="maincrypto.cpp" />
+    <ClCompile Include="runStatisticTests.cpp" />
     <ClCompile Include="statTests\src\approximateEntropy.cpp" />
     <ClCompile Include="statTests\src\blockFrequency.cpp" />
     <ClCompile Include="statTests\src\cephes.cpp" />
@@ -44,6 +49,8 @@
     <ClCompile Include="statTests\src\dfft.cpp" />
     <ClCompile Include="statTests\src\discreteFourierTransform.cpp" />
     <ClCompile Include="statTests\src\frequency.cpp" />
+    <ClCompile Include="statTests\src\generators.cpp" />
+    <ClCompile Include="statTests\src\genutils.cpp" />
     <ClCompile Include="statTests\src\linearComplexity.cpp" />
     <ClCompile Include="statTests\src\longestRunOfOnes.cpp" />
     <ClCompile Include="statTests\src\matrix.cpp" />
@@ -130,6 +137,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Boost\include\boost-1_65;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -144,6 +152,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Boost\include\boost-1_65;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

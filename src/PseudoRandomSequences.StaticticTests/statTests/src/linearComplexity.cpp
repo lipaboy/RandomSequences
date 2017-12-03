@@ -4,9 +4,10 @@
 #include <string.h>
 #include "../include/externs.h"
 #include "../include/cephes.h"  
+#include "../include/stat_fncs.h"
 
-void
-LinearComplexity(int M, int n)
+double
+LinearComplexity(int M, int n, BoolIterator epsilon)
 {
 	int       i, ii, j, d, N, L, m, N_, parity, sign, K = 6;
 	double    p_value, T_, mean, nu[7], chi2;
@@ -27,9 +28,8 @@ LinearComplexity(int M, int n)
 			free(P);
 		if ( T != NULL )
 			free(T);
-		return;
+		return -1.;
 	}
-
 
 	//fprintf(stats[TEST_LINEARCOMPLEXITY], "-----------------------------------------------------\n");
 	//fprintf(stats[TEST_LINEARCOMPLEXITY], "\tL I N E A R  C O M P L E X I T Y\n");
@@ -61,9 +61,14 @@ LinearComplexity(int M, int n)
 		/* DETERMINE LINEAR COMPLEXITY */
 		N_ = 0;
 		while ( N_ < M ) {
-			d = (int)epsilon[ii*M+N_];
-			for ( i=1; i<=L; i++ )
-				d += C[i] * epsilon[ii*M+N_-i];
+			auto iter = epsilon;
+			std::advance(iter, ii*M + N_);
+			d = (int)(*iter);
+			for (i = 1; i <= L; i++) {
+				iter = epsilon;
+				std::advance(iter, ii*M + N_ - i);
+				d += C[i] * (*iter);
+			}
 			d = d%2;
 			if ( d == 1 ) {
 				for ( i=0; i<M; i++ ) {
@@ -117,11 +122,13 @@ LinearComplexity(int M, int n)
 		chi2 += pow(nu[i]-N*pi[i], 2) / (N*pi[i]);
 	p_value = cephes_igamc(K/2.0, chi2/2.0);
 
-	printf("Linear complexity:\t\t%s\t\t%9.6f\n", p_value > ALPHA ? "SUCCESS" : "FAILURE", p_value);// fflush(stats[TEST_LINEARCOMPLEXITY]);
+	//printf("Linear complexity:\t\t%s\t\t%9.6f\n", p_value > ALPHA ? "SUCCESS" : "FAILURE", p_value);// fflush(stats[TEST_LINEARCOMPLEXITY]);
 	//fprintf(results[TEST_LINEARCOMPLEXITY], "%f\n", p_value); fflush(results[TEST_LINEARCOMPLEXITY]);
 
 	free(B_);
 	free(P);
 	free(C);
 	free(T);
+
+	return (p_value);
 }

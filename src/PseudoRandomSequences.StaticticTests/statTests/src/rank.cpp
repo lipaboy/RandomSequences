@@ -5,23 +5,27 @@
 #include "../include/externs.h"
 //#include "../include/cephes.h"
 #include "../include/matrix.h"
+#include "../include/stat_fncs.h"
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                               R A N K  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-void
-Rank(int n)
+double
+Rank(int n, BoolIterator epsilon)
 {
 	int			N, i, k, r;
 	double		p_value, product, chi_squared, arg1, p_32, p_31, p_30, R, F_32, F_31, F_30;
 	BitSequence	**matrix = create_matrix(32, 32);
 
+	double result;
+
 	N = n / (32 * 32);
 	if (isZero(N)) {
-		printf("\t\t\t\tRANK TEST\n");
-		printf("\t\tError: Insuffucient # Of Bits To Define An 32x32 (%dx%d) Matrix\n", 32, 32);
-		p_value = 0.00;
+		/*printf("\t\t\t\tRANK TEST\n");
+		printf("\t\tError: Insuffucient # Of Bits To Define An 32x32 (%dx%d) Matrix\n", 32, 32);*/
+		//p_value = 0.00;
+		result = -1.;
 	}
 	else {
 		r = 32;					/* COMPUTE PROBABILITIES */
@@ -41,7 +45,7 @@ Rank(int n)
 		F_32 = 0;
 		F_31 = 0;
 		for (k = 0; k < N; k++) {			/* FOR EACH 32x32 MATRIX   */
-			def_matrix(32, 32, matrix, k);
+			def_matrix(32, 32, matrix, k, epsilon);
 #if (DISPLAY_MATRICES == 1)
 			display_matrix(32, 32, matrix);
 #endif
@@ -78,10 +82,16 @@ Rank(int n)
 		if ( isNegative(p_value) || isGreaterThanOne(p_value) )
 			printf("WARNING:  P_VALUE IS OUT OF RANGE.\n");
 
+		result = double(p_value);
+	}
+
+	if (matrix != NULL) {
 		for (i = 0; i < 32; i++)				/* DEALLOCATE MATRIX  */
 			free(matrix[i]);
 		free(matrix);
 	}
-	printf("Rank (matrix):\t\t\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);
+	//printf("Rank (matrix):\t\t\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);
+
+	return result;
 	//printf("%f\n", p_value);
 }

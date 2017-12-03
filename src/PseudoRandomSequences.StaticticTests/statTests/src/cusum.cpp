@@ -4,13 +4,14 @@
 #include <string.h>
 #include "../include/externs.h"
 #include "../include/cephes.h"
+#include "../include/stat_fncs.h"
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 		    C U M U L A T I V E  S U M S  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-void
-CumulativeSums(int n)
+std::pair<double, double>
+CumulativeSums(int n, BoolIterator epsilon)
 {
 	int		S, sup, inf, z, zrev, k;
 	double	sum1, sum2, p_value;
@@ -19,7 +20,7 @@ CumulativeSums(int n)
 	sup = 0;
 	inf = 0;
 	for ( k=0; k<n; k++ ) {
-		epsilon[k] ? S++ : S--;
+		*(epsilon++) ? S++ : S--;
 		if ( S > sup )
 			sup++;
 		if ( S < inf )
@@ -52,7 +53,8 @@ CumulativeSums(int n)
 	if ( isNegative(p_value) || isGreaterThanOne(p_value) )
 		printf("\t\tWARNING:  P_VALUE IS OUT OF RANGE\n");
 
-	printf("%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);
+	//printf("%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);
+	double p_value1 = p_value;
 	//fprintf(results[TEST_CUSUM], "%f\n", p_value);
 		
 	// backwards
@@ -78,6 +80,7 @@ CumulativeSums(int n)
 	if ( isNegative(p_value) || isGreaterThanOne(p_value) )
 		printf("\t\tWARNING:  P_VALUE IS OUT OF RANGE\n");
 
-	printf("Cumulative Sums:\t\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);// fflush(stats[TEST_CUSUM]);
+	//printf("Cumulative Sums:\t\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);// fflush(stats[TEST_CUSUM]);
+	return std::make_pair(p_value1, p_value);
 	//fprintf(results[TEST_CUSUM], "%f\n", p_value); fflush(results[TEST_CUSUM]);
 }

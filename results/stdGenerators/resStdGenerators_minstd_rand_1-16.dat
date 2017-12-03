@@ -1,0 +1,4 @@
+	Frequency	BlockFrequency_2	BlockFrequency_256	BlockFrequency_512	Runs	LongestRunOfOnes	Rank	DiscreteFourierTransform	NonOverlappingTemplateMatchings_3	OverlappingTemplateMatchings_2	OverlappingTemplateMatchings_512	OverlappingTemplateMatchings_1024	Serial_3_1	Serial_3_2	ApproximateEntropy_1	CumulativeSums_1	CumulativeSums_2	
+1_Kbits	2	0	0	0	0	1	4	0	3	0	0	0	0	0	0	0	2	
+4_Kbits	0	0	1	0	1	1	0	1	0	0	0	0	0	0	1	2	0	
+16_Kbits	0	1	0	0	1	1	1	0	2	0	0	0	0	0	0	0	0	

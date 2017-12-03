@@ -7,6 +7,7 @@ Written by Alexey Lubkin
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <boost/math/distributions/chi_squared.hpp>
 
 
 #if (defined _MSC_VER) || (defined __BORLANDC__)
@@ -199,7 +200,7 @@ void TBookStack::Clear()
 	c0 = first = Add(v); FreePtr++;
 	for (i = 1; i < NUpperPart; i++)
 	{
-		v.ID = i;
+		v.ID = uint32_t(i);
 		v.prevLink = c0;
 		c1 = Add(v); FreePtr++;
 		c0->nextLink = c1;
@@ -294,7 +295,7 @@ double TBookStack::Run()
 		}
 	}
 	SampleSize = i;
-	if (!qq) printf("\n");
+	//if (!qq) printf("\n");
 
 	if (SampleSize > 0)
 	{
@@ -551,15 +552,19 @@ double bookStackTestMain(int argc, const char* argv[])
 	double chi = pbs->Run();
 
 	//if(!qq) cout << "  Sample size: " << (pbs->SampleSize * ww) <<" bits (" << pbs->SampleSize << " words) \n";
-	if (!qq)
-		if (pbs->SampleSize * uu / ((__int64)(1) << ww) < 5)
-			printf("WARNING: The (SampleSize*u/(2^w) >= 5) is not true!\n");
+	//if (!qq)
+		//if (pbs->SampleSize * uu / ((__int64)(1) << ww) < 5)
+		//	printf("WARNING: The (SampleSize*u/(2^w) >= 5) is not true!\n");
 
 	flush(cout);
 
 	delete pbs;
 	if (ff.size() > 0) fclose(input);
 
-	return chi;
+	//cout << "BookStack stat:\t\t\t" << ((p_value >= 0.01) ? "SUCCESS" : "FAILURE") 
+	//<< "\t\tp_value = " << p_value << endl << endl;
+	double p_value = 1 -
+		boost::math::cdf(boost::math::chi_squared_distribution<double>(1), chi);
+	return p_value;
 }
 

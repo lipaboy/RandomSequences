@@ -13,15 +13,15 @@
 
 
 
-void
-Frequency(int n)
+double
+Frequency(int n, BoolIterator epsilon)
 {
 	int		i;
 	double	f, s_obs, p_value, sum, sqrt2 = 1.41421356237309504880;
 	
 	sum = 0.0;
 	for ( i=0; i<n; i++ )
-		sum += 2*(int)epsilon[i]-1;
+		sum += 2*(int)*(epsilon++) - 1;
 		//sum += 2 * (int)getRand(i) - 1;
 	s_obs = fabs(sum)/sqrt(n);
 	f = s_obs/sqrt2;
@@ -38,7 +38,8 @@ Frequency(int n)
 	/*fprintf(stats[TEST_FREQUENCY], "%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value); fflush(stats[TEST_FREQUENCY]);
 	fprintf(results[TEST_FREQUENCY], "%f\n", p_value); fflush(results[TEST_FREQUENCY]);*/
 
-	printf("Frequency(Monobit):\t\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value); 
+	//printf("Frequency(Monobit):\t\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value); 
+	return (p_value);
 	//fflush(stats[TEST_FREQUENCY]);
 	//printf("%f\n", p_value); fflush(results[TEST_FREQUENCY]);
 }

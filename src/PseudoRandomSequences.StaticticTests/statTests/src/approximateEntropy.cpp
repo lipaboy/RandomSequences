@@ -5,13 +5,14 @@
 #include "../include/externs.h"
 #include "../include/utilities.h"
 #include "../include/cephes.h"  
+#include "../include/stat_fncs.h"
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                 A P P R O X I M A T E  E N T R O P Y   T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-void
-ApproximateEntropy(int m, int n)
+double
+ApproximateEntropy(int m, int n, BoolIterator epsilon)
 {
 	int				i, j, k, r, blockSize, seqLength, powLen, index;
 	double			sum, numOfBlocks, ApEn[2], apen, chi_squared, p_value;
@@ -36,7 +37,7 @@ ApproximateEntropy(int m, int n)
 			powLen = (int)pow(2, blockSize+1)-1;
 			if ( (P = (unsigned int*)calloc(powLen,sizeof(unsigned int)))== NULL ) {
 				printf("ApEn:  Insufficient memory available.\n");
-				return;
+				return -1.;
 			}
 			for ( i=1; i<powLen-1; i++ )
 				P[i] = 0;
@@ -44,7 +45,9 @@ ApproximateEntropy(int m, int n)
 				k = 1;
 				for ( j=0; j<blockSize; j++ ) {
 					k <<= 1;
-					if ( (int)epsilon[(i+j) % seqLength] == 1 )
+					auto iter = epsilon;
+					std::advance(iter, (i + j) % seqLength);
+					if ( (int)*iter == 1 )
 						k++;
 				}
 				P[k-1]++;
@@ -84,6 +87,7 @@ ApproximateEntropy(int m, int n)
 		printf( "\t\t--------------------------------------------\n");
 	}
 	
-	printf("Approximate Entropy:\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value); //fflush(stats[TEST_APEN]);
+	//printf("Approximate Entropy:\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value); //fflush(stats[TEST_APEN]);
+	return double(p_value);
 	/*fprintf(results[TEST_APEN], "%f\n", p_value); fflush(results[TEST_APEN]);*/
 }

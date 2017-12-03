@@ -329,7 +329,7 @@ U T I L I T I E S
 
 
 int
-convertToBits(BYTE *x, int xBitLength, int bitsNeeded, int *num_0s, int *num_1s, int *bitsRead)
+convertToBits(BYTE *x, int xBitLength, int bitsNeeded, int *num_0s, int *num_1s, int *bitsRead, std::vector<bool>& epsilon)
 {
 	int		i, j, count, bit;
 	BYTE	mask;
@@ -351,7 +351,7 @@ convertToBits(BYTE *x, int xBitLength, int bitsNeeded, int *num_0s, int *num_1s,
 				zeros++;
 			}
 			mask >>= 1;
-			epsilon[*bitsRead] = bit;
+			epsilon[*bitsRead] = bool(bit);
 			(*bitsRead)++;
 			if ( *bitsRead == bitsNeeded )
 				return 1;

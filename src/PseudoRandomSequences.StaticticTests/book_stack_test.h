@@ -5,7 +5,6 @@
 #include <bitset>
 #include <random>
 #include <algorithm>
-#include <boost/math/distributions/chi_squared.hpp>
 
 //#include "statisticChiSquared.h"
 #include "pseudoRandomSequences.h"

@@ -9,8 +9,8 @@
                     B L O C K  F R E Q U E N C Y  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-void
-BlockFrequency(int M, int n)
+double
+BlockFrequency(int M, int n, BoolIterator epsilon)
 {
 	int		i, j, N, blockSum;
 	double	p_value, sum, pi, v, chi_squared;
@@ -21,7 +21,7 @@ BlockFrequency(int M, int n)
 	for ( i=0; i<N; i++ ) {
 		blockSum = 0;
 		for ( j=0; j<M; j++ )
-			blockSum += epsilon[j+i*M];
+			blockSum += *(epsilon++);
 		pi = (double)blockSum/(double)M;
 		v = pi - 0.5;
 		sum += v*v;
@@ -39,6 +39,7 @@ BlockFrequency(int M, int n)
 	fprintf(stats[TEST_BLOCK_FREQUENCY], "\t\t(d) Note: %d bits were discarded.\n", n % M);
 	fprintf(stats[TEST_BLOCK_FREQUENCY], "\t\t---------------------------------------------\n");*/
 
-	printf("Block frequency:\t\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);// fflush(stats[TEST_BLOCK_FREQUENCY]);
+	//printf("Block frequency:\t\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);// fflush(stats[TEST_BLOCK_FREQUENCY]);
+	return (p_value);
 	//printf( "%f\n", p_value); fflush(results[TEST_BLOCK_FREQUENCY]);
 }

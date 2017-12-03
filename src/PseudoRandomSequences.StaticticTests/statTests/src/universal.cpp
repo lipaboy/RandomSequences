@@ -5,13 +5,14 @@
 #include "../include/externs.h"
 #include "../include/utilities.h"
 #include "../include/cephes.h"
+#include "../include/stat_fncs.h"
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                          U N I V E R S A L  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-void
-Universal(int n)
+double
+Universal(int n, BoolIterator epsilon)
 {
 	int		i, j, p, L, Q, K;
 	double	arg, sqrt2, sigma, phi, sum, p_value, c;
@@ -50,7 +51,7 @@ Universal(int n)
 		printf("\t\tERROR:  L IS OUT OF RANGE.\n");
 		printf("\t\t-OR- :  Q IS LESS THAN %f.\n", 10*pow(2, L));
 		printf("\t\t-OR- :  Unable to allocate T.\n");
-		return;
+		return -1.;
 	}
 	
 	/* COMPUTE THE EXPECTED:  Formula 16, in Marsaglia's Paper */
@@ -62,14 +63,20 @@ Universal(int n)
 		T[i] = 0;
 	for ( i=1; i<=Q; i++ ) {		/* INITIALIZE TABLE */
 		decRep = 0;
-		for ( j=0; j<L; j++ )
-			decRep += epsilon[(i-1)*L+j] * (long)pow(2, L-1-j);
+		for (j = 0; j < L; j++) {
+			auto iter = epsilon;
+			std::advance(iter, (i - 1)*L + j);
+			decRep += (*iter) * (long)pow(2, L - 1 - j);
+		}
 		T[decRep] = i;
 	}
 	for ( i=Q+1; i<=Q+K; i++ ) { 	/* PROCESS BLOCKS */
 		decRep = 0;
-		for ( j=0; j<L; j++ )
-			decRep += epsilon[(i-1)*L+j] * (long)pow(2, L-1-j);
+		for (j = 0; j < L; j++) {
+			auto iter = epsilon;
+			std::advance(iter, (i - 1)*L + j);
+			decRep += (*iter) * (long)pow(2, L - 1 - j);
+		}
 		sum += log(i - T[decRep])/log(2);
 		T[decRep] = i;
 	}
@@ -95,8 +102,9 @@ Universal(int n)
 	if ( isNegative(p_value) || isGreaterThanOne(p_value) )
 		printf("\t\tWARNING:  P_VALUE IS OUT OF RANGE\n");
 
-	printf("Universal (Maurer's):\t\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);// fflush(stats[TEST_UNIVERSAL]);
+	//printf("Universal (Maurer's):\t\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);// fflush(stats[TEST_UNIVERSAL]);
 	//fprintf(results[TEST_UNIVERSAL], "%f\n", p_value); fflush(results[TEST_UNIVERSAL]);
 	
 	free(T);
+	return (p_value);
 }

@@ -3,12 +3,26 @@
 
 #include <vector>
 #include <bitset>
+#include <boost/math/distributions/chi_squared.hpp>
+#include "statTests/include/stat_fncs.h"
 
 namespace PseudoRandomSequences {
 
 	typedef size_t Word;
 	const uint32_t MAX_DIMENSION = sizeof(Word) * 8;
 	using AlphabetType = std::bitset<MAX_DIMENSION>;
+
+	void runTests(BoolIterator epsilonBegin,
+		BoolIterator epsilonEnd,
+		std::vector<std::string> & testNames,
+		bool isSaveNames,
+		std::vector<double> & testResults,
+		std::string const & testKey,
+		std::string const & inputFile);
+
+	int beaconRun(int argc, char * argv[]);
+
+	int generatorsTestConfigRun(int argc, char * argv[]);
 
 }
 
