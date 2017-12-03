@@ -73,11 +73,14 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 			//"knuth_b", 
 		//"ranlux48", 
 			//"random_device",
-		"lcg",
-		//"SHA1",
-		//"modExp",
-		//"bbs",
-		//"exclusiveOR"
+
+        //"lcg",    //fast
+        //"SHA1",   //fast
+       // "exclusiveOR"   //fast
+        "micali_schnorr"    //fast
+
+        //"modExp", //slow
+        //"bbs",    //slow
 	};
 	std::minstd_rand generatorMinstdRand;
 	std::knuth_b generatorKnuthB;
@@ -98,8 +101,8 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 
 		//--------------------Container---------------------//
 
-		const int TRAVERSAL_COUNT_LARGE = 1;
-		const int TRAVERSAL_COUNT_SMALL = TRAVERSAL_COUNT_LARGE;
+        const int TRAVERSAL_COUNT_SMALL = 5;
+        const int TRAVERSAL_COUNT_LARGE = TRAVERSAL_COUNT_SMALL;
 		const size_t TRAVERSAL_THRESHOLD = size_t(1e5);
 		size_t stepIterSize = 4;		// the step of size iteration (traversal step)
 		std::vector<bool> epsilon;
@@ -122,6 +125,8 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 			epsilon = bbs();
 		else if ("exclusiveOR" == genName)
 			epsilon = exclusiveOR();
+        else if ("micali_schnorr" == genName)
+            epsilon = micali_schnorr();
 		else
 			isStdGenerators = true;
 

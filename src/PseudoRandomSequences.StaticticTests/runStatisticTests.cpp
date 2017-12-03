@@ -71,7 +71,7 @@ void PseudoRandomSequences::runTests(
 				testResults.push_back(bookStackTestMain(int(arguments.size()), &arguments[0]));
 			}
 		}
-        cout << "Time: " << my_get_current_clock_time() - start << endl;
+        ////cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	if (testKey[1] == '1') {
         auto start = my_get_current_clock_time();
@@ -80,7 +80,7 @@ void PseudoRandomSequences::runTests(
         //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	// #Parameterized
-	if (testKey[2] == '1') {
+    if (testKey[2] == '1') {
         auto start = my_get_current_clock_time();
 		const int min = 2, avg = EPSILON_SIZE / 4, max = EPSILON_SIZE / 2;
 		//doesn't equal frequency monobit with M = 1
@@ -115,7 +115,7 @@ void PseudoRandomSequences::runTests(
 		// Has a little difference between results of my own discreteFourier Test version
 		if (isSaveNames) testNames.push_back("DiscreteFourierTransform");
 		testResults.push_back(DiscreteFourierTransform(EPSILON_SIZE, epsilonBegin));
-        cout << "Time: " << my_get_current_clock_time() - start << endl;
+        ////cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	// #Slow test
 	// #Parameterized
@@ -139,7 +139,7 @@ void PseudoRandomSequences::runTests(
 			testResults.push_back(size == 0 ? -1.
 				: average + size * (ALPHA - (size - 1.) / size + 1e-3) * (1. - average));
 		}
-        cout << "Time: " << my_get_current_clock_time() - start << endl;
+        ////cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	// #Parameterized
 	if (testKey[8] == '1') {
@@ -149,7 +149,7 @@ void PseudoRandomSequences::runTests(
 			if (isSaveNames) testNames.push_back("OverlappingTemplateMatchings_" + std::to_string(param));
 			testResults.push_back(OverlappingTemplateMatchings(param, EPSILON_SIZE, epsilonBegin));
 		}
-        cout << "Time: " << my_get_current_clock_time() - start << endl;
+        ////cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	if (testKey[9] == '1') {
         auto start = my_get_current_clock_time();
@@ -182,7 +182,7 @@ void PseudoRandomSequences::runTests(
 			if (isSaveNames) testNames.push_back("Serial_" + std::to_string(param) + "_2");
 			testResults.push_back(res.second);
 		}
-        cout << "Time: " << my_get_current_clock_time() - start << endl;
+        ////cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	// #Slow
 	// #Parameterized
@@ -195,7 +195,7 @@ void PseudoRandomSequences::runTests(
 			// (M + 1) - bit block is used to compare
 			testResults.push_back(ApproximateEntropy(param, EPSILON_SIZE, epsilonBegin));
 		}
-        cout << "Time: " << my_get_current_clock_time() - start << endl;
+        ////cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	if (testKey[13] == '1') {
         auto start = my_get_current_clock_time();

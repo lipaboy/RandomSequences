@@ -20,6 +20,7 @@ Serial(int m, int n, BoolIterator epsilon)
 	del2 = psim0 - 2.0*psim1 + psim2;
 	p_value1 = cephes_igamc(pow(2, m-1)/2, del1/2.0);
 	p_value2 = cephes_igamc(pow(2, m-2)/2, del2/2.0);
+   // printf("pv1 = %f, pv2 = %f\n", p_value1, p_value2);
 	
 	/*fprintf(stats[TEST_SERIAL], "\t\t\t       SERIAL TEST\n");
 	fprintf(stats[TEST_SERIAL], "\t\t---------------------------------------------\n");
@@ -62,9 +63,11 @@ psi2(int m, int n, BoolIterator epsilon)
 //#pragma omp parallel for
 	for ( i=1; i<powLen-1; i++ )
 		P[i] = 0;	  /* INITIALIZE NODES */
-
-#pragma omp parallel for private(j, k)
-	for (int i=0; i < numOfBlocks; i++ ) {		 /* COMPUTE FREQUENCY */
+    // doesn't work in linux with gcc
+#ifndef __GNUC__
+#pragma omp parallel for private(j, k) shared(P, epsilon)
+#endif
+    for (int i = 0; i < numOfBlocks; i++ ) {		 /* COMPUTE FREQUENCY */
 		k = 1;
 		for ( j=0; j<m; j++ ) {
 			auto iter = epsilon;
