@@ -36,8 +36,9 @@ void PseudoRandomSequences::runTests(
 	std::vector<std::string> & testNames,
 	bool isSaveNames,
 	std::vector<double> & testResults,
-	std::string const & testKey,
-	std::string const & inputFile) 
+    std::string const & testKey
+    //std::string const & inputFile
+        )
 {
 	using std::string;
 	using std::cout;
@@ -46,6 +47,26 @@ void PseudoRandomSequences::runTests(
 	const int EPSILON_SIZE = int(std::distance(epsilonBegin, epsilonEnd));
 	// #Parameterized
 	if (testKey[0] == '1') {
+        string inputFile = "bookStackInput.dat";
+        {
+            std::ofstream outFile;
+            outFile.open(inputFile, std::ios::out | std::ios::trunc);
+            auto outIter = std::ostream_iterator<char>(outFile);
+            int bitPos = 0;
+            char buffer = 0;
+            for (auto iter = epsilonBegin; iter != epsilonEnd; iter++) {
+                buffer |= (*iter) << (bitPos++);
+                if (bitPos >= 8) {
+                    bitPos = 0;
+                    *(outIter++) = buffer;
+                    buffer = 0;
+                }
+            }
+            if (bitPos > 0)
+                *(outIter) = buffer;
+            outFile.close();
+        }
+
         auto start = my_get_current_clock_time();
 		// ! Each bit means 0 or 1 (you can't pass to bookStackTest 0 or 1 in whole byte for example)
 		for (int upperPart = 0; upperPart < 3; upperPart++) {
@@ -165,7 +186,9 @@ void PseudoRandomSequences::runTests(
 	//	std::vector<int> blockSizes{ 8, sqrtSize / 2, sqrtSize};	// must be > 3
 	//	for (auto param : blockSizes) {
 	//		if (isSaveNames) testNames.push_back("LinearComplexity_" + std::to_string(param));
-	//		testResults.push_back(LinearComplexity(param, EPSILON_SIZE, epsilonBegin));
+    //		testResults.push_back(
+    //          LinearComplexity(param, EPSILON_SIZE, epsilonBegin)
+    //      );
 	//	}
 	//}
 	// #TheSlowest
@@ -208,7 +231,8 @@ void PseudoRandomSequences::runTests(
 	}
 	//if (testKey[14] == '1') {
 	//	if (isSaveNames) testNames.push_back("RandomExcursions");
-	//	auto result = RandomExcursions(EPSILON_SIZE, epsilonBegin);
+    //	auto result =
+    //          RandomExcursions(EPSILON_SIZE, epsilonBegin);
 	//	double average = 0.;
 	//	for (auto elem : result) {
 	//		average += (elem >= ALPHA);
@@ -220,7 +244,8 @@ void PseudoRandomSequences::runTests(
 	//}
 	//if (testKey[15] == '1') {		// For more longer sequences (> 1e6)
 	//	if (isSaveNames) testNames.push_back("RandomExcursionsVariant");
-	//	auto result = RandomExcursionsVariant(EPSILON_SIZE, epsilonBegin);
+    //	auto result =
+    //          RandomExcursionsVariant(EPSILON_SIZE, epsilonBegin);
 	//	double average = 0.;
 	//	for (auto elem : result) {
 	//		average += (elem >= ALPHA);

@@ -78,43 +78,20 @@ int PseudoRandomSequences::beaconRun(int argc, char * argv[]) {
 			inFile.close();
 		}
 		
-		cout << endl << "Seq size = " << result.size() << endl;
+        cout << endl << "Seq size = " << result.size() << endl;
 
-		//-------------Output----------------//
-		std::string outFilename = "out";
-		{
-			std::ofstream outFile;
-			outFile.open(outFilename + std::to_string(fileIndex) + ".tmp", std::ios::out | std::ios::trunc);
-			//std::copy(result.begin(), result.end(), std::ostream_iterator<bool>(outFile, ""));
-			auto outIter = std::ostream_iterator<char>(outFile);
-			int bitPos = 0;
-			char buffer = 0;
-			for (auto val : result) {
-				buffer |= val << (bitPos++);
-				if (bitPos >= 8) {
-					bitPos = 0;
-					*(outIter++) = buffer;
-					buffer = 0;
-				}
-			}
-			if (bitPos > 0)
-				*(outIter) = buffer;
-			outFile.close();
-		}
+        //----------------Tests-----------------//
+        vector<string> testNames = { "" };
+        vector<double> testResults;
+        {
+            string testKey(argv[1]);
+            Sequence epsilon;
+            epsilon = std::move(result);
 
-		string testKey(argv[1]);
-		Sequence epsilon;
-		epsilon = std::move(result);
-		const int EPSILON_SIZE = int(epsilon.size());
-
-		vector<string> testNames = { "" };
-		vector<double> testResults;
-
-		//----------------Tests-----------------//
-
-		runTests(epsilon.begin(), epsilon.end(), testNames, (fileIndex <= firstId), testResults, testKey, 
-			outFilename + std::to_string(fileIndex) + ".tmp");
-
+            runTests(epsilon.begin(), epsilon.end(), testNames, (fileIndex <= firstId), testResults, testKey
+                //outFilename + std::to_string(fileIndex) + ".tmp"
+                     );
+        }
 		//----------------Write results-----------------//
 		{
 			if (fileIndex <= firstId) {

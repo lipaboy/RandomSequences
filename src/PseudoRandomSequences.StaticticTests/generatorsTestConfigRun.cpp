@@ -199,34 +199,13 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 					std::copy(epsilonRange.begin(), iterEnd,
 						std::ostream_iterator<bool>(cout, ""));
 					std::cout << std::endl;
-				}
-
-				//-------------Output in file (for bookStackTest)----------------//
-			
-				{
-					std::ofstream outFile;
-					outFile.open(outFilename, std::ios::out | std::ios::trunc);
-					auto outIter = std::ostream_iterator<char>(outFile);
-					int bitPos = 0;
-					char buffer = 0;
-					for (auto iter = epsilonRange.begin(); iter != epsilonRange.end(); iter++) {
-						buffer |= (*iter) << (bitPos++);
-						if (bitPos >= 8) {
-							bitPos = 0;
-							*(outIter++) = buffer;
-							buffer = 0;
-						}
-					}
-					if (bitPos > 0)
-						*(outIter) = buffer;
-					outFile.close();
-				}
+                }
 
 				//----------------Tests-----------------//
 				{
 					runTests(epsilonRange.begin(), epsilonRange.end(), testNames, 
 						(iSize <= firstSize) && (jTraver <= 0), 
-						currResults, testKey, outFilename);
+                        currResults, testKey);
 					if (jTraver == 0)
 						testResults.assign(currResults.size(), 0);
 					std::transform(currResults.begin(), currResults.end(), testResults.begin(),

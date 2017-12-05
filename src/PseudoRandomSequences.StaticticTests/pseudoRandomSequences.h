@@ -28,8 +28,9 @@ namespace PseudoRandomSequences {
 		std::vector<std::string> & testNames,
 		bool isSaveNames,
 		std::vector<double> & testResults,
-		std::string const & testKey,
-		std::string const & inputFile);
+        std::string const & testKey
+        //std::string const & inputFile
+                  );
 
 	int beaconRun(int argc, char * argv[]);
 
