@@ -99,7 +99,7 @@ NonOverlappingTemplateMatchings(int m, int n, BoolIterator epsilon)
 			for ( k=0; k<=K; k++ )
 				nu[k] = 0;
 // max threads == 8
-#pragma omp parallel for private(W_obs, match, j, k)
+//#pragma omp parallel for private(W_obs, match, j, k)
 			for ( i=0; i < N; i++ ) {
 				W_obs = 0;
 				for ( j=0; j < M - m + 1; j++) {

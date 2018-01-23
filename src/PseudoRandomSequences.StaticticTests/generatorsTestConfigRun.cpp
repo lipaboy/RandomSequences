@@ -74,10 +74,10 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 		//"ranlux48", 
 			//"random_device",
 
-        //"lcg",    //fast
+        "lcg",    //fast
         //"SHA1",   //fast
        // "exclusiveOR"   //fast
-        "micali_schnorr"    //fast
+       // "micali_schnorr"    //fast
 
         //"modExp", //slow
         //"bbs",    //slow
@@ -92,12 +92,12 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 		std::string & genName = generatorNames[iGen];
 		
 		std::ofstream resFile;
-		//std::ofstream extraFile;
+        std::ofstream extraFile;
 		resFile.open("resStdGenerators_" + genName + "_" + std::to_string(firstSize) 
 			+ "-" + std::to_string(lastSize) + ".dat",
 			std::ios::out | std::ios::trunc);
-		//extraFile.open("extraStdGenerators_" + genName + ".dat",
-		//	std::ios::out | std::ios::trunc);
+        extraFile.open("extraStdGenerators_" + genName + ".dat",
+            std::ios::out | std::ios::trunc);
 
 		//--------------------Container---------------------//
 
@@ -151,8 +151,11 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 			string testKey(argv[1]);
 
 			currResults.reserve(60u);
-			int traversalCount = (std::distance(epsilonRange.begin(), epsilonRange.end()) < TRAVERSAL_THRESHOLD) ? TRAVERSAL_COUNT_LARGE
-				: TRAVERSAL_COUNT_SMALL;
+            int traversalCount =
+                    (std::distance(epsilonRange.begin(), epsilonRange.end()) < TRAVERSAL_THRESHOLD)
+                        ? TRAVERSAL_COUNT_LARGE : TRAVERSAL_COUNT_SMALL;
+
+//#pragma omp parallel for reduction(+:accumulatorSize) private(epsilonRange) shared(genName, traversalCount)
 			for (int jTraver = 0; jTraver < traversalCount; jTraver++) 
 			{
 				// Generator factory
@@ -204,16 +207,15 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 				//----------------Tests-----------------//
 				{
 					runTests(epsilonRange.begin(), epsilonRange.end(), testNames, 
-						(iSize <= firstSize) && (jTraver <= 0), 
-                        currResults, testKey);
+						(iSize <= firstSize) && (jTraver <= 0), currResults, testKey);
 					if (jTraver == 0)
 						testResults.assign(currResults.size(), 0);
-					std::transform(currResults.begin(), currResults.end(), testResults.begin(),
-						testResults.begin(),
+                    std::transform(currResults.begin(), currResults.end(), //first source
+                        testResults.begin(),                                //second source
+                        testResults.begin(),                                //destination
 						[](double p_value, double count) -> double { return (std::abs(p_value - -1.) < 1e-5)
 											? count : (p_value < ALPHA) + count; }
-					);
-					currResults.clear();
+                    );
                 }
 			}
 
@@ -228,13 +230,23 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 				resFile << endl;
 			}
 			//----------------Extra infos-----------------//
+            {
+                if (iSize <= firstSize) {
+                    std::copy(testNames.begin(), testNames.end(), std::ostream_iterator<string>(extraFile, "\t"));
+                    resFile << endl;
+                }
+                resFile << iSize << "_Kbits\t";
+                std::copy(currResults.begin(), currResults.end(), std::ostream_iterator<double>(extraFile, "\t"));
+                resFile << endl;
+            }
 
-			resFile.flush();
+            resFile.flush();
+            extraFile.flush();
+            currResults.clear();
 			testNames.clear();
-			//extraFile.flush();
 		}
 		resFile.close();
-		//extraFile.close();
+        extraFile.close();
 	}
 
     cout << endl << "Whole time expend: " << (my_get_current_clock_time() - wholeTimeExpend) / 1000.

@@ -65,7 +65,7 @@ psi2(int m, int n, BoolIterator epsilon)
 		P[i] = 0;	  /* INITIALIZE NODES */
     // doesn't work in linux with gcc
 #ifndef __GNUC__
-#pragma omp parallel for private(j, k) shared(P, epsilon)
+//#pragma omp parallel for private(j, k) shared(P, epsilon)
 #endif
     for (int i = 0; i < numOfBlocks; i++ ) {		 /* COMPUTE FREQUENCY */
 		k = 1;
