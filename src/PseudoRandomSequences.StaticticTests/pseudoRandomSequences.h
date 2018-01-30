@@ -23,18 +23,33 @@ namespace PseudoRandomSequences {
 	const uint32_t MAX_DIMENSION = sizeof(Word) * 8;
 	using AlphabetType = std::bitset<MAX_DIMENSION>;
 
+    using std::vector;
+    using std::string;
+
+    struct ResultStructure {
+        vector<string> statTestNames;
+        vector<vector<double> > resultsForEachSize;   //count of failures result of test
+        vector<vector<double> > pValues;              //extra data
+    };
+
 	void runTests(BoolIterator epsilonBegin,
 		BoolIterator epsilonEnd,
-		std::vector<std::string> & testNames,
+        vector<string> & testNames,
 		bool isSaveNames,
-		std::vector<double> & testResults,
-        std::string const & testKey
+        vector<double> & testResults,
+        string const & testKey
         //std::string const & inputFile
                   );
+
+    ResultStructure testGenerator(string generatorName,
+                       vector<int> const & sequenceSizes,
+                       string const & testKey,
+                       int fieldModulusOfPossibility);
 
 	int beaconRun(int argc, char * argv[]);
 
 	int generatorsTestConfigRun(int argc, char * argv[]);
+
 
 }
 

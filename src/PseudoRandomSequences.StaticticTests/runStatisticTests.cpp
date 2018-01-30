@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <cstdio>
 #include <stdlib.h>
 #include <iomanip>
 #include <limits>
@@ -19,23 +20,23 @@
 
 using namespace PseudoRandomSequences;
 
-    int PseudoRandomSequences::my_get_current_clock_time() {
+int PseudoRandomSequences::my_get_current_clock_time() {
 #ifdef __GNUC__
-       struct tms curr;
-       long clocks_per_sec = sysconf(_SC_CLK_TCK);
-       times(&curr);
-       return (int)std::round(curr.tms_utime / (double)clocks_per_sec * 1000.);
+   struct tms curr;
+   long clocks_per_sec = sysconf(_SC_CLK_TCK);
+   times(&curr);
+   return (int)std::round(curr.tms_utime / (double)clocks_per_sec * 1000.);
 #else   //Windows
-       return clock();
+   return clock();
 #endif
-   }
+}
 
 void PseudoRandomSequences::runTests(
 	BoolIterator epsilonBegin,
 	BoolIterator epsilonEnd,
 	std::vector<std::string> & testNames,
 	bool isSaveNames,
-	std::vector<double> & testResults,
+    std::vector<double> & testResults,  // return pValues
     std::string const & testKey
     //std::string const & inputFile
         )
@@ -92,6 +93,7 @@ void PseudoRandomSequences::runTests(
 				testResults.push_back(bookStackTestMain(int(arguments.size()), &arguments[0]));
 			}
 		}
+        std::remove(inputFile.c_str());
         ////cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	if (testKey[1] == '1') {

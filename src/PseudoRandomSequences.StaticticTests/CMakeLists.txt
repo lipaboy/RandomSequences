@@ -10,6 +10,7 @@ set(APP_SOURCES
 	generatorsTestConfigRun.cpp
 	runStatisticTests.cpp
 	beaconConfigsRun.cpp
+        testGenerator.cpp
 
 	lipaboyLibrary/src/maths/fixed_precision_number.h
 	lipaboyLibrary/src/maths/precision_number.h
