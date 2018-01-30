@@ -23,6 +23,8 @@ namespace PseudoRandomSequences {
 	const uint32_t MAX_DIMENSION = sizeof(Word) * 8;
 	using AlphabetType = std::bitset<MAX_DIMENSION>;
 
+    struct ResultStructure;
+
 	void runTests(BoolIterator epsilonBegin,
 		BoolIterator epsilonEnd,
 		std::vector<std::string> & testNames,
@@ -32,9 +34,12 @@ namespace PseudoRandomSequences {
         //std::string const & inputFile
                   );
 
+    void testGenerator(std::string generatorName);
+
 	int beaconRun(int argc, char * argv[]);
 
 	int generatorsTestConfigRun(int argc, char * argv[]);
+
 
 }
 

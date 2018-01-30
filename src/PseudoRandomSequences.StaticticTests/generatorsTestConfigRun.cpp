@@ -74,6 +74,8 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 		//"ranlux48", 
 			//"random_device",
 
+        //---------------------------NIST generators----------------------------//
+
         "lcg",    //fast
         //"SHA1",   //fast
        // "exclusiveOR"   //fast
