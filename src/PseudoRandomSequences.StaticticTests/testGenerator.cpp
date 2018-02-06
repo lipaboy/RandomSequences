@@ -109,10 +109,10 @@ PseudoRandomSequences::testGenerator(string generatorName,
         cout << "Sequence size = " << inputSize << endl;
         //-------------Input----------------//
 
-        if (isStdGenerators)
+        if (isStdGenerators) {
             epsilon.resize(inputSize);
-
-        std::string outFilename = "out.tmp";
+            epsilonRange = { epsilon.begin(), epsilon.end() };
+        }
 
         int traversalCount =
                 (std::distance(epsilonRange.begin(), epsilonRange.end()) < TRAVERSAL_THRESHOLD)
@@ -161,9 +161,7 @@ PseudoRandomSequences::testGenerator(string generatorName,
                     std::advance(iterBegin, accumulatorSize);
                     std::advance(iterEnd, accumulatorSize + inputSize);
                     epsilonRange = MyBoolRange(iterBegin, iterEnd);
-                    accumulatorSize
-                            //vector<string> testNames = { "" };
-                            += inputSize;
+                    accumulatorSize += inputSize;
                 }
             }
 
@@ -172,14 +170,14 @@ PseudoRandomSequences::testGenerator(string generatorName,
                 auto iterEnd = epsilonRange.begin();
                 std::advance(iterEnd, 10);
                 std::copy(epsilonRange.begin(), iterEnd,
-                    std::ostream_iterator<bool>(cout, ""));
+                    std::ostream_iterator<bool>(std::cout, ""));
                 std::cout << std::endl;
             }
 
             //----------------Tests-----------------//
             {
-                auto isTestFinishedLambda = [] (double pValue) { return std::abs(-1. - pValue) > 1e-5; }; // -1 means that test doesn't work
-                auto isTestSuccessedLambda = [] (double pValue) { return (pValue >= ALPHA); };
+                auto isTestFinishedLambda = [] (double pValue) -> bool { return std::abs(-1. - pValue) > 1e-5; }; // -1 means that test doesn't work
+                auto isTestSuccessedLambda = [] (double pValue) -> bool { return (pValue >= ALPHA); };
 
                 runTests(epsilonRange.begin(), epsilonRange.end(), result.statTestNames,
                     (i <= 0) && (iTraver <= 0), pValues, testKey);
@@ -190,7 +188,7 @@ PseudoRandomSequences::testGenerator(string generatorName,
                     testResults.begin(),                                // second source
                     testResults.begin(),                                // destination
                     [&isTestFinishedLambda, &isTestSuccessedLambda](double p_value, double count) -> double {
-                        return isTestFinishedLambda(p_value) ? count : !isTestSuccessedLambda + count; }
+                        return isTestFinishedLambda(p_value) ? count : !isTestSuccessedLambda(p_value) + count; }
                 );
             }
         }

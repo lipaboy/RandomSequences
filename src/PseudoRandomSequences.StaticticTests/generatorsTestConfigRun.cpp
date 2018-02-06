@@ -68,14 +68,14 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 	size_t firstSize = boost::lexical_cast<size_t>(argv[3]);
 	size_t lastSize = boost::lexical_cast<size_t>(argv[4]);
 	std::vector<string> generatorNames{ 
-		//"minstd_rand", 
+        "minstd_rand",
 			//"knuth_b", 
 		//"ranlux48", 
 			//"random_device",
 
         //---------------------------NIST generators----------------------------//
 
-        "lcg",    //fast
+        //"lcg",    //fast
         //"SHA1",   //fast
        // "exclusiveOR"   //fast
        // "micali_schnorr"    //fast
@@ -127,11 +127,11 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
             {
                 if (i <= 0) {
                     std::copy(testNames.begin(), testNames.end(), std::ostream_iterator<string>(extraFile, "\t"));
-                    resFile << endl;
+                    extraFile << endl;
                 }
-                resFile << iSize << "_Kbits\t";
+                extraFile << iSize / 1024 << "_Kbits\t";
                 std::copy(pValues.begin(), pValues.end(), std::ostream_iterator<double>(extraFile, "\t"));
-                resFile << endl;
+                extraFile << endl;
             }
 		}
 		resFile.close();
