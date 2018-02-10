@@ -28,7 +28,7 @@ NonOverlappingTemplateMatchings(int m, int n, BoolIterator epsilon)
 	FILE			*fp = NULL;
 	double			sum, chi2, p_value, lambda, pi[6], varWj;
 	int				i, j, jj, k, match, SKIP, M, N, K = 5;
-	char			directory[100];
+    char			directory[100] = "";
 	BitSequence		*sequence = NULL;
 
 	std::vector<double> result;
@@ -47,6 +47,7 @@ NonOverlappingTemplateMatchings(int m, int n, BoolIterator epsilon)
 	varWj = M*(1.0/pow(2.0, m) - (2.0*m-1.0)/pow(2.0, 2.0*m));
     sprintf(directory, "templates/template%d", m);
 
+    //printf("directory = %s\n", directory);
     fp = fopen(directory, "r");
 	if ( ((isNegative(lambda)) || (isZero(lambda))) ||
 		 (fp == NULL) ||

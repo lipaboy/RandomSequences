@@ -572,7 +572,8 @@ double bookStackTestMain(int argc, const char* argv[])
 	flush(cout);
 
 	delete pbs;
-	if (ff.size() > 0) fclose(input);
+    if (ff.size() > 0)
+        fclose(input);
 
 	//cout << "BookStack stat:\t\t\t" << ((p_value >= 0.01) ? "SUCCESS" : "FAILURE") 
 	//<< "\t\tp_value = " << p_value << endl << endl;

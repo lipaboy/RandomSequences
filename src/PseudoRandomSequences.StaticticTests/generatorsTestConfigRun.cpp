@@ -50,10 +50,11 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 
 
 	size_t len = 0;
-	if (argc < 4 || (len = std::strlen(argv[1])) < TEST_COUNT) {
+    if (argc < 5 || (len = std::strlen(argv[1])) < TEST_COUNT) {
 		cout << "Not enough parameters ( testKey ("
 			<< TEST_COUNT << ", current = " << len << "), "
-			<< "input possibility, first size, last size)"
+            << "input possibility, first size, last size, "
+            << "traversal count)"
 			<< endl;
 		return -1;
 	}
@@ -96,12 +97,13 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 		resFile.open("resStdGenerators_" + genName + "_" + std::to_string(firstSize) 
 			+ "-" + std::to_string(lastSize) + ".dat",
 			std::ios::out | std::ios::trunc);
-        extraFile.open("extraStdGenerators_" + genName + ".dat",
+        extraFile.open("extraStdGenerators_" + genName + "_" + std::to_string(firstSize)
+                       + "-" + std::to_string(lastSize) + ".dat",
             std::ios::out | std::ios::trunc);
 
 		//--------------------Container---------------------//
 
-        const int TRAVERSAL_COUNT_SMALL = 5;
+        const int TRAVERSAL_COUNT_SMALL = std::atoi(argv[5]);
         const int TRAVERSAL_COUNT_LARGE = TRAVERSAL_COUNT_SMALL;
 		const size_t TRAVERSAL_THRESHOLD = size_t(1e5);
 		size_t stepIterSize = 4;		// the step of size iteration (traversal step)
@@ -233,11 +235,11 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
             {
                 if (iSize <= firstSize) {
                     std::copy(testNames.begin(), testNames.end(), std::ostream_iterator<string>(extraFile, "\t"));
-                    resFile << endl;
+                    extraFile << endl;
                 }
-                resFile << iSize << "_Kbits\t";
+                extraFile << iSize << "_Kbits\t";
                 std::copy(currResults.begin(), currResults.end(), std::ostream_iterator<double>(extraFile, "\t"));
-                resFile << endl;
+                extraFile << endl;
             }
 
             resFile.flush();

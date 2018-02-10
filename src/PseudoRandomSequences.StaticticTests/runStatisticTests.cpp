@@ -13,6 +13,8 @@
 #include <limits>
 #include <cmath>
 #include <chrono>
+#include <exception>
+#include <cstdlib>
 
 #include "statTests/include/stat_fncs.h"
 #include "lipaboyLibrary/src/maths/fixed_precision_number.h"
@@ -44,13 +46,27 @@ void PseudoRandomSequences::runTests(
 	using std::cout;
 	using std::endl;
 
+        static int _i = 0;
+        _i++;
+        if (_i == 5)
+            _i = _i + 1 - 1;
+
 	const int EPSILON_SIZE = int(std::distance(epsilonBegin, epsilonEnd));
 	// #Parameterized
 	if (testKey[0] == '1') {
-        string inputFile = "bookStackInput.dat";
+        string inputFile;
+        try {
+            //inputFile = ();
+        } catch (std::exception & exp) {
+            std::cerr << exp.what() << endl;
+        }
+
         {
+            try {
+                //std::remove("bookStackInput.dat");
             std::ofstream outFile;
-            outFile.open(inputFile, std::ios::out | std::ios::trunc);
+            outFile.exceptions ( std::ofstream::failbit | std::ofstream::badbit );
+            outFile.open("bookStackInput.dat", std::ios::trunc);
             auto outIter = std::ostream_iterator<char>(outFile);
             int bitPos = 0;
             char buffer = 0;
@@ -65,34 +81,37 @@ void PseudoRandomSequences::runTests(
             if (bitPos > 0)
                 *(outIter) = buffer;
             outFile.close();
+            } catch(std::ofstream::failure & e) {
+                std::cerr << "Exception opening/reading/closing file\n";
+            }
         }
 
-        auto start = my_get_current_clock_time();
-		// ! Each bit means 0 or 1 (you can't pass to bookStackTest 0 or 1 in whole byte for example)
-		for (int upperPart = 0; upperPart < 3; upperPart++) {
-			for (uint64_t dim = 8; dim <= 32; dim *= 2) {	//8, 16, 32
-				string sizeStr = std::to_string(EPSILON_SIZE);
-				string dimStr = std::to_string(dim);
-				uint64_t upperPartSize = (upperPart == 0) ? 16LL
-					: ((upperPart == 1) ? (1LL << (dim / 2)) : (1LL << (dim - 1)));
-				string upperPartStr = std::to_string(upperPartSize);
-				string filename = (inputFile);
-				std::vector<const char *> arguments{ "bs.exe",
-					"-f", filename.c_str(),
-					"-n", sizeStr.c_str(),	// file size (in bits)
-					"-w", dimStr.c_str(),				// word size (or alphabet symbol length (see yourself book stack version)
-					//"-b", "0",				// blank between words
-					"-u", upperPartStr.c_str()				// size of upper part book stack
-				};
-				if (upperPartSize > (1LL << 28))
-					continue;
-				//std::cout << "up=" << upperPartStr << ", dim = " << dimStr << std::endl;
-				if (isSaveNames) 
-					testNames.push_back("BookStackTest_" + dimStr + "dim_" + upperPartStr + "up");
-				testResults.push_back(bookStackTestMain(int(arguments.size()), &arguments[0]));
-			}
-		}
-        ////cout << "Time: " << my_get_current_clock_time() - start << endl;
+//        auto start = my_get_current_clock_time();
+//        // ! Each bit means 0 or 1 (you can't pass to bookStackTest 0 or 1 in whole byte for example)
+//        for (int upperPart = 0; upperPart < 3; upperPart++) {
+//            for (uint64_t dim = 8; dim <= 32; dim *= 2) {	//8, 16, 32
+//                string sizeStr = std::to_string(EPSILON_SIZE);
+//                string dimStr = std::to_string(dim);
+//                uint64_t upperPartSize = (upperPart == 0) ? 16LL
+//                    : ((upperPart == 1) ? (1LL << (dim / 2)) : (1LL << (dim - 1)));
+//                string upperPartStr = std::to_string(upperPartSize);
+//                string filename = ("bookStackInput.dat");
+//                std::vector<const char *> arguments{ "bs.exe",
+//                    "-f", filename.c_str(),
+//                    "-n", sizeStr.c_str(),	// file size (in bits)
+//                    "-w", dimStr.c_str(),				// word size (or alphabet symbol length (see yourself book stack version)
+//                    //"-b", "0",				// blank between words
+//                    "-u", upperPartStr.c_str()				// size of upper part book stack
+//                };
+//                if (upperPartSize > (1LL << 28))
+//                    continue;
+//                //std::cout << "up=" << upperPartStr << ", dim = " << dimStr << std::endl;
+//                if (isSaveNames)
+//                    testNames.push_back("BookStackTest_" + dimStr + "dim_" + upperPartStr + "up");
+//                testResults.push_back(bookStackTestMain(int(arguments.size()), &arguments[0]));
+//            }
+//        }
+//        cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	if (testKey[1] == '1') {
         auto start = my_get_current_clock_time();
@@ -101,7 +120,7 @@ void PseudoRandomSequences::runTests(
         //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	// #Parameterized
-    if (testKey[2] == '1') {
+    if (testKey[2] == '1' && 0) {
         auto start = my_get_current_clock_time();
 		const int min = 2, avg = EPSILON_SIZE / 4, max = EPSILON_SIZE / 2;
 		//doesn't equal frequency monobit with M = 1
@@ -127,20 +146,21 @@ void PseudoRandomSequences::runTests(
 	}
 	if (testKey[5] == '1') {
         auto start = my_get_current_clock_time();
-		if (isSaveNames) testNames.push_back("Rank");
-		testResults.push_back(Rank(EPSILON_SIZE, epsilonBegin));
+//		if (isSaveNames) testNames.push_back("Rank");
+//		testResults.push_back(Rank(EPSILON_SIZE, epsilonBegin));
         //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	if (testKey[6] == '1') {
         auto start = my_get_current_clock_time();
 		// Has a little difference between results of my own discreteFourier Test version
-		if (isSaveNames) testNames.push_back("DiscreteFourierTransform");
-		testResults.push_back(DiscreteFourierTransform(EPSILON_SIZE, epsilonBegin));
+//		if (isSaveNames) testNames.push_back("DiscreteFourierTransform");
+//		testResults.push_back(DiscreteFourierTransform(EPSILON_SIZE, epsilonBegin));
         ////cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	// #Slow test
 	// #Parameterized
-	if (testKey[7] == '1') {	// TODO: need to check
+
+    if (testKey[7] == '1' && 0) {	// TODO: need to check
         auto start = my_get_current_clock_time();
 		//2 - is minimum (depends on existing files)
 		std::vector<int> blockSizes { 3 };
@@ -220,7 +240,7 @@ void PseudoRandomSequences::runTests(
 		}
         ////cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
-	if (testKey[13] == '1') {
+    if (testKey[13] == '1' && 0) {
         auto start = my_get_current_clock_time();
 		auto res = CumulativeSums(EPSILON_SIZE, epsilonBegin);
 		if (isSaveNames) testNames.push_back("CumulativeSums_1");
