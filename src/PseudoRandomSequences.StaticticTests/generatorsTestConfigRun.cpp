@@ -218,6 +218,7 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 						[](double p_value, double count) -> double { return (std::abs(p_value - -1.) < 1e-5)
 											? count : (p_value < ALPHA) + count; }
                     );
+					currResults.clear();
                 }
 			}
 
@@ -244,7 +245,6 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 
             resFile.flush();
             extraFile.flush();
-            currResults.clear();
 			testNames.clear();
 		}
 		resFile.close();

@@ -86,32 +86,32 @@ void PseudoRandomSequences::runTests(
             }
         }
 
-//        auto start = my_get_current_clock_time();
-//        // ! Each bit means 0 or 1 (you can't pass to bookStackTest 0 or 1 in whole byte for example)
-//        for (int upperPart = 0; upperPart < 3; upperPart++) {
-//            for (uint64_t dim = 8; dim <= 32; dim *= 2) {	//8, 16, 32
-//                string sizeStr = std::to_string(EPSILON_SIZE);
-//                string dimStr = std::to_string(dim);
-//                uint64_t upperPartSize = (upperPart == 0) ? 16LL
-//                    : ((upperPart == 1) ? (1LL << (dim / 2)) : (1LL << (dim - 1)));
-//                string upperPartStr = std::to_string(upperPartSize);
-//                string filename = ("bookStackInput.dat");
-//                std::vector<const char *> arguments{ "bs.exe",
-//                    "-f", filename.c_str(),
-//                    "-n", sizeStr.c_str(),	// file size (in bits)
-//                    "-w", dimStr.c_str(),				// word size (or alphabet symbol length (see yourself book stack version)
-//                    //"-b", "0",				// blank between words
-//                    "-u", upperPartStr.c_str()				// size of upper part book stack
-//                };
-//                if (upperPartSize > (1LL << 28))
-//                    continue;
-//                //std::cout << "up=" << upperPartStr << ", dim = " << dimStr << std::endl;
-//                if (isSaveNames)
-//                    testNames.push_back("BookStackTest_" + dimStr + "dim_" + upperPartStr + "up");
-//                testResults.push_back(bookStackTestMain(int(arguments.size()), &arguments[0]));
-//            }
-//        }
-//        cout << "Time: " << my_get_current_clock_time() - start << endl;
+        auto start = my_get_current_clock_time();
+        // ! Each bit means 0 or 1 (you can't pass to bookStackTest 0 or 1 in whole byte for example)
+        for (int upperPart = 0; upperPart < 3; upperPart++) {
+            for (uint64_t dim = 8; dim <= 32; dim *= 2) {	//8, 16, 32
+                string sizeStr = std::to_string(EPSILON_SIZE);
+                string dimStr = std::to_string(dim);
+                uint64_t upperPartSize = (upperPart == 0) ? 16LL
+                    : ((upperPart == 1) ? (1LL << (dim / 2)) : (1LL << (dim - 1)));
+                string upperPartStr = std::to_string(upperPartSize);
+                string filename = ("bookStackInput.dat");
+                std::vector<const char *> arguments{ "bs.exe",
+                    "-f", filename.c_str(),
+                    "-n", sizeStr.c_str(),	// file size (in bits)
+                    "-w", dimStr.c_str(),				// word size (or alphabet symbol length (see yourself book stack version)
+                    //"-b", "0",				// blank between words
+                    "-u", upperPartStr.c_str()				// size of upper part book stack
+                };
+                if (upperPartSize > (1LL << 28))
+                    continue;
+                //std::cout << "up=" << upperPartStr << ", dim = " << dimStr << std::endl;
+                if (isSaveNames)
+                    testNames.push_back("BookStackTest_" + dimStr + "dim_" + upperPartStr + "up");
+                testResults.push_back(bookStackTestMain(int(arguments.size()), &arguments[0]));
+            }
+        }
+        cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	if (testKey[1] == '1') {
         auto start = my_get_current_clock_time();
@@ -146,15 +146,15 @@ void PseudoRandomSequences::runTests(
 	}
 	if (testKey[5] == '1') {
         auto start = my_get_current_clock_time();
-//		if (isSaveNames) testNames.push_back("Rank");
-//		testResults.push_back(Rank(EPSILON_SIZE, epsilonBegin));
+		if (isSaveNames) testNames.push_back("Rank");
+		testResults.push_back(Rank(EPSILON_SIZE, epsilonBegin));
         //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	if (testKey[6] == '1') {
         auto start = my_get_current_clock_time();
 		// Has a little difference between results of my own discreteFourier Test version
-//		if (isSaveNames) testNames.push_back("DiscreteFourierTransform");
-//		testResults.push_back(DiscreteFourierTransform(EPSILON_SIZE, epsilonBegin));
+		if (isSaveNames) testNames.push_back("DiscreteFourierTransform");
+		testResults.push_back(DiscreteFourierTransform(EPSILON_SIZE, epsilonBegin));
         ////cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	// #Slow test

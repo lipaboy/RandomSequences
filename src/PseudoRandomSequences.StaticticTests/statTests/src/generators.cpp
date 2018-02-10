@@ -63,7 +63,7 @@ lcg()
 		num_0s = 0;
 		num_1s = 0;
 		bitsRead = 0;
-		SEED = lcg_rand(tp.n, SEED, DUNIF, tp.n);
+		SEED = lcg_rand(static_cast<int>(tp.n), SEED, DUNIF, static_cast<int>(tp.n));
 		for ( i=0; i<tp.n; i++ ) {
 			if ( DUNIF[i] < 0.5 ) {
 				bit = 0;
@@ -108,7 +108,7 @@ quadRes1()
 			memset(x, 0x00, 128);
 			ModMult(x, g, 64, g, 64, p,64);
 			memcpy(g, x+64, 64);
-			done = convertToBits(g, 512, tp.n, &num_0s, &num_1s, &bitsRead, epsilon);
+			done = convertToBits(g, 512, static_cast<int>(tp.n), &num_0s, &num_1s, &bitsRead, epsilon);
 		} while ( !done );
 		//fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
 		//nist_test_suite();
@@ -149,7 +149,7 @@ quadRes2()
 			Mult(x, t1, 65, g, 64);		/* x(2x+3) */
 			add(x, 129, One, 1);		/* x(2x+3)+1 */
 			memcpy(g, x+65, 64);
-			done = convertToBits(g, 512, tp.n, &num_0s, &num_1s, &bitsRead, epsilon);
+			done = convertToBits(g, 512, static_cast<int>(tp.n), &num_0s, &num_1s, &bitsRead, epsilon);
 		} while ( !done) ;
 		//fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
 		//nist_test_suite();
@@ -184,7 +184,7 @@ cubicRes()
 			Mult(tmp, g, 64, g, 64);
 			Mult(x, tmp, 128, g, 64); // Don't need to mod by 2^512, just take low 64 bytes
 			memcpy(g, x+128, 64);
-			done = convertToBits(g, 512, tp.n, &num_0s, &num_1s, &bitsRead, epsilon);
+			done = convertToBits(g, 512, static_cast<int>(tp.n), &num_0s, &num_1s, &bitsRead, epsilon);
 		} while ( !done );
 		//fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
 		//nist_test_suite();
@@ -271,7 +271,7 @@ modExp()
 		do {
 			memset(x, 0x00, 128);
 			ModExp(x, g, 64, y, 20, p, 64);	      /* NOTE:  g must be less than p */
-			done = convertToBits(x, 512, tp.n, &num_0s, &num_1s, &bitsRead, epsilon);
+			done = convertToBits(x, 512, static_cast<int>(tp.n), &num_0s, &num_1s, &bitsRead, epsilon);
 			memcpy(y, x+44, 20);
 			} while ( !done );
 		//fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
@@ -362,7 +362,7 @@ micali_schnorr()
 			memcpy(Tail, Y+23, 105);
 			for ( j=0; j<3; j++ )
 				bshl(Tail, 105);
-			done = convertToBits(Tail, k, tp.n, &num_0s, &num_1s, &bitsRead, epsilon);
+			done = convertToBits(Tail, k, static_cast<int>(tp.n), &num_0s, &num_1s, &bitsRead, epsilon);
 			memset(X, 0x00, 128);
 			memcpy(X+104, Y, 24);
 			for ( j=0; j<5; j++ )
@@ -456,7 +456,7 @@ SHA1()
 #endif
 			// End: SHA Steps A-E
 
-			done = convertToBits(G, 160, tp.n, &num_0s, &num_1s, &bitsRead, epsilon);
+			done = convertToBits(G, 160, static_cast<int>(tp.n), &num_0s, &num_1s, &bitsRead, epsilon);
 			add(Xkey, 20, G, 20);
 			add(Xkey, 20, One, 1);
 		} while ( !done );
