@@ -216,7 +216,7 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
                         testResults.begin(),                                //second source
                         testResults.begin(),                                //destination
 						[](double p_value, double count) -> double { return (std::abs(p_value - -1.) < 1e-5)
-											? count : (p_value < ALPHA) + count; }
+                                            ? count - 1000. : (p_value < ALPHA) + count; }
                     );
 					currResults.clear();
                 }
@@ -251,7 +251,8 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
         extraFile.close();
 	}
 
-    cout << endl << "Whole time expend: " << (my_get_current_clock_time() - wholeTimeExpend) / 1000.
+    cout << endl << "Whole time expend: "
+         << getTimeDifferenceInMillis(wholeTimeExpend, my_get_current_clock_time())
          << "sec." << endl;
 	
 

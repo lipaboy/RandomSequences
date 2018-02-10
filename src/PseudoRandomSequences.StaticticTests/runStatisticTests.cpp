@@ -14,23 +14,16 @@
 #include <cmath>
 #include <chrono>
 #include <exception>
-#include <cstdlib>
+#include <cstdio>
 
 #include "statTests/include/stat_fncs.h"
 #include "lipaboyLibrary/src/maths/fixed_precision_number.h"
 
 using namespace PseudoRandomSequences;
 
-    int PseudoRandomSequences::my_get_current_clock_time() {
-#ifdef __GNUC__
-       struct tms curr;
-       long clocks_per_sec = sysconf(_SC_CLK_TCK);
-       times(&curr);
-       return (int)std::round(curr.tms_utime / (double)clocks_per_sec * 1000.);
-#else   //Windows
-       return clock();
-#endif
-   }
+
+
+    // TODO: take off the responsibility of return names of active tests and give it to another function with argument testKey
 
 void PseudoRandomSequences::runTests(
 	BoolIterator epsilonBegin,
@@ -44,29 +37,17 @@ void PseudoRandomSequences::runTests(
 {
 	using std::string;
 	using std::cout;
-	using std::endl;
-
-        static int _i = 0;
-        _i++;
-        if (_i == 5)
-            _i = _i + 1 - 1;
+    using std::endl;
 
 	const int EPSILON_SIZE = int(std::distance(epsilonBegin, epsilonEnd));
 	// #Parameterized
 	if (testKey[0] == '1') {
-        string inputFile;
-        try {
-            //inputFile = ();
-        } catch (std::exception & exp) {
-            std::cerr << exp.what() << endl;
-        }
-
+        string inputFile = "bookStackInput.dat";
         {
-            try {
-                //std::remove("bookStackInput.dat");
+            std::remove(inputFile.c_str());
             std::ofstream outFile;
             outFile.exceptions ( std::ofstream::failbit | std::ofstream::badbit );
-            outFile.open("bookStackInput.dat", std::ios::trunc);
+            outFile.open(inputFile, std::ios::trunc);
             auto outIter = std::ostream_iterator<char>(outFile);
             int bitPos = 0;
             char buffer = 0;
@@ -81,9 +62,6 @@ void PseudoRandomSequences::runTests(
             if (bitPos > 0)
                 *(outIter) = buffer;
             outFile.close();
-            } catch(std::ofstream::failure & e) {
-                std::cerr << "Exception opening/reading/closing file\n";
-            }
         }
 
         auto start = my_get_current_clock_time();
@@ -95,7 +73,7 @@ void PseudoRandomSequences::runTests(
                 uint64_t upperPartSize = (upperPart == 0) ? 16LL
                     : ((upperPart == 1) ? (1LL << (dim / 2)) : (1LL << (dim - 1)));
                 string upperPartStr = std::to_string(upperPartSize);
-                string filename = ("bookStackInput.dat");
+                string filename = inputFile;
                 std::vector<const char *> arguments{ "bs.exe",
                     "-f", filename.c_str(),
                     "-n", sizeStr.c_str(),	// file size (in bits)
@@ -111,7 +89,8 @@ void PseudoRandomSequences::runTests(
                 testResults.push_back(bookStackTestMain(int(arguments.size()), &arguments[0]));
             }
         }
-        cout << "Time: " << my_get_current_clock_time() - start << endl;
+        cout << "Book stack test time: "
+             << getTimeDifferenceInMillis(start, my_get_current_clock_time()) << endl;
 	}
 	if (testKey[1] == '1') {
         auto start = my_get_current_clock_time();
@@ -120,7 +99,7 @@ void PseudoRandomSequences::runTests(
         //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	// #Parameterized
-    if (testKey[2] == '1' && 0) {
+    if (testKey[2] == '1') {
         auto start = my_get_current_clock_time();
 		const int min = 2, avg = EPSILON_SIZE / 4, max = EPSILON_SIZE / 2;
 		//doesn't equal frequency monobit with M = 1
@@ -160,7 +139,7 @@ void PseudoRandomSequences::runTests(
 	// #Slow test
 	// #Parameterized
 
-    if (testKey[7] == '1' && 0) {	// TODO: need to check
+    if (testKey[7] == '1') {	// TODO: need to check
         auto start = my_get_current_clock_time();
 		//2 - is minimum (depends on existing files)
 		std::vector<int> blockSizes { 3 };
@@ -200,17 +179,21 @@ void PseudoRandomSequences::runTests(
 		}
         //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
-	// #Parameterized
-	//if (testKey[10] == '1') {		// think: neccessary try all the variant of blockSize (read documentation of test)
-	//	int sqrtSize = int(std::floor(std::sqrt(EPSILON_SIZE)));
-	//	std::vector<int> blockSizes{ 8, sqrtSize / 2, sqrtSize};	// must be > 3
-	//	for (auto param : blockSizes) {
-	//		if (isSaveNames) testNames.push_back("LinearComplexity_" + std::to_string(param));
-    //		testResults.push_back(
-    //          LinearComplexity(param, EPSILON_SIZE, epsilonBegin)
-    //      );
-	//	}
-	//}
+    // #Parameterized
+    if (testKey[10] == '1') {		// think: neccessary try all the variant of blockSize (read documentation of test)
+        int sqrtSize = int(std::floor(std::pow(EPSILON_SIZE, 0.5)));
+        int sqrtSqrtSize = int(std::floor(std::pow(EPSILON_SIZE, 0.25)));
+        std::vector<int> blockSizes{ //8, sqrtSize / 2, sqrtSize
+                            8, sqrtSqrtSize,
+        //            sqrtSize
+        };	// must be > 3
+        for (auto param : blockSizes) {
+            if (isSaveNames) testNames.push_back("LinearComplexity_" + std::to_string(param));
+            testResults.push_back(
+              LinearComplexity(param, EPSILON_SIZE, epsilonBegin)
+          );
+        }
+    }
 	// #TheSlowest
 	// #Parameterized
 	if (testKey[11] == '1') {// think: neccessary try all the variant of blockSize (read documentation of test)
@@ -240,7 +223,7 @@ void PseudoRandomSequences::runTests(
 		}
         ////cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
-    if (testKey[13] == '1' && 0) {
+    if (testKey[13] == '1') {
         auto start = my_get_current_clock_time();
 		auto res = CumulativeSums(EPSILON_SIZE, epsilonBegin);
 		if (isSaveNames) testNames.push_back("CumulativeSums_1");
@@ -249,30 +232,54 @@ void PseudoRandomSequences::runTests(
 		testResults.push_back(res.second);
         //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
-	//if (testKey[14] == '1') {
-	//	if (isSaveNames) testNames.push_back("RandomExcursions");
-    //	auto result =
-    //          RandomExcursions(EPSILON_SIZE, epsilonBegin);
-	//	double average = 0.;
-	//	for (auto elem : result) {
-	//		average += (elem >= ALPHA);
-	//	}
-	//	size_t size = result.size();
-	//	average /= size;
-	//	testResults.push_back(size == 0 ? -1.
-	//		: average + size * (ALPHA - (size - 1.) / size + 1e-3) * (1. - average));
-	//}
-	//if (testKey[15] == '1') {		// For more longer sequences (> 1e6)
-	//	if (isSaveNames) testNames.push_back("RandomExcursionsVariant");
-    //	auto result =
-    //          RandomExcursionsVariant(EPSILON_SIZE, epsilonBegin);
-	//	double average = 0.;
-	//	for (auto elem : result) {
-	//		average += (elem >= ALPHA);
-	//	}
-	//	size_t size = result.size();
-	//	average /= size;
-	//	testResults.push_back(size == 0 ? -1.
-	//		: average + size * (ALPHA - (size - 1.) / size + 1e-3) * (1. - average));
-	//}
+    if (testKey[14] == '1') {
+        if (isSaveNames) testNames.push_back("RandomExcursions");
+        auto result =
+              RandomExcursions(EPSILON_SIZE, epsilonBegin);
+        double average = 0.;
+        for (auto elem : result) {
+            average += (elem >= ALPHA);
+        }
+        size_t size = result.size();
+        average /= size;
+        testResults.push_back(size == 0 ? -1.
+            : average + size * (ALPHA - (size - 1.) / size + 1e-3) * (1. - average));
+    }
+    if (testKey[15] == '1') {		// For more longer sequences (> 1e6)
+        if (isSaveNames) testNames.push_back("RandomExcursionsVariant");
+        auto result =
+              RandomExcursionsVariant(EPSILON_SIZE, epsilonBegin);
+        double average = 0.;
+        for (auto elem : result) {
+            average += (elem >= ALPHA);
+        }
+        size_t size = result.size();
+        average /= size;
+        testResults.push_back(size == 0 ? -1.
+            : average + size * (ALPHA - (size - 1.) / size + 1e-3) * (1. - average));
+    }
 }
+
+
+TimeType PseudoRandomSequences::my_get_current_clock_time() {
+#ifdef __linux__
+//       struct tms curr;
+//       long clocks_per_sec = sysconf(_SC_CLK_TCK);
+//       times(&curr);
+//       return (int)std::round(curr.tms_utime / (double)clocks_per_sec * 1000.);
+   return std::chrono::steady_clock::now();
+#elif _WIN32    //Windows
+   return clock();
+#endif
+}
+
+using std::chrono::time_point;
+
+int PseudoRandomSequences::getTimeDifferenceInMillis(TimeType const & from, TimeType const & to) {
+#ifdef __linux__
+   return std::chrono::duration_cast<std::chrono::milliseconds>(to - from).count();
+#elif _WIN32   //Windows
+   return to - from;
+#endif
+}
+

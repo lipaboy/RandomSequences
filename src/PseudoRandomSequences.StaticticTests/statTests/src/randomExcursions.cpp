@@ -67,11 +67,11 @@ RandomExcursions(int n, BoolIterator epsilon)
 
 	constraint = MAX(0.005*pow(n, 0.5), 500);
 	if (J < constraint) {
-		printf("\t\tRandom Excursions Test:\n");
-		printf("\t\t---------------------------------------------\n");
-		printf( "\t\tWARNING:  TEST NOT APPLICABLE.  THERE ARE AN\n");
-		printf("\t\t\t  INSUFFICIENT NUMBER OF CYCLES.\n");
-		printf( "\t\t---------------------------------------------\n");
+//        std::cerr << "\t\tRandom Excursions Test:\n";
+//        std::cerr << "\t\t---------------------------------------------\n";
+//        std::cerr << "\t\tWARNING:  TEST NOT APPLICABLE.  THERE ARE AN\n";
+//        std::cerr << "\t\t\t  INSUFFICIENT NUMBER OF CYCLES.\n";
+//        std::cerr << "\t\t---------------------------------------------\n";
 		/*for(i = 0; i < 8; i++)
 			printf( "%f\n", 0.0);*/
 		//result = -1.;

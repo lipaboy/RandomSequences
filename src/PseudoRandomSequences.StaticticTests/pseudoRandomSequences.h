@@ -4,11 +4,12 @@
 #include <vector>
 #include <bitset>
 #include <boost/math/distributions/chi_squared.hpp>
+#include <chrono>
 
-#ifdef __GNUC__
+#ifdef __linux__
 #include <unistd.h>
 #include <sys/times.h>
-#else
+#elif _WIN32
 #include <time.h>
 #endif
 
@@ -16,8 +17,17 @@
 
 namespace PseudoRandomSequences {
 
-// return in milliseconds
-    int my_get_current_clock_time();
+#ifdef __linux__
+    using std::chrono::time_point;
+    typedef time_point<std::chrono::steady_clock> TimeType;
+#elif _WIN32   //Windows
+    typedef int TimeType;
+#endif
+
+    // return in milliseconds
+    TimeType my_get_current_clock_time();
+
+    int getTimeDifferenceInMillis(TimeType const & from, TimeType const & to);
 
 	typedef size_t Word;
 	const uint32_t MAX_DIMENSION = sizeof(Word) * 8;

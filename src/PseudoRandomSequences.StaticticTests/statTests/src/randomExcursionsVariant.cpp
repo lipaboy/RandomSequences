@@ -23,7 +23,7 @@ RandomExcursionsVariant(int n, BoolIterator epsilon)
 	//printf("RandomExcursionsVariant:");
 
 	if ( (S_k = (int *)calloc(n, sizeof(int))) == NULL ) {
-		printf("\t\tRANDOM EXCURSIONS VARIANT: Insufficent memory allocated.\n");
+        printf("\t\tRANDOM EXCURSIONS VARIANT: Insufficent memory allocated.\n");
 		return result;
 	}
 	J = 0;
@@ -46,10 +46,10 @@ RandomExcursionsVariant(int n, BoolIterator epsilon)
 */
 	constraint = (int)MAX(0.005*pow(n, 0.5), 500);
 	if (J < constraint) {
-		printf("\t\tRANDOM EXCURSIONS VARIANT:\n");
-		printf("\n\t\tWARNING:  TEST NOT APPLICABLE.  THERE ARE AN\n");
-		printf("\t\t\t  INSUFFICIENT NUMBER OF CYCLES.\n");
-		printf("\t\t---------------------------------------------\n");
+//        std::cerr << "\t\tRANDOM EXCURSIONS VARIANT:\n";
+//        std::cerr << "\n\t\tWARNING:  TEST NOT APPLICABLE.  THERE ARE AN\n";
+//        std::cerr << "\t\t\t  INSUFFICIENT NUMBER OF CYCLES.\n";
+//        std::cerr << "\t\t---------------------------------------------\n";
 		free(S_k);
 		return result;
 		/*for ( i=0; i<18; i++ )
