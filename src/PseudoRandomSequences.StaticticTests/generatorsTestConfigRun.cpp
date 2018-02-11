@@ -130,9 +130,7 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
         else if ("micali_schnorr" == genName)
             epsilon = micali_schnorr();
 		else
-			isStdGenerators = true;
-
-		MyBoolRange epsilonRange = { epsilon.begin(), epsilon.end() };
+            isStdGenerators = true;
 
 		size_t accumulatorSize = 0u;
 		for (size_t iSize = firstSize; iSize <= lastSize; iSize *= stepIterSize) {
@@ -144,24 +142,22 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 			//-------------Input----------------//
 
 			if (isStdGenerators)
-				epsilon.resize(inputSize);
+                epsilon.resize(inputSize);
 
-			vector<double> testResults;
             string testKey(argv[1]);
             vector<string> testNames =
-                    getStatisticTestNames(testKey, epsilon.size());
-			vector<double> currResults;
-			std::string outFilename = "out.tmp";
+                    getStatisticTestNames(testKey, inputSize);
+            vector<double> testResults(testNames.size());
+            vector<double> currResults;
 
             //currResults.reserve(60u);     // better don't do it because you can miss segmentation fault
-            int traversalCount =
-                    (std::distance(epsilonRange.begin(), epsilonRange.end()) < TRAVERSAL_THRESHOLD)
-                        ? TRAVERSAL_COUNT_LARGE : TRAVERSAL_COUNT_SMALL;
+            int traversalCount = TRAVERSAL_COUNT_LARGE;
 
-//#pragma omp parallel for reduction(+:accumulatorSize) private(epsilonRange) shared(genName, traversalCount)
+#pragma omp parallel for private(currResults) shared(genName, traversalCount, testKey, testResults)
 			for (int jTraver = 0; jTraver < traversalCount; jTraver++) 
 			{
 				// Generator factory
+                MyBoolRange epsilonRange(epsilon.begin(), epsilon.end());
 				{
 					std::normal_distribution<double> distribution(4.5, 2.0);		//doesn't failure with random_device generator
 					//std::chi_squared_distribution<double> distribution(3.0);		//failure with random_device (number of freedoms = 3.0)
@@ -190,12 +186,15 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 						});
 					}
 					else {
-						auto iterBegin = epsilon.begin();
-						auto iterEnd = epsilon.begin();
-						std::advance(iterBegin, accumulatorSize);
-						std::advance(iterEnd, accumulatorSize + inputSize);
-						epsilonRange = MyBoolRange(iterBegin, iterEnd);
-						accumulatorSize += inputSize;
+                        auto iterBegin = epsilon.begin();
+                        auto iterEnd = epsilon.begin();
+                        #pragma omp critical
+                        {
+                            std::advance(iterBegin, accumulatorSize);
+                            std::advance(iterEnd, accumulatorSize + inputSize);
+                            accumulatorSize += inputSize;
+                        }
+                        epsilonRange = MyBoolRange(iterBegin, iterEnd);
 					}
 				}
 
@@ -210,15 +209,16 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 				//----------------Tests-----------------//
 				{
                     runTests(epsilonRange.begin(), epsilonRange.end(), currResults, testKey);
-					if (jTraver == 0)
-						testResults.assign(currResults.size(), 0);
-                    std::transform(currResults.begin(), currResults.end(), //first source
-                        testResults.begin(),                                //second source
-                        testResults.begin(),                                //destination
-						[](double p_value, double count) -> double { return (std::abs(p_value - -1.) < 1e-5)
-                                            ? count - 1000. : (p_value < ALPHA) + count; }
-                    );
-					currResults.clear();
+                    #pragma omp critical
+                    {
+                        std::transform(currResults.begin(), currResults.end(), //first source
+                            testResults.begin(),                                //second source
+                            testResults.begin(),                                //destination
+                            [](double p_value, double count) -> double { return (std::abs(p_value - -1.) < 1e-5)
+                                                ? count - 1000. : (p_value < ALPHA) + count; }
+                        );
+                    }
+                    currResults.clear();
                 }
 			}
 

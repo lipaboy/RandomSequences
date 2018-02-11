@@ -16,6 +16,8 @@
 #include <exception>
 #include <cstdio>
 
+#include <omp.h>
+
 #include "statTests/include/stat_fncs.h"
 #include "lipaboyLibrary/src/maths/fixed_precision_number.h"
 
@@ -42,7 +44,7 @@ void PseudoRandomSequences::runTests(
 
 	// #Parameterized
 	if (testKey[0] == '1') {
-        string inputFile = "bookStackInput.dat";
+        string inputFile = "bookStackInput" + std::to_string(omp_get_thread_num()) + ".dat";
         {
             std::ofstream outFile;
             outFile.exceptions ( std::ofstream::failbit | std::ofstream::badbit );
@@ -224,7 +226,7 @@ void PseudoRandomSequences::runTests(
 vector<string> PseudoRandomSequences::getStatisticTestNames(string testKey, size_t sequenceSize) {
     vector<string> testNames;
     TestParameters testParameters(sequenceSize);
-std::cout << sequenceSize << std::endl;
+
     if (testKey[0] == '1')
         for (auto param : testParameters.bookStackTest)
             testNames.push_back("BookStackTest_" + std::to_string(param.dimension)
