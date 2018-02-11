@@ -46,11 +46,11 @@ Universal(int n, BoolIterator epsilon)
 	p = (int)pow(2, L);
 	if ( (L < 6) || (L > 16) || ((double)Q < 10*pow(2, L)) ||
 		 ((T = (long *)calloc(p, sizeof(long))) == NULL) ) {
-		printf("\t\tUNIVERSAL STATISTICAL TEST\n");
-		printf("\t\t---------------------------------------------\n");
-		printf("\t\tERROR:  L IS OUT OF RANGE.\n");
-		printf("\t\t-OR- :  Q IS LESS THAN %f.\n", 10*pow(2, L));
-		printf("\t\t-OR- :  Unable to allocate T.\n");
+//		printf("\t\tUNIVERSAL STATISTICAL TEST\n");
+//		printf("\t\t---------------------------------------------\n");
+//		printf("\t\tERROR:  L IS OUT OF RANGE.\n");
+//		printf("\t\t-OR- :  Q IS LESS THAN %f.\n", 10*pow(2, L));
+//		printf("\t\t-OR- :  Unable to allocate T.\n");
 		return -1.;
 	}
 	

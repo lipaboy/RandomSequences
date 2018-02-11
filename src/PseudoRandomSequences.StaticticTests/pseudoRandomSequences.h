@@ -29,6 +29,25 @@ namespace PseudoRandomSequences {
 
     int getTimeDifferenceInMillis(TimeType const & from, TimeType const & to);
 
+    using std::vector;
+    using std::pair;
+    using std::string;
+
+    class TestParameters {
+    public:
+        TestParameters(uint64_t EPSILON_SIZE);
+
+        struct BookStackPair { uint64_t upperPart; uint64_t dimension; };
+        vector<BookStackPair> bookStackTest;
+
+        vector<uint64_t> blockFrequencyTest;
+        vector<uint64_t> nonOverlappingTemplateMatchingsTest;
+        vector<uint64_t> overlappingTemplateMatchingsTest;		// TODO: CHECK
+        vector<uint64_t> linearComplexityTest;	// must be > 3
+        vector<uint64_t> serialTest;
+        vector<uint64_t> approximateEntropyTest;
+    };
+
 	typedef size_t Word;
 	const uint32_t MAX_DIMENSION = sizeof(Word) * 8;
 	using AlphabetType = std::bitset<MAX_DIMENSION>;
