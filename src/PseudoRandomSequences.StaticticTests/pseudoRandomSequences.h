@@ -48,17 +48,16 @@ namespace PseudoRandomSequences {
         vector<uint64_t> approximateEntropyTest;
     };
 
+    vector<string> getStatisticTestNames(string testKey, size_t sequenceSize);
+
 	typedef size_t Word;
 	const uint32_t MAX_DIMENSION = sizeof(Word) * 8;
 	using AlphabetType = std::bitset<MAX_DIMENSION>;
 
-	void runTests(BoolIterator epsilonBegin,
-		BoolIterator epsilonEnd,
-		std::vector<std::string> & testNames,
-		bool isSaveNames,
-		std::vector<double> & testResults,
+    void runTests(BoolIterator epsilonBegin,
+        BoolIterator epsilonEnd,
+        std::vector<double> & testResults,
         std::string const & testKey
-        //std::string const & inputFile
                   );
 
 	int beaconRun(int argc, char * argv[]);

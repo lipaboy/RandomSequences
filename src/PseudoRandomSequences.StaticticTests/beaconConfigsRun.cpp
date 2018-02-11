@@ -81,14 +81,14 @@ int PseudoRandomSequences::beaconRun(int argc, char * argv[]) {
         cout << endl << "Seq size = " << result.size() << endl;
 
         //----------------Tests-----------------//
-        vector<string> testNames = { "" };
+        string testKey(argv[1]);
+        vector<string> testNames = getStatisticTestNames(testKey, result.size());
         vector<double> testResults;
         {
-            string testKey(argv[1]);
             Sequence epsilon;
             epsilon = std::move(result);
 
-            runTests(epsilon.begin(), epsilon.end(), testNames, (fileIndex <= firstId), testResults, testKey
+            runTests(epsilon.begin(), epsilon.end(), testResults, testKey
                 //outFilename + std::to_string(fileIndex) + ".tmp"
                      );
         }

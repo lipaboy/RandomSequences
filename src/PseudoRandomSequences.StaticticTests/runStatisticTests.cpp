@@ -22,21 +22,19 @@
 using namespace PseudoRandomSequences;
 
 
+using std::vector;
+using std::pair;
+using std::string;
 using std::cout;
 using std::endl;
-
-
 
     // TODO: take off the responsibility of return names of active tests and give it to another function with argument testKey
 
 void PseudoRandomSequences::runTests(
 	BoolIterator epsilonBegin,
-	BoolIterator epsilonEnd,
-	std::vector<std::string> & testNames,
-	bool isSaveNames,
+    BoolIterator epsilonEnd,
 	std::vector<double> & testResults,
     std::string const & testKey
-    //std::string const & inputFile
         )
 {
 	const int EPSILON_SIZE = int(std::distance(epsilonBegin, epsilonEnd));
@@ -82,8 +80,7 @@ void PseudoRandomSequences::runTests(
             if (param.upperPart > (1LL << 28))
                 continue;
             //std::cout << "up=" << upperPartStr << ", dim = " << dimStr << std::endl;
-            if (isSaveNames)
-                testNames.push_back("BookStackTest_" + dimStr + "dim_" + upperPartStr + "up");
+
             testResults.push_back(bookStackTestMain(int(arguments.size()), &arguments[0]));
         }
         std::remove(inputFile.c_str());
@@ -92,7 +89,6 @@ void PseudoRandomSequences::runTests(
 	}
 	if (testKey[1] == '1') {
         auto start = my_get_current_clock_time();
-		if (isSaveNames) testNames.push_back("Frequency");
 		testResults.push_back(Frequency(EPSILON_SIZE, epsilonBegin));
         //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
@@ -100,34 +96,29 @@ void PseudoRandomSequences::runTests(
     if (testKey[2] == '1') {
         auto start = my_get_current_clock_time();
         for (auto blockSize : testParameters.blockFrequencyTest) {
-		//doesn't equal frequency monobit with M = 1
-            if (isSaveNames) testNames.push_back("BlockFrequency_" + std::to_string(blockSize));
+            //doesn't equal frequency monobit with M = 1
             testResults.push_back(BlockFrequency(blockSize, EPSILON_SIZE, epsilonBegin));
         }
         //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	if (testKey[3] == '1') {
         auto start = my_get_current_clock_time();
-		if (isSaveNames) testNames.push_back("Runs");
 		testResults.push_back(Runs(EPSILON_SIZE, epsilonBegin));
         //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	if (testKey[4] == '1') {
         auto start = my_get_current_clock_time();
-		if (isSaveNames) testNames.push_back("LongestRunOfOnes");
 		testResults.push_back(LongestRunOfOnes(EPSILON_SIZE, epsilonBegin));
         //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	if (testKey[5] == '1') {
         auto start = my_get_current_clock_time();
-		if (isSaveNames) testNames.push_back("Rank");
 		testResults.push_back(Rank(EPSILON_SIZE, epsilonBegin));
         //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	if (testKey[6] == '1') {
         auto start = my_get_current_clock_time();
 		// Has a little difference between results of my own discreteFourier Test version
-		if (isSaveNames) testNames.push_back("DiscreteFourierTransform");
 		testResults.push_back(DiscreteFourierTransform(EPSILON_SIZE, epsilonBegin));
         ////cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
@@ -138,8 +129,6 @@ void PseudoRandomSequences::runTests(
         //2 - is minimum (depends on existing files)
 		// from 2 to 16
         for (auto param : testParameters.nonOverlappingTemplateMatchingsTest) {
-			if (isSaveNames) testNames.push_back("NonOverlappingTemplateMatchings_" 
-				+ std::to_string(param));
 			std::vector<double> temp;
 			temp = NonOverlappingTemplateMatchings(param, EPSILON_SIZE, epsilonBegin);
 			double average = 0.;
@@ -159,21 +148,20 @@ void PseudoRandomSequences::runTests(
         auto start = my_get_current_clock_time();
 
         for (auto param : testParameters.overlappingTemplateMatchingsTest) {
-			if (isSaveNames) testNames.push_back("OverlappingTemplateMatchings_" + std::to_string(param));
 			testResults.push_back(OverlappingTemplateMatchings(param, EPSILON_SIZE, epsilonBegin));
 		}
         ////cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	if (testKey[9] == '1') {
         auto start = my_get_current_clock_time();
-        if (isSaveNames) testNames.push_back("Universal");
-        testResults.push_back(Universal(EPSILON_SIZE, epsilonBegin));
+        testResults.push_back(
+            Universal(EPSILON_SIZE, epsilonBegin)
+        );
         //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
     // #Parameterized
     if (testKey[10] == '1') {		// think: neccessary try all the variant of blockSize (read documentation of test)
         for (auto param : testParameters.linearComplexityTest) {
-            if (isSaveNames) testNames.push_back("LinearComplexity_" + std::to_string(param));
             testResults.push_back(
                 LinearComplexity(param, EPSILON_SIZE, epsilonBegin)
             );
@@ -184,11 +172,8 @@ void PseudoRandomSequences::runTests(
 	if (testKey[11] == '1') {// think: neccessary try all the variant of blockSize (read documentation of test)
         auto start = my_get_current_clock_time();
         for (auto param : testParameters.serialTest) {
-			auto res = 
-				Serial(param, EPSILON_SIZE, epsilonBegin);
-			if (isSaveNames) testNames.push_back("Serial_" + std::to_string(param) + "_1");
-			testResults.push_back(res.first);
-			if (isSaveNames) testNames.push_back("Serial_" + std::to_string(param) + "_2");
+            auto res = Serial(param, EPSILON_SIZE, epsilonBegin);
+            testResults.push_back(res.first);
 			testResults.push_back(res.second);
 		}
         ////cout << "Time: " << my_get_current_clock_time() - start << endl;
@@ -198,7 +183,6 @@ void PseudoRandomSequences::runTests(
 	if (testKey[12] == '1') {// think: neccessary try all the variant of blockSize (read documentation of test)
         auto start = my_get_current_clock_time();
         for (auto param : testParameters.approximateEntropyTest) {
-			if (isSaveNames) testNames.push_back("ApproximateEntropy_" + std::to_string(param));
 			// (M + 1) - bit block is used to compare
 			testResults.push_back(ApproximateEntropy(param, EPSILON_SIZE, epsilonBegin));
 		}
@@ -207,14 +191,11 @@ void PseudoRandomSequences::runTests(
     if (testKey[13] == '1') {
         auto start = my_get_current_clock_time();
 		auto res = CumulativeSums(EPSILON_SIZE, epsilonBegin);
-		if (isSaveNames) testNames.push_back("CumulativeSums_1");
 		testResults.push_back(res.first);
-		if (isSaveNames) testNames.push_back("CumulativeSums_2");
 		testResults.push_back(res.second);
         //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
     if (testKey[14] == '1') {
-        if (isSaveNames) testNames.push_back("RandomExcursions");
         auto result =
               RandomExcursions(EPSILON_SIZE, epsilonBegin);
         double average = 0.;
@@ -227,7 +208,6 @@ void PseudoRandomSequences::runTests(
             : average + size * (ALPHA - (size - 1.) / size + 1e-3) * (1. - average));
     }
     if (testKey[15] == '1') {		// For more longer sequences (> 1e6)
-        if (isSaveNames) testNames.push_back("RandomExcursionsVariant");
         auto result =
               RandomExcursionsVariant(EPSILON_SIZE, epsilonBegin);
         double average = 0.;
@@ -241,8 +221,57 @@ void PseudoRandomSequences::runTests(
     }
 }
 
-std::vector<std::string> getStatisticTestNames() {
-    return std::vector<std::string>();
+vector<string> PseudoRandomSequences::getStatisticTestNames(string testKey, size_t sequenceSize) {
+    vector<string> testNames;
+    TestParameters testParameters(sequenceSize);
+std::cout << sequenceSize << std::endl;
+    if (testKey[0] == '1')
+        for (auto param : testParameters.bookStackTest)
+            testNames.push_back("BookStackTest_" + std::to_string(param.dimension)
+                                + "dim_" + std::to_string(param.upperPart) + "up");
+    if (testKey[1] == '1')
+        testNames.push_back("Frequency");
+    if (testKey[2] == '1')
+        for (auto blockSize : testParameters.blockFrequencyTest)
+            testNames.push_back("BlockFrequency_" + std::to_string(blockSize));
+    if (testKey[3] == '1')
+        testNames.push_back("Runs");;
+    if (testKey[4] == '1')
+        testNames.push_back("LongestRunOfOnes");
+    if (testKey[5] == '1')
+        testNames.push_back("Rank");
+    if (testKey[6] == '1')
+        testNames.push_back("DiscreteFourierTransform");
+    if (testKey[7] == '1')
+        for (auto param : testParameters.nonOverlappingTemplateMatchingsTest)
+            testNames.push_back("NonOverlappingTemplateMatchings_"
+                + std::to_string(param));
+    if (testKey[8] == '1')
+        for (auto param : testParameters.overlappingTemplateMatchingsTest)
+            testNames.push_back("OverlappingTemplateMatchings_" + std::to_string(param));
+    if (testKey[9] == '1')
+        testNames.push_back("Universal");
+    if (testKey[10] == '1')
+        for (auto param : testParameters.linearComplexityTest)
+            testNames.push_back("LinearComplexity_" + std::to_string(param));
+    if (testKey[11] == '1')
+        for (auto param : testParameters.serialTest) {
+            testNames.push_back("Serial_" + std::to_string(param) + "_1");
+            testNames.push_back("Serial_" + std::to_string(param) + "_2");
+        }
+    if (testKey[12] == '1')
+        for (auto param : testParameters.approximateEntropyTest)
+            testNames.push_back("ApproximateEntropy_" + std::to_string(param));
+    if (testKey[13] == '1') {
+        testNames.push_back("CumulativeSums_1");
+        testNames.push_back("CumulativeSums_2");
+    }
+    if (testKey[14] == '1')
+        testNames.push_back("RandomExcursions");
+    if (testKey[15] == '1')
+        testNames.push_back("RandomExcursionsVariant");
+
+    return std::move(testNames);
 }
 
 PseudoRandomSequences::TestParameters::TestParameters(uint64_t EPSILON_SIZE)
@@ -254,6 +283,8 @@ PseudoRandomSequences::TestParameters::TestParameters(uint64_t EPSILON_SIZE)
         for (uint64_t dim = 8; dim <= 32; dim *= 2) {	//8, 16, 32
             uint64_t upperPartSize = (upperPart == 0) ? 16LL
                 : ((upperPart == 1) ? (1LL << (dim / 2)) : (1LL << (dim - 1)));
+            if (upperPartSize > (1LL << 28))
+                continue;
             bookStackTest.push_back({ upperPartSize, dim });
         }
     }

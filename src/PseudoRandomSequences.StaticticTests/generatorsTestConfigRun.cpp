@@ -97,9 +97,9 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 		resFile.open("resStdGenerators_" + genName + "_" + std::to_string(firstSize) 
 			+ "-" + std::to_string(lastSize) + ".dat",
 			std::ios::out | std::ios::trunc);
-        extraFile.open("extraStdGenerators_" + genName + "_" + std::to_string(firstSize)
-                       + "-" + std::to_string(lastSize) + ".dat",
-            std::ios::out | std::ios::trunc);
+//        extraFile.open("extraStdGenerators_" + genName + "_" + std::to_string(firstSize)
+//                       + "-" + std::to_string(lastSize) + ".dat",
+//            std::ios::out | std::ios::trunc);
 
 		//--------------------Container---------------------//
 
@@ -147,12 +147,13 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 				epsilon.resize(inputSize);
 
 			vector<double> testResults;
-			vector<string> testNames = { "" };
+            string testKey(argv[1]);
+            vector<string> testNames =
+                    getStatisticTestNames(testKey, epsilon.size());
 			vector<double> currResults;
 			std::string outFilename = "out.tmp";
-			string testKey(argv[1]);
 
-			currResults.reserve(60u);
+            //currResults.reserve(60u);     // better don't do it because you can miss segmentation fault
             int traversalCount =
                     (std::distance(epsilonRange.begin(), epsilonRange.end()) < TRAVERSAL_THRESHOLD)
                         ? TRAVERSAL_COUNT_LARGE : TRAVERSAL_COUNT_SMALL;
@@ -208,8 +209,7 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 
 				//----------------Tests-----------------//
 				{
-					runTests(epsilonRange.begin(), epsilonRange.end(), testNames, 
-						(iSize <= firstSize) && (jTraver <= 0), currResults, testKey);
+                    runTests(epsilonRange.begin(), epsilonRange.end(), currResults, testKey);
 					if (jTraver == 0)
 						testResults.assign(currResults.size(), 0);
                     std::transform(currResults.begin(), currResults.end(), //first source
@@ -224,31 +224,31 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 
 			//----------------Write results-----------------//
 			{
-				if (iSize <= firstSize) {
+                //if (iSize <= firstSize) {
                     std::copy(testNames.begin(), testNames.end(), std::ostream_iterator<string>(resFile, "\t"));
 					resFile << endl;
-				}
+                //}
                 resFile << iSize << "_Kbits\t";
                 std::copy(testResults.begin(), testResults.end(), std::ostream_iterator<double>(resFile, "\t"));
 				resFile << endl;
 			}
 			//----------------Extra infos-----------------//
-            {
-                if (iSize <= firstSize) {
-                    std::copy(testNames.begin(), testNames.end(), std::ostream_iterator<string>(extraFile, "\t"));
-                    extraFile << endl;
-                }
-                extraFile << iSize << "_Kbits\t";
-                std::copy(currResults.begin(), currResults.end(), std::ostream_iterator<double>(extraFile, "\t"));
-                extraFile << endl;
-            }
+//            {
+//                //if (iSize <= firstSize) {
+//                    std::copy(testNames.begin(), testNames.end(), std::ostream_iterator<string>(extraFile, "\t"));
+//                    extraFile << endl;
+//                //}
+//                extraFile << iSize << "_Kbits\t";
+//                std::copy(currResults.begin(), currResults.end(), std::ostream_iterator<double>(extraFile, "\t"));
+//                extraFile << endl;
+//            }
 
             resFile.flush();
-            extraFile.flush();
+//            extraFile.flush();
 			testNames.clear();
 		}
 		resFile.close();
-        extraFile.close();
+//        extraFile.close();
 	}
 
     cout << endl << "Whole time expend: "
