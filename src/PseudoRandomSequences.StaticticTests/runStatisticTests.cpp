@@ -41,9 +41,12 @@ void PseudoRandomSequences::runTests(
 {
 	const int EPSILON_SIZE = int(std::distance(epsilonBegin, epsilonEnd));
     TestParameters testParameters(EPSILON_SIZE);
+    int testCountExec = 0;
 
+    // #Slow in case where sequence is short
 	// #Parameterized
-	if (testKey[0] == '1') {
+    if (testKey[0] == '1') {
+        testCountExec++;
         string inputFile = "bookStackInput" + std::to_string(omp_get_thread_num()) + ".dat";
         {
             std::ofstream outFile;
@@ -90,12 +93,14 @@ void PseudoRandomSequences::runTests(
              << getTimeDifferenceInMillis(start, my_get_current_clock_time()) << endl;
 	}
 	if (testKey[1] == '1') {
+        testCountExec++;
         auto start = my_get_current_clock_time();
 		testResults.push_back(Frequency(EPSILON_SIZE, epsilonBegin));
         //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	// #Parameterized
     if (testKey[2] == '1') {
+        testCountExec++;
         auto start = my_get_current_clock_time();
         for (auto blockSize : testParameters.blockFrequencyTest) {
             //doesn't equal frequency monobit with M = 1
@@ -104,29 +109,34 @@ void PseudoRandomSequences::runTests(
         //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	if (testKey[3] == '1') {
+        testCountExec++;
         auto start = my_get_current_clock_time();
 		testResults.push_back(Runs(EPSILON_SIZE, epsilonBegin));
         //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	if (testKey[4] == '1') {
+        testCountExec++;
         auto start = my_get_current_clock_time();
 		testResults.push_back(LongestRunOfOnes(EPSILON_SIZE, epsilonBegin));
         //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	if (testKey[5] == '1') {
+        testCountExec++;
         auto start = my_get_current_clock_time();
 		testResults.push_back(Rank(EPSILON_SIZE, epsilonBegin));
         //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	if (testKey[6] == '1') {
+        testCountExec++;
         auto start = my_get_current_clock_time();
 		// Has a little difference between results of my own discreteFourier Test version
 		testResults.push_back(DiscreteFourierTransform(EPSILON_SIZE, epsilonBegin));
         ////cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
-	// #Slow test
+    // #The Slowest test
 	// #Parameterized
     if (testKey[7] == '1') {	// TODO: need to check
+        testCountExec++;
         auto start = my_get_current_clock_time();
         //2 - is minimum (depends on existing files)
 		// from 2 to 16
@@ -143,54 +153,61 @@ void PseudoRandomSequences::runTests(
 			testResults.push_back(size == 0 ? -1.
 				: average + size * (ALPHA - (size - 1.) / size + 1e-3) * (1. - average));
 		}
-        ////cout << "Time: " << my_get_current_clock_time() - start << endl;
+        cout << "NonOverlapping Time: " << getTimeDifferenceInMillis(start, my_get_current_clock_time()) << endl;
 	}
 	// #Parameterized
 	if (testKey[8] == '1') {
+        testCountExec++;
         auto start = my_get_current_clock_time();
-
         for (auto param : testParameters.overlappingTemplateMatchingsTest) {
 			testResults.push_back(OverlappingTemplateMatchings(param, EPSILON_SIZE, epsilonBegin));
 		}
-        ////cout << "Time: " << my_get_current_clock_time() - start << endl;
+        cout << "Overlapping Time: " << getTimeDifferenceInMillis(start, my_get_current_clock_time()) << endl;
 	}
 	if (testKey[9] == '1') {
+        testCountExec++;
         auto start = my_get_current_clock_time();
         testResults.push_back(
             Universal(EPSILON_SIZE, epsilonBegin)
         );
         //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
+    // #The Slowest test
     // #Parameterized
     if (testKey[10] == '1') {		// think: neccessary try all the variant of blockSize (read documentation of test)
+        testCountExec++;
+        auto start = my_get_current_clock_time();
         for (auto param : testParameters.linearComplexityTest) {
             testResults.push_back(
                 LinearComplexity(param, EPSILON_SIZE, epsilonBegin)
             );
         }
+        cout << "LinearComplexity Time: " << getTimeDifferenceInMillis(start, my_get_current_clock_time()) << endl;
     }
-	// #TheSlowest
+    // #Slow (time grows very much)
 	// #Parameterized
 	if (testKey[11] == '1') {// think: neccessary try all the variant of blockSize (read documentation of test)
+        testCountExec++;
         auto start = my_get_current_clock_time();
         for (auto param : testParameters.serialTest) {
             auto res = Serial(param, EPSILON_SIZE, epsilonBegin);
             testResults.push_back(res.first);
 			testResults.push_back(res.second);
 		}
-        ////cout << "Time: " << my_get_current_clock_time() - start << endl;
+        cout << "Serial Time: " << getTimeDifferenceInMillis(start, my_get_current_clock_time()) << endl;
 	}
-	// #Slow
 	// #Parameterized
 	if (testKey[12] == '1') {// think: neccessary try all the variant of blockSize (read documentation of test)
+        testCountExec++;
         auto start = my_get_current_clock_time();
         for (auto param : testParameters.approximateEntropyTest) {
 			// (M + 1) - bit block is used to compare
 			testResults.push_back(ApproximateEntropy(param, EPSILON_SIZE, epsilonBegin));
 		}
-        ////cout << "Time: " << my_get_current_clock_time() - start << endl;
+        cout << "Approximate Time: " << getTimeDifferenceInMillis(start, my_get_current_clock_time()) << endl;
 	}
     if (testKey[13] == '1') {
+        testCountExec++;
         auto start = my_get_current_clock_time();
 		auto res = CumulativeSums(EPSILON_SIZE, epsilonBegin);
 		testResults.push_back(res.first);
@@ -198,6 +215,7 @@ void PseudoRandomSequences::runTests(
         //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
     if (testKey[14] == '1') {
+        testCountExec++;
         auto result =
               RandomExcursions(EPSILON_SIZE, epsilonBegin);
         double average = 0.;
@@ -210,6 +228,7 @@ void PseudoRandomSequences::runTests(
             : average + size * (ALPHA - (size - 1.) / size + 1e-3) * (1. - average));
     }
     if (testKey[15] == '1') {		// For more longer sequences (> 1e6)
+        testCountExec++;
         auto result =
               RandomExcursionsVariant(EPSILON_SIZE, epsilonBegin);
         double average = 0.;
@@ -221,6 +240,8 @@ void PseudoRandomSequences::runTests(
         testResults.push_back(size == 0 ? -1.
             : average + size * (ALPHA - (size - 1.) / size + 1e-3) * (1. - average));
     }
+
+    cout << "Test count executed: " << testCountExec << endl;
 }
 
 vector<string> PseudoRandomSequences::getStatisticTestNames(string testKey, size_t sequenceSize) {
@@ -278,8 +299,9 @@ vector<string> PseudoRandomSequences::getStatisticTestNames(string testKey, size
 
 PseudoRandomSequences::TestParameters::TestParameters(uint64_t EPSILON_SIZE)
     : blockFrequencyTest({ 2, EPSILON_SIZE / 4, EPSILON_SIZE / 2 }),
-      nonOverlappingTemplateMatchingsTest({ 3 }),
-      overlappingTemplateMatchingsTest({ 2, EPSILON_SIZE / 2, EPSILON_SIZE })
+      nonOverlappingTemplateMatchingsTest({ 3, 5, 7, //14
+                                          }),                    //slow test!!!!
+      overlappingTemplateMatchingsTest({ 2, 6, 12 })
 {
     for (int upperPart = 0; upperPart < 3; upperPart++) {
         for (uint64_t dim = 8; dim <= 32; dim *= 2) {	//8, 16, 32
@@ -293,13 +315,13 @@ PseudoRandomSequences::TestParameters::TestParameters(uint64_t EPSILON_SIZE)
 
     auto sqrtSize = uint64_t(std::floor(std::pow(EPSILON_SIZE, 0.5)));
     auto sqrtSqrtSize = uint64_t(std::floor(std::pow(EPSILON_SIZE, 0.25)));
-    linearComplexityTest = { //8, sqrtSize / 2, sqrtSize
-                            8, sqrtSqrtSize,
-        //            sqrtSize
-    };
-    int logSize = int(std::floor(std::log2(EPSILON_SIZE)) - 2);
-    serialTest = { 3 };
-    approximateEntropyTest = { 1 };
+    linearComplexityTest = { 8, sqrtSqrtSize,
+                           //  sqrtSize
+                           };                   //slow test!!!!
+    uint64_t logSize = uint64_t(std::floor(std::log2(EPSILON_SIZE)) - 2);
+    serialTest = { 3, logSize / 2, logSize };
+    uint64_t logSize2 = uint64_t(std::floor(std::log2(EPSILON_SIZE)) - 5);
+    approximateEntropyTest = { 1, logSize2 / 2, logSize2 };
 }
 
 

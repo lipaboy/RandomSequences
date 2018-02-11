@@ -50,7 +50,7 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 
 
 	size_t len = 0;
-    if (argc < 5 || (len = std::strlen(argv[1])) < TEST_COUNT) {
+    if (argc < 6 || (len = std::strlen(argv[1])) < TEST_COUNT) {
 		cout << "Not enough parameters ( testKey ("
 			<< TEST_COUNT << ", current = " << len << "), "
             << "input possibility, first size, last size, "
@@ -214,8 +214,9 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
                         std::transform(currResults.begin(), currResults.end(), //first source
                             testResults.begin(),                                //second source
                             testResults.begin(),                                //destination
-                            [](double p_value, double count) -> double { return (std::abs(p_value - -1.) < 1e-5)
-                                                ? count - 1000. : (p_value < ALPHA) + count; }
+                            [](double p_value, double count) -> double {
+                                return (p_value < 0.) ? count - 1000. : (p_value < ALPHA) + count; }
+                        // p_value < ALPHA - it is failure
                         );
                     }
                     currResults.clear();
