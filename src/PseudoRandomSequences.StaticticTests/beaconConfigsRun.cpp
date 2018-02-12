@@ -57,7 +57,7 @@ int PseudoRandomSequences::beaconRun(int argc, char * argv[]) {
 	extraFile.open("extra" + std::to_string(firstId) + "-" + std::to_string(lastId) + ".dat",
 		std::ios::out | std::ios::trunc);
 
-	std::string inputFilename = "input";
+    std::string inputFilename = "beacon/input";
 	Sequence result;
 
 	for (size_t fileIndex = firstId; fileIndex <= lastId; fileIndex *= 2) {
@@ -95,6 +95,7 @@ int PseudoRandomSequences::beaconRun(int argc, char * argv[]) {
 		//----------------Write results-----------------//
 		{
 			if (fileIndex <= firstId) {
+                resFile << "\t";
 				std::copy(testNames.begin(), testNames.end(), std::ostream_iterator<string>(resFile, "\t"));
 				resFile << endl;
 			}
@@ -109,6 +110,7 @@ int PseudoRandomSequences::beaconRun(int argc, char * argv[]) {
 		//----------------Extra infos-----------------//
 		{
 			if (fileIndex <= firstId) {
+                extraFile << "\t";
 				std::copy(testNames.begin(), testNames.end(), std::ostream_iterator<string>(extraFile, "\t"));
 				extraFile << endl;
 			}

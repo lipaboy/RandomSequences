@@ -89,8 +89,8 @@ void PseudoRandomSequences::runTests(
             testResults.push_back(bookStackTestMain(int(arguments.size()), &arguments[0]));
         }
         std::remove(inputFile.c_str());
-        cout << "Book stack test time: "
-             << getTimeDifferenceInMillis(start, my_get_current_clock_time()) << endl;
+//        cout << "Book stack test time: "
+//             << getTimeDifferenceInMillis(start, my_get_current_clock_time()) << endl;
 	}
 	if (testKey[1] == '1') {
         testCountExec++;
@@ -153,7 +153,7 @@ void PseudoRandomSequences::runTests(
 			testResults.push_back(size == 0 ? -1.
 				: average + size * (ALPHA - (size - 1.) / size + 1e-3) * (1. - average));
 		}
-        cout << "NonOverlapping Time: " << getTimeDifferenceInMillis(start, my_get_current_clock_time()) << endl;
+//        cout << "NonOverlapping Time: " << getTimeDifferenceInMillis(start, my_get_current_clock_time()) << endl;
 	}
 	// #Parameterized
 	if (testKey[8] == '1') {
@@ -162,7 +162,7 @@ void PseudoRandomSequences::runTests(
         for (auto param : testParameters.overlappingTemplateMatchingsTest) {
 			testResults.push_back(OverlappingTemplateMatchings(param, EPSILON_SIZE, epsilonBegin));
 		}
-        cout << "Overlapping Time: " << getTimeDifferenceInMillis(start, my_get_current_clock_time()) << endl;
+//        cout << "Overlapping Time: " << getTimeDifferenceInMillis(start, my_get_current_clock_time()) << endl;
 	}
 	if (testKey[9] == '1') {
         testCountExec++;
@@ -182,7 +182,7 @@ void PseudoRandomSequences::runTests(
                 LinearComplexity(param, EPSILON_SIZE, epsilonBegin)
             );
         }
-        cout << "LinearComplexity Time: " << getTimeDifferenceInMillis(start, my_get_current_clock_time()) << endl;
+//        cout << "LinearComplexity Time: " << getTimeDifferenceInMillis(start, my_get_current_clock_time()) << endl;
     }
     // #Slow (time grows very much)
 	// #Parameterized
@@ -194,7 +194,7 @@ void PseudoRandomSequences::runTests(
             testResults.push_back(res.first);
 			testResults.push_back(res.second);
 		}
-        cout << "Serial Time: " << getTimeDifferenceInMillis(start, my_get_current_clock_time()) << endl;
+//        cout << "Serial Time: " << getTimeDifferenceInMillis(start, my_get_current_clock_time()) << endl;
 	}
 	// #Parameterized
 	if (testKey[12] == '1') {// think: neccessary try all the variant of blockSize (read documentation of test)
@@ -204,7 +204,7 @@ void PseudoRandomSequences::runTests(
 			// (M + 1) - bit block is used to compare
 			testResults.push_back(ApproximateEntropy(param, EPSILON_SIZE, epsilonBegin));
 		}
-        cout << "Approximate Time: " << getTimeDifferenceInMillis(start, my_get_current_clock_time()) << endl;
+//        cout << "Approximate Time: " << getTimeDifferenceInMillis(start, my_get_current_clock_time()) << endl;
 	}
     if (testKey[13] == '1') {
         testCountExec++;
@@ -241,7 +241,7 @@ void PseudoRandomSequences::runTests(
             : average + size * (ALPHA - (size - 1.) / size + 1e-3) * (1. - average));
     }
 
-    cout << "Test count executed: " << testCountExec << endl;
+    //cout << "Test count executed: " << testCountExec << endl;
 }
 
 vector<string> PseudoRandomSequences::getStatisticTestNames(string testKey, size_t sequenceSize) {

@@ -4,3 +4,4 @@
 **/*.code-workspace
 **/.vscode/*
 **/build*/**
+**/id_rsa*
