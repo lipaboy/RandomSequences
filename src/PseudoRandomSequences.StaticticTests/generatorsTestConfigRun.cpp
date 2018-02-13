@@ -103,8 +103,7 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 
 
         const int TRAVERSAL_COUNT_LARGE = TRAVERSAL_COUNT_SMALL;
-		const size_t TRAVERSAL_THRESHOLD = size_t(1e5);
-        size_t stepIterSize = 10;		// the step of size iteration (traversal step)
+        const size_t TRAVERSAL_THRESHOLD = size_t(1e5);
 		std::vector<bool> epsilon;
 		tp.n = 0;
 		tp.numOfBitStreams = 1;
@@ -113,7 +112,6 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 				: TRAVERSAL_COUNT_SMALL);
 		}
 
-		bool isStdGenerators = false;
 		// TODO: Too much memory allocations
         std::normal_distribution<double> distribution(4.5, 2.0);		//doesn't failure with random_device generator
         //std::chi_squared_distribution<double> distribution(3.0);		//failure with random_device (number of freedoms = 3.0)
@@ -141,10 +139,10 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
                 return (int(std::round(distribution(generatorRandomDevice))) % inputOppositePossibility == 0);
             });
         }
-        else if ("default_random_engine" == genName) {
+        else if ("rand" == genName) {
             std::generate_n(std::back_inserter(epsilon), tp.n,
                 [&inputOppositePossibility, &generatorDefaultRandomEngine, &distribution]() -> bool {
-                return (int(std::round(distribution(generatorDefaultRandomEngine))) % inputOppositePossibility == 0);
+                return ((std::rand() % 2) == 0);
             });
         }
         else if ("mt19937_64" == genName) {
@@ -212,17 +210,17 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 					}
 				}
 
-				{
-					auto iterEnd = epsilonRange.begin();
-					std::advance(iterEnd, 10);
-					std::copy(epsilonRange.begin(), iterEnd,
-						std::ostream_iterator<bool>(cout, ""));
-					std::cout << std::endl;
-                }
+//				{
+//					auto iterEnd = epsilonRange.begin();
+//					std::advance(iterEnd, 10);
+//					std::copy(epsilonRange.begin(), iterEnd,
+//						std::ostream_iterator<bool>(cout, ""));
+//					std::cout << std::endl;
+//                }
 
 				//----------------Tests-----------------//
 				{
-                    runTests(epsilonRange.begin(), epsilonRange.end(), currResults, testKey);
+                    runTests(epsilonRange.begin(), epsilonRange.end(), currResults, testKey, genName);
                     #pragma omp critical
                     {
                         std::transform(currResults.begin(), currResults.end(), //first source
@@ -239,11 +237,11 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 
 			//----------------Write results-----------------//
 			{
-                //if (iSize <= firstSize) {
+                if (iSize == seqSizes[0]) {
                     resFile << "\t";
                     std::copy(testNames.begin(), testNames.end(), std::ostream_iterator<string>(resFile, "\t"));
 					resFile << endl;
-                //}
+                }
                 resFile << iSize << "_Kbits\t";
                 std::copy(testResults.begin(), testResults.end(), std::ostream_iterator<double>(resFile, "\t"));
 				resFile << endl;
@@ -268,7 +266,7 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 	}
 
     cout << endl << "Whole time expend: "
-         << getTimeDifferenceInMillis(wholeTimeExpend, my_get_current_clock_time())
+         << getTimeDifferenceInMillis(wholeTimeExpend, my_get_current_clock_time()) / 1000
          << "sec." << endl;
 	
 

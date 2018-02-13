@@ -57,8 +57,8 @@ namespace PseudoRandomSequences {
     void runTests(BoolIterator epsilonBegin,
         BoolIterator epsilonEnd,
         std::vector<double> & testResults,
-        std::string const & testKey
-                  );
+        std::string const & testKey,
+        const std::string &uniqueSequenceName);
 
 	int beaconRun(int argc, char * argv[]);
 

@@ -36,7 +36,8 @@ void PseudoRandomSequences::runTests(
 	BoolIterator epsilonBegin,
     BoolIterator epsilonEnd,
 	std::vector<double> & testResults,
-    std::string const & testKey
+    std::string const & testKey,
+    std::string const & uniqueSequenceName
         )
 {
 	const int EPSILON_SIZE = int(std::distance(epsilonBegin, epsilonEnd));
@@ -47,7 +48,8 @@ void PseudoRandomSequences::runTests(
 	// #Parameterized
     if (testKey[0] == '1') {
         testCountExec++;
-        string inputFile = "bookStackInput" + std::to_string(omp_get_thread_num()) + ".dat";
+        string inputFile = "bookStackInput" + std::to_string(omp_get_thread_num())
+                + uniqueSequenceName + std::to_string(EPSILON_SIZE) + ".dat";
         {
             std::ofstream outFile;
             outFile.exceptions ( std::ofstream::failbit | std::ofstream::badbit );
@@ -298,7 +300,9 @@ vector<string> PseudoRandomSequences::getStatisticTestNames(string testKey, size
 }
 
 PseudoRandomSequences::TestParameters::TestParameters(uint64_t EPSILON_SIZE)
-    : blockFrequencyTest({ 2, EPSILON_SIZE / 4, EPSILON_SIZE / 2 }),
+    : blockFrequencyTest({ 2, //EPSILON_SIZE / 4, EPSILON_SIZE / 2
+                         16, 32, 128
+                         }),
       nonOverlappingTemplateMatchingsTest({ 3, 5, 7, //14
                                           }),                    //slow test!!!!
       overlappingTemplateMatchingsTest({ 2, 6, 12 })
@@ -315,13 +319,15 @@ PseudoRandomSequences::TestParameters::TestParameters(uint64_t EPSILON_SIZE)
 
     auto sqrtSize = uint64_t(std::floor(std::pow(EPSILON_SIZE, 0.5)));
     auto sqrtSqrtSize = uint64_t(std::floor(std::pow(EPSILON_SIZE, 0.25)));
-    linearComplexityTest = { 8, sqrtSqrtSize,
+    linearComplexityTest = { 8, 10, //sqrtSqrtSize
                            //  sqrtSize
                            };                   //slow test!!!!
     uint64_t logSize = uint64_t(std::floor(std::log2(EPSILON_SIZE)) - 2);
-    serialTest = { 3, logSize / 2, logSize };
+    serialTest = { 3, //logSize / 2, logSize
+                 5, 11};
     uint64_t logSize2 = uint64_t(std::floor(std::log2(EPSILON_SIZE)) - 5);
-    approximateEntropyTest = { 1, logSize2 / 2, logSize2 };
+    approximateEntropyTest = { 1, //logSize2 / 2, logSize2
+                             4, 8};
 }
 
 

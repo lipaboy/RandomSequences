@@ -88,7 +88,7 @@ int PseudoRandomSequences::beaconRun(int argc, char * argv[]) {
             Sequence epsilon;
             epsilon = std::move(result);
 
-            runTests(epsilon.begin(), epsilon.end(), testResults, testKey
+            runTests(epsilon.begin(), epsilon.end(), testResults, testKey, "beacon"
                 //outFilename + std::to_string(fileIndex) + ".tmp"
                      );
         }
