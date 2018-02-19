@@ -15,10 +15,10 @@ LinearComplexity(int M, int n, BoolIterator epsilon)
 	BitSequence  *T = NULL, *P = NULL, *B_ = NULL, *C = NULL;
 	
 	N = (int)floor(n/M);
-	if ( ((B_ = (BitSequence *) calloc(M, sizeof(BitSequence))) == NULL) ||
-		 ((C  = (BitSequence *) calloc(M, sizeof(BitSequence))) == NULL) ||
-		 ((P  = (BitSequence *) calloc(M, sizeof(BitSequence))) == NULL) ||
-		 ((T  = (BitSequence *) calloc(M, sizeof(BitSequence))) == NULL) ) {
+	if ( ((B_ = (BitSequence *) calloc(M+1, sizeof(BitSequence))) == NULL) ||
+		 ((C  = (BitSequence *) calloc(M+1, sizeof(BitSequence))) == NULL) ||
+		 ((P  = (BitSequence *) calloc(M+1, sizeof(BitSequence))) == NULL) ||
+		 ((T  = (BitSequence *) calloc(M+1, sizeof(BitSequence))) == NULL) ) {
 		printf("Insufficient Memory for Work Space:: Linear Complexity Test\n");
 		if ( B_ != NULL )
 			free(B_);

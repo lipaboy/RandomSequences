@@ -56,7 +56,7 @@
 
 #include <stdlib.h>
 
-typedef bool	BitSequence;
+typedef BYTE	BitSequence;
 
 typedef struct _testParameters {
 	size_t		n;
