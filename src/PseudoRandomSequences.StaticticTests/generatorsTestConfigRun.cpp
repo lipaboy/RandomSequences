@@ -25,7 +25,7 @@ using namespace std::chrono;
 
 //TODO: try to use GoogleTests
 
-typedef std::vector<bool> Sequence;
+//typedef std::vector<char> Sequence;
 
 const int TEST_COUNT = 16;
 
@@ -51,7 +51,7 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
     //-----------------------------Input data-----------------------------//
 
     int sizesStartIndex = 5;
-    size_t len = std::strlen(argv[1]);
+    size_t len = (argc > 1) ? std::strlen(argv[1]) : 0;
     size_t countSizes = (argc >= sizesStartIndex + 1) ? std::atoi(argv[sizesStartIndex]) : 0;
     if (countSizes <= 0 || argc < sizesStartIndex + 1 + countSizes || len < TEST_COUNT) {
 		cout << "Not enough parameters ( testKey ("
@@ -104,7 +104,7 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 
         const int TRAVERSAL_COUNT_LARGE = TRAVERSAL_COUNT_SMALL;
         const size_t TRAVERSAL_THRESHOLD = size_t(1e5);
-		std::vector<bool> epsilon;
+        Sequence epsilon;
 		tp.n = 0;
 		tp.numOfBitStreams = 1;
         for (auto jSize : seqSizes) {
@@ -151,6 +151,13 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
                 return (int(std::round(distribution(generatorMt19937_64))) % inputOppositePossibility == 0);
             });
         }
+        else if ("bad" == genName) {
+            std::generate_n(std::back_inserter(epsilon), tp.n,
+                [&inputOppositePossibility, &generatorMt19937_64, &distribution]() -> bool {
+                static int i = 0;
+                return (i++ < tp.n);
+            });
+        }
         else if ("lcg" == genName)
 			epsilon = lcg();
 		else if ("SHA1" == genName)
@@ -191,7 +198,7 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
             //currResults.reserve(60u);     // better don't do it because you can miss segmentation fault
             int traversalCount = TRAVERSAL_COUNT_LARGE;
 
-#pragma omp parallel for private(currResults) shared(genName, traversalCount, testKey, testResults)
+//#pragma omp parallel for private(currResults) shared(genName, traversalCount, testKey, testResults)
 			for (int jTraver = 0; jTraver < traversalCount; jTraver++) 
 			{
 				// Generator factory
@@ -223,13 +230,16 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
                     runTests(epsilonRange.begin(), epsilonRange.end(), currResults, testKey, genName);
                     #pragma omp critical
                     {
-                        std::transform(currResults.begin(), currResults.end(), //first source
-                            testResults.begin(),                                //second source
-                            testResults.begin(),                                //destination
-                            [](double p_value, double count) -> double {
-                                return (p_value < 0.) ? count - 1000. : (p_value < ALPHA) + count; }
-                        // p_value < ALPHA - it is failure
-                        );
+//                        std::transform(currResults.begin(), currResults.end(), //first source
+//                            testResults.begin(),                                //second source
+//                            testResults.begin(),                                //destination
+//                            [](double p_value, double count) -> double {
+//                                return ((p_value < 0.) ? (count - 1000.) : ((p_value < 0.05) + count)); }
+//                        // p_value < ALPHA - it is failure
+//                        );
+                        for (int i = 0; i < currResults.size(); i++) {
+                            testResults[i] += (currResults[i] < 0.05);
+                        }
                     }
                     currResults.clear();
                 }

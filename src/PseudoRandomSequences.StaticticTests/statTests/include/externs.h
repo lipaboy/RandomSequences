@@ -16,7 +16,8 @@
 //	std::ptrdiff_t
 //> BoolAnyRange;
 
-typedef std::vector<bool>::iterator BoolIterator;
+typedef std::vector<char> Sequence;
+typedef Sequence::iterator BoolIterator;
 
 //extern std::vector<bool>	epsilon;				// BIT STREAM
 extern TP			tp;						// TEST PARAMETER STRUCTURE

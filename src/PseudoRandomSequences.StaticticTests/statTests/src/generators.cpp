@@ -8,6 +8,8 @@
 #include "../include/generators.h"
 #include "../include/genutils.h"
 
+
+
 double
 lcg_rand(int N, double SEED, double* DUNIF, int NDIM)
 {
@@ -41,7 +43,7 @@ lcg_rand(int N, double SEED, double* DUNIF, int NDIM)
 	return SEED;
 }
 
-std::vector<bool>
+Sequence
 lcg()
 {
 	double	*DUNIF, SEED;
@@ -49,7 +51,7 @@ lcg()
 	unsigned bit;
 	int		num_0s, num_1s, v, bitsRead;
 
-	std::vector<bool> epsilon;
+    Sequence epsilon;
 
 	SEED = 23482349.0;
 	epsilon.resize(tp.n);
@@ -85,12 +87,12 @@ lcg()
 }
 
 
-std::vector<bool>
+Sequence
 quadRes1()
 {
 	int		k, num_0s, num_1s, bitsRead, done;
 	BYTE	p[64], g[64], x[128];
-	std::vector<bool> epsilon;
+    Sequence epsilon;
 	epsilon.resize(tp.n);
 
     ahtopb((char*)"987b6a6bf2c56a97291c445409920032499f9ee7ad128301b5d0254aa1a9633fdbd378d40149f1e23a13849f3d45992f5c4c6b7104099bc301f6005f9d8115e1", p, 64);
@@ -118,13 +120,13 @@ quadRes1()
 	return std::move(epsilon);
 }
 
-std::vector<bool>
+Sequence
 quadRes2()
 {
 	BYTE	g[64], x[129], t1[65];
 	BYTE	One[1], Two, Three[1];
 	int		k, num_0s, num_1s, bitsRead, done;
-	std::vector<bool> epsilon;
+    Sequence epsilon;
 	epsilon.resize(tp.n);
 	/*if ( ((epsilon = (BitSequence *)calloc(tp.n, sizeof(BitSequence))) == NULL) ) {
 		printf("Insufficient memory available.\n");
@@ -159,12 +161,12 @@ quadRes2()
 	return std::move(epsilon);
 }
 
-std::vector<bool>
+Sequence
 cubicRes()
 {
 	BYTE	g[64], tmp[128], x[192];
 	int		k, num_0s, num_1s, bitsRead, done;
-	std::vector<bool> epsilon;
+    Sequence epsilon;
 	epsilon.resize(tp.n);
 	/*if ( ((epsilon = (BitSequence *)calloc(tp.n, sizeof(BitSequence))) == NULL) ) {
 		printf("Insufficient memory available.\n");
@@ -194,7 +196,7 @@ cubicRes()
 	return std::move(epsilon);
 }
 
-std::vector<bool>
+Sequence
 exclusiveOR()
 {
 	int		i, num_0s, num_1s, bitsRead;
@@ -204,7 +206,7 @@ exclusiveOR()
 		printf("Insufficient memory available.\n");
 		exit(1);
 	}*/
-	std::vector<bool> epsilon;
+    Sequence epsilon;
 	epsilon.resize(tp.n);
 
 	memcpy(bit_sequence, "0001011011011001000101111001001010011011101101000100000010101111111010100100001010110110000000000100110000101110011111111100111", 127);
@@ -248,12 +250,12 @@ exclusiveOR()
 }
 
 
-std::vector<bool>
+Sequence
 modExp()
 {
 	int		k, num_0s, num_1s, bitsRead, done;
 	BYTE	p[64], g[64], x[192], y[20];
-	std::vector<bool> epsilon;
+    Sequence epsilon;
 	epsilon.resize(tp.n);
 	/*if ( (epsilon = (BitSequence *)calloc(tp.n, sizeof(BitSequence))) == NULL ) {
 		printf("Insufficient memory available.\n");
@@ -282,13 +284,13 @@ modExp()
 	return std::move(epsilon);
 }
 
-std::vector<bool>
+Sequence
 bbs()
 {
 	int		i, v, bitsRead;
 	BYTE	p[64], q[64], n[128], s[64], x[256];
 	int		num_0s, num_1s;
-	std::vector<bool> epsilon;
+    Sequence epsilon;
 	epsilon.resize(tp.n);
 	/*if ( (epsilon = (BitSequence*)calloc(tp.n, sizeof(BitSequence))) == NULL ) {
 		printf("Insufficient memory available.\n");
@@ -333,13 +335,13 @@ bbs()
 
 // The exponent, e, is set to 11
 // This results in k = 837 and r = 187
-std::vector<bool>
+Sequence
 micali_schnorr()
 {
 	long	i, j;
 	int		k=837, num_0s, num_1s, bitsRead, done;
 	BYTE	p[64], q[64], n[128], e[1], X[128], Y[384], Tail[105];
-	std::vector<bool> epsilon;
+    Sequence epsilon;
 	epsilon.resize(tp.n);
 	/*if ( (epsilon = (BitSequence *)calloc(tp.n, sizeof(BitSequence))) == NULL ) {
 		printf("Insufficient memory available.\n");
@@ -378,7 +380,7 @@ micali_schnorr()
 
 //  Uses 160 bit Xkey and no XSeed (b=160)
 //  This is the generic form of the generator found on the last page of the Change Notice for FIPS 186-2
-std::vector<bool>
+Sequence
 SHA1()
 {
 	ULONG	A, B, C, D, E, temp, Wbuff[16];
@@ -387,7 +389,7 @@ SHA1()
 	int		i, num_0s, num_1s, bitsRead;
 	int		done;
 	ULONG	tx[5] = { 0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0 };
-	std::vector<bool> epsilon;
+    Sequence epsilon;
 	epsilon.resize(tp.n);
 	/*if ( ((epsilon = (BitSequence *) calloc(tp.n,sizeof(BitSequence))) == NULL) ) {
 		printf("Insufficient memory available.\n");

@@ -2,16 +2,18 @@
 
 //#include	"../include/sha.h"
 
-std::vector<bool>	lcg();
+
+
+Sequence	lcg();
 double	lcg_rand(int, double, double*, int);
-std::vector<bool>	quadRes1();
-std::vector<bool>	quadRes2();
-std::vector<bool>	cubicRes();
-std::vector<bool>	exclusiveOR();
-std::vector<bool>	modExp();
-std::vector<bool>	bbs();
-std::vector<bool>	micali_schnorr();
-std::vector<bool>	SHA1();
+Sequence	quadRes1();
+Sequence	quadRes2();
+Sequence	cubicRes();
+Sequence	exclusiveOR();
+Sequence	modExp();
+Sequence	bbs();
+Sequence	micali_schnorr();
+Sequence	SHA1();
 
 
 /* The circular shifts. */
