@@ -1,7 +1,7 @@
 #ifndef STAT_TESTS_EXTERNS_H
 #define STAT_TESTS_EXTERNS_H
 
-#include "../include/defs.h"
+#include "defs.h"
 #include <vector>
 #include <boost/range/any_range.hpp>
 
@@ -16,7 +16,7 @@
 //	std::ptrdiff_t
 //> BoolAnyRange;
 
-typedef std::vector<char> Sequence;
+typedef std::vector<BitSequence> Sequence;
 typedef Sequence::iterator BoolIterator;
 
 //extern std::vector<bool>	epsilon;				// BIT STREAM
