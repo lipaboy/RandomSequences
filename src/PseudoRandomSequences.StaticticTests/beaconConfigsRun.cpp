@@ -24,7 +24,7 @@ using namespace std::chrono;
 
 //TODO: try to use GoogleTests
 
-typedef std::vector<char> Sequence;
+//typedef std::vector<char> Sequence;
 
 const int TEST_COUNT = 16;
 

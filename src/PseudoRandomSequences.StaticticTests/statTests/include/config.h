@@ -2,11 +2,9 @@
 #ifndef _CONFIG_H_
 #define	_CONFIG_H_
 
-#if defined(__cplusplus)
-extern "C"{
+#ifdef __cplusplus
+extern "C" {
 #endif
-
-
 
 //#define	WINDOWS32
 //#define	PROTOTYPES
@@ -48,7 +46,7 @@ typedef ULONG WORD64[2];  /* 64-bit word */
 #endif
 
 
-#if defined(__cplusplus)
+#ifdef __cplusplus
 }
 #endif
 

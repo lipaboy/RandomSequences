@@ -33,7 +33,7 @@ Runs(int n, BoolIterator epsilon)
 
 		V = 1;
 		for (k = 1; k < n; k++) {
-			bool prev = *epsilon;
+			auto prev = *epsilon;
 			if (prev != *(++epsilon))
 				V++;
 		}

@@ -235,16 +235,16 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
                     runTests(epsilonRange.begin(), epsilonRange.end(), currResults, testKey, genName);
                     #pragma omp critical
                     {
-//                        std::transform(currResults.begin(), currResults.end(), //first source
-//                            testResults.begin(),                                //second source
-//                            testResults.begin(),                                //destination
-//                            [](double p_value, double count) -> double {
-//                                return ((p_value < 0.) ? (count - 1000.) : ((p_value < 0.05) + count)); }
-//                        // p_value < ALPHA - it is failure
-//                        );
-                        for (int i = 0; i < currResults.size(); i++) {
+                        std::transform(currResults.begin(), currResults.end(), //first source
+                            testResults.begin(),                                //second source
+                            testResults.begin(),                                //destination
+                            [](double p_value, double count) -> double {
+                                return ((p_value < 0.) ? (count - 1000.) : ((p_value < 0.05) + count)); }
+                        // p_value < ALPHA - it is failure
+                        );
+                        /*for (int i = 0; i < currResults.size(); i++) {
                             testResults[i] += (currResults[i] < 0.05);
-                        }
+                        }*/
                     }
                     currResults.clear();
                 }
