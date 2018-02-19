@@ -181,6 +181,11 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
             return -1;
         }
 
+        std::ofstream outSeqFile;
+        outSeqFile.open("RandSeq.seq");
+        std::copy(epsilon.begin(), epsilon.end(), std::ostream_iterator<ByteSequence>(outSeqFile, ""));
+        outSeqFile.close();
+
 		size_t accumulatorSize = 0u;
         for (auto iSize : seqSizes) {
 			size_t inputSize = 1024u * iSize;
