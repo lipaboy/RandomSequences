@@ -1,0 +1,12 @@
+
+Serial test:
+n = 10^6
+m = 2
+(input) data\\data.e
+(output)P-value1 = 0.843764; P-value2 = 0.561915
+
+Discrete Fourier Transform Test:
+11001001000011111101101010100010001000010110100011
+00001000110100110001001100011001100010100010111000
+n = 100
+(output)P-value = 0.168669

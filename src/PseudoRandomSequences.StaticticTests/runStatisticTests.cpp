@@ -132,7 +132,9 @@ void PseudoRandomSequences::runTests(
         testCountExec++;
         auto start = my_get_current_clock_time();
 		// Has a little difference between results of my own discreteFourier Test version
-		testResults.push_back(DiscreteFourierTransform(EPSILON_SIZE, epsilonBegin));
+		testResults.push_back(
+			DiscreteFourierTransform(EPSILON_SIZE, epsilonBegin));
+		cout << "Discrete Fourier test: " << testResults.back() << endl;
         ////cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
     // #The Slowest test
@@ -192,9 +194,11 @@ void PseudoRandomSequences::runTests(
         testCountExec++;
         auto start = my_get_current_clock_time();
         for (auto param : testParameters.serialTest) {
-            auto res = Serial(param, EPSILON_SIZE, epsilonBegin);
+            auto res = 
+				Serial(param, EPSILON_SIZE, epsilonBegin);
             testResults.push_back(res.first);
 			testResults.push_back(res.second);
+			cout << "Serial: " << res.first << " " << res.second << endl;
 		}
 //        cout << "Serial Time: " << getTimeDifferenceInMillis(start, my_get_current_clock_time()) << endl;
 	}
@@ -323,7 +327,8 @@ PseudoRandomSequences::TestParameters::TestParameters(uint64_t EPSILON_SIZE)
                            //  sqrtSize
                            };                   //slow test!!!!
     uint64_t logSize = uint64_t(std::floor(std::log2(EPSILON_SIZE)) - 2);
-    serialTest = { 3, //logSize / 2, logSize
+	//Choose m and n such that m < (log2 n) - 2.
+    serialTest = { 2, 3, //logSize / 2, logSize
                  5, 11};
     uint64_t logSize2 = uint64_t(std::floor(std::log2(EPSILON_SIZE)) - 5);
     approximateEntropyTest = { 1, //logSize2 / 2, logSize2

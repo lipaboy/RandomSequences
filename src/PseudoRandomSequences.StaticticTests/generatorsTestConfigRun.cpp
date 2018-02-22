@@ -101,6 +101,7 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 
 		//--------------------Container---------------------//
 
+		uint32_t atom = 1u;//1000u;
 
         const int TRAVERSAL_COUNT_LARGE = TRAVERSAL_COUNT_SMALL;
         const size_t TRAVERSAL_THRESHOLD = size_t(1e5);
@@ -108,7 +109,7 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 		tp.n = 0;
 		tp.numOfBitStreams = 1;
         for (auto jSize : seqSizes) {
-			tp.n += jSize * 1024u * ((jSize < TRAVERSAL_THRESHOLD) ? TRAVERSAL_COUNT_LARGE
+			tp.n += jSize * atom * ((jSize < TRAVERSAL_THRESHOLD) ? TRAVERSAL_COUNT_LARGE
 				: TRAVERSAL_COUNT_SMALL);
 		}
 
@@ -181,9 +182,21 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
             return -1;
         }
 
+		std::ifstream inData;
+		inData.open("data\\data.fourierExample");
+		for (auto elem : epsilon) {
+			if (inData.eof())
+				break;
+			char ch;
+			inData >> ch;
+			elem = (ch == '1') ? 1 : 0;
+		}
+		inData.close();
+
 		size_t accumulatorSize = 0u;
         for (auto iSize : seqSizes) {
-			size_t inputSize = 1024u * iSize;
+			size_t inputSize = //1024u 
+				atom * iSize;
 			
 			cout << ">-----------------------New Size-----------------------<" << endl;
 			cout << endl << genName << endl;
@@ -197,8 +210,9 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 
             //currResults.reserve(60u);     // better don't do it because you can miss segmentation fault
             int traversalCount = TRAVERSAL_COUNT_LARGE;
+			cout << seqSizes.size() << " " << traversalCount << " " << generatorNames.size() << endl;
 
-//#pragma omp parallel for private(currResults) shared(genName, traversalCount, testKey, testResults)
+#pragma omp parallel for private(currResults) shared(genName, traversalCount, testKey, testResults)
 			for (int jTraver = 0; jTraver < traversalCount; jTraver++) 
 			{
 				// Generator factory
