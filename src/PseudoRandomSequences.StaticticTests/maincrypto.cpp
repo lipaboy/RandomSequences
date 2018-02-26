@@ -17,6 +17,10 @@ int main(int argc, char *argv[]) {
     //return generatorsTestConfigRun(argc, argv);
     ListOfVectors<int> list(5, 5);
     list[10] = 2;
+    list[0] = 1;
     cout << list[10];
+
+    typename ListOfVectors<int>::iterator iter = list.begin();
+    cout << *iter;
 }
 
