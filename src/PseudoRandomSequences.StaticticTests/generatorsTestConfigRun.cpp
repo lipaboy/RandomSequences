@@ -79,7 +79,9 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
     // Kbits
 
 	std::minstd_rand generatorMinstdRand;
+    std::minstd_rand0 generatorMinstdRand0;
 	std::knuth_b generatorKnuthB;
+    std::ranlux24 generatorRanlux24;
 	std::ranlux48 generatorRanlux48;	//failure with normal_distribution and with chi_squared_distribution
 	std::random_device generatorRandomDevice;
     std::default_random_engine generatorDefaultRandomEngine;
@@ -122,10 +124,22 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
                 return (int(std::round(distribution(generatorMinstdRand))) % inputOppositePossibility == 0);
             });
         }
+        else if ("minstd_rand0" == genName) {
+            std::generate_n(std::back_inserter(epsilon), tp.n,
+                [&inputOppositePossibility, &generatorMinstdRand0, &distribution]() -> bool {
+                return (int(std::round(distribution(generatorMinstdRand0))) % inputOppositePossibility == 0);
+            });
+        }
         else if ("knuth_b" == genName) {
             std::generate_n(std::back_inserter(epsilon), tp.n,
                 [&inputOppositePossibility, &generatorKnuthB, &distribution]() -> bool {
                 return (int(std::round(distribution(generatorKnuthB))) % inputOppositePossibility == 0);
+            });
+        }
+        else if ("ranlux24" == genName) {
+            std::generate_n(std::back_inserter(epsilon), tp.n,
+                [&inputOppositePossibility, &generatorRanlux24, &distribution]() -> bool {
+                return (int(std::round(distribution(generatorRanlux24))) % inputOppositePossibility == 0);
             });
         }
         else if ("ranlux48" == genName) {
@@ -161,8 +175,8 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
         }
         else if ("lcg" == genName)
 			epsilon = lcg();
-		else if ("SHA1" == genName)
-			epsilon = SHA1();
+//		else if ("SHA1" == genName) //wrong given results
+//			epsilon = SHA1();
         else if ("modExp" == genName)       //slow
 			epsilon = modExp();
         else if ("bbs" == genName)          //slow
@@ -182,16 +196,23 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
             return -1;
         }
 
-		std::ifstream inData;
-		inData.open("data\\data.fourierExample");
-		for (auto elem : epsilon) {
-			if (inData.eof())
-				break;
-			char ch;
-			inData >> ch;
-			elem = (ch == '1') ? 1 : 0;
-		}
-		inData.close();
+//        std::ifstream inData;
+//        //linux
+//        inData.open("data/data.fourierExample", std::ios::in);
+//        //windows
+//        //inData.open("data\\data.fourierExample", std::ios::in);
+//        inData.seekg(0);
+//        for (auto elem : epsilon) {
+//            if (inData.eof())
+//                break;
+//            char ch;
+//            inData >> ch;
+//            elem = (ch == '1') ? true : false;
+//                    //false;
+//           // cout << elem;
+//        }
+//        cout << endl;
+//        inData.close();
 
 		size_t accumulatorSize = 0u;
         for (auto iSize : seqSizes) {
@@ -251,9 +272,10 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
                                 return ((p_value < 0.) ? (count - 1000.) : ((p_value < 0.05) + count)); }
                         // p_value < ALPHA - it is failure
                         );
-                        /*for (int i = 0; i < currResults.size(); i++) {
-                            testResults[i] += (currResults[i] < 0.05);
-                        }*/
+                        for (auto pValue : currResults) {
+                            cout << pValue << " ";
+                        }
+                        cout << endl;
                     }
                     currResults.clear();
                 }

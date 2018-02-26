@@ -134,7 +134,7 @@ void PseudoRandomSequences::runTests(
 		// Has a little difference between results of my own discreteFourier Test version
 		testResults.push_back(
 			DiscreteFourierTransform(EPSILON_SIZE, epsilonBegin));
-		cout << "Discrete Fourier test: " << testResults.back() << endl;
+        //cout << "Discrete Fourier test: " << testResults.back() << endl;
         ////cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
     // #The Slowest test
@@ -185,7 +185,9 @@ void PseudoRandomSequences::runTests(
             testResults.push_back(
                 LinearComplexity(param, EPSILON_SIZE, epsilonBegin)
             );
+            //cout << testResults.back() << " ";
         }
+        //cout << endl;
 //        cout << "LinearComplexity Time: " << getTimeDifferenceInMillis(start, my_get_current_clock_time()) << endl;
     }
     // #Slow (time grows very much)
@@ -198,7 +200,7 @@ void PseudoRandomSequences::runTests(
 				Serial(param, EPSILON_SIZE, epsilonBegin);
             testResults.push_back(res.first);
 			testResults.push_back(res.second);
-			cout << "Serial: " << res.first << " " << res.second << endl;
+            //cout << "Serial: " << res.first << " " << res.second << endl;
 		}
 //        cout << "Serial Time: " << getTimeDifferenceInMillis(start, my_get_current_clock_time()) << endl;
 	}
@@ -324,6 +326,7 @@ PseudoRandomSequences::TestParameters::TestParameters(uint64_t EPSILON_SIZE)
     auto sqrtSize = uint64_t(std::floor(std::pow(EPSILON_SIZE, 0.5)));
     auto sqrtSqrtSize = uint64_t(std::floor(std::pow(EPSILON_SIZE, 0.25)));
     linearComplexityTest = { 8, 10, //sqrtSqrtSize
+                             24, //1000 //is checked on linux
                            //  sqrtSize
                            };                   //slow test!!!!
     uint64_t logSize = uint64_t(std::floor(std::log2(EPSILON_SIZE)) - 2);
@@ -331,7 +334,7 @@ PseudoRandomSequences::TestParameters::TestParameters(uint64_t EPSILON_SIZE)
     serialTest = { 2, 3, //logSize / 2, logSize
                  5, 11};
     uint64_t logSize2 = uint64_t(std::floor(std::log2(EPSILON_SIZE)) - 5);
-    approximateEntropyTest = { 1, //logSize2 / 2, logSize2
+    approximateEntropyTest = { 1,2, //logSize2 / 2, logSize2
                              4, 8};
 }
 

@@ -11,6 +11,7 @@
 #include "../include/stat_fncs.h"
 
 #include <vector>
+#include <iostream>
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
          D I S C R E T E  F O U R I E R  T R A N S F O R M  T E S T 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -35,8 +36,12 @@ DiscreteFourierTransform(int n, BoolIterator epsilon)
             printf("DiscreteFourierTrans : failure by malloc/n");
 			return -1.;
 	}
-	for ( i=0; i<n; i++ )
-		X[i] = 2 * (int)*(epsilon++) - 1;
+    for ( i=0; i<n; i++ ) {
+        auto kek = *(epsilon);
+        X[i] = 2 * (*(epsilon++)) - 1;
+        //std::cout << (int)kek;
+    }
+    printf("\n");
 		//X[i] = 2 * getRand(i) - 1;
 		//X[i] = 2 * (int)seq[i] - 1;
 	
@@ -58,15 +63,15 @@ DiscreteFourierTransform(int n, BoolIterator epsilon)
 	d = (N_l - N_o)/sqrt(n/4.0*0.95*0.05);
 	p_value = erfc(fabs(d)/sqrt(2.0));
 
-    printf("\t/t/t/tFFT TEST/n");
-    printf("\t/t-------------------------------------------\n");
-    printf("\t/tCOMPUTATIONAL INFORMATION:\n");
-    printf("\t/t-------------------------------------------\n");
-    printf("\t/t(a) Percentile = %f/n", percentile);
-    printf("\t/t(b) N_l        = %f/n", N_l);
-    printf("\t/t(c) N_o        = %f/n", N_o);
-    printf("\t/t(d) d          = %f/n", d);
-    printf("\t/t-------------------------------------------\n");
+//    printf("\t/t/t/tFFT TEST/n");
+//    printf("\t/t-------------------------------------------\n");
+//    printf("\t/tCOMPUTATIONAL INFORMATION:\n");
+//    printf("\t/t-------------------------------------------\n");
+//    printf("\t/t(a) Percentile = %f/n", percentile);
+//    printf("\t/t(b) N_l        = %f/n", N_l);
+//    printf("\t/t(c) N_o        = %f/n", N_o);
+//    printf("\t/t(d) d          = %f/n", d);
+//    printf("\t/t-------------------------------------------\n");
 /*
     fprintf(stats[TEST_FFT], "%s/t/tp_value = %f/n/n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);
     fprintf(results[TEST_FFT], "%f/n", p_value);*/

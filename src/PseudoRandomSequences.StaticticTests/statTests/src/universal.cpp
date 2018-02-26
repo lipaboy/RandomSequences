@@ -66,6 +66,7 @@ Universal(int n, BoolIterator epsilon)
 		for (j = 0; j < L; j++) {
 			auto iter = epsilon;
 			std::advance(iter, (i - 1)*L + j);
+//            std::cout << *(iter);
 			decRep += (*iter) * (long)pow(2, L - 1 - j);
 		}
 		T[decRep] = i;
@@ -86,16 +87,16 @@ Universal(int n, BoolIterator epsilon)
 	//fprintf(stats[TEST_UNIVERSAL], "\t\t--------------------------------------------\n");
 	//fprintf(stats[TEST_UNIVERSAL], "\t\tCOMPUTATIONAL INFORMATION:\n");
 	//fprintf(stats[TEST_UNIVERSAL], "\t\t--------------------------------------------\n");
-	//fprintf(stats[TEST_UNIVERSAL], "\t\t(a) L         = %d\n", L);
-	//fprintf(stats[TEST_UNIVERSAL], "\t\t(b) Q         = %d\n", Q);
-	//fprintf(stats[TEST_UNIVERSAL], "\t\t(c) K         = %d\n", K);
-	//fprintf(stats[TEST_UNIVERSAL], "\t\t(d) sum       = %f\n", sum);
-	//fprintf(stats[TEST_UNIVERSAL], "\t\t(e) sigma     = %f\n", sigma);
-	//fprintf(stats[TEST_UNIVERSAL], "\t\t(f) variance  = %f\n", variance[L]);
-	//fprintf(stats[TEST_UNIVERSAL], "\t\t(g) exp_value = %f\n", expected_value[L]);
-	//fprintf(stats[TEST_UNIVERSAL], "\t\t(h) phi       = %f\n", phi);
-	//fprintf(stats[TEST_UNIVERSAL], "\t\t(i) WARNING:  %d bits were discarded.\n", n-(Q+K)*L);
-	//fprintf(stats[TEST_UNIVERSAL], "\t\t-----------------------------------------\n");
+//    printf("\t\t(a) L         = %d\n", L);
+//    printf("\t\t(b) Q         = %d\n", Q);
+//    printf("\t\t(c) K         = %d\n", K);
+//    printf("\t\t(d) sum       = %f\n", sum);
+//    printf("\t\t(e) sigma     = %f\n", sigma);
+//    printf("\t\t(f) variance  = %f\n", variance[L]);
+//    printf("\t\t(g) exp_value = %f\n", expected_value[L]);
+//    printf("\t\t(h) phi       = %f\n", phi);
+//    printf("\t\t(i) WARNING:  %d bits were discarded.\n", n-(Q+K)*L);
+//    printf("\t\t-----------------------------------------\n");
 
 	arg = fabs(phi-expected_value[L])/(sqrt2 * sigma);
 	p_value = erfc(arg);
