@@ -11,6 +11,8 @@ set(APP_SOURCES
 	runStatisticTests.cpp
 	beaconConfigsRun.cpp
 
+        ListOfVectors.h
+
 	lipaboyLibrary/src/maths/fixed_precision_number.h
 	lipaboyLibrary/src/maths/precision_number.h
 	pseudoRandomSequences.h
@@ -50,7 +52,8 @@ set(APP_SOURCES
 	statTests/src/runs.cpp
 	statTests/src/serial.cpp
 	statTests/src/universal.cpp
-	statTests/src/utilities.cpp)
+        statTests/src/utilities.cpp
+)
 
     find_package(OpenMP)
     if (OPENMP_FOUND)
