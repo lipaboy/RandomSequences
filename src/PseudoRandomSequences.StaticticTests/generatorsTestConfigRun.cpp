@@ -92,18 +92,20 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 		std::string & genName = generatorNames[iGen];
 		
 		std::ofstream resFile;
-//        std::ofstream extraFile;
         string outFilename = "resStdGenerators_" + genName;
         for (auto iSize : seqSizes)
             outFilename += "_" + std::to_string(iSize);
         resFile.open(outFilename + ".dat", std::ios::out | std::ios::trunc);
+        // Extra data (p_values)
+//        std::ofstream extraFile;
 //        extraFile.open("extraStdGenerators_" + genName + "_" + std::to_string(firstSize)
 //                       + "-" + std::to_string(lastSize) + ".dat",
 //            std::ios::out | std::ios::trunc);
 
 		//--------------------Container---------------------//
 
-		uint32_t atom = 1u;//1000u;
+        uint32_t atom = //1u;
+                1024u;
 
         const int TRAVERSAL_COUNT_LARGE = TRAVERSAL_COUNT_SMALL;
         const size_t TRAVERSAL_THRESHOLD = size_t(1e5);
@@ -115,6 +117,7 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 				: TRAVERSAL_COUNT_SMALL);
 		}
 
+        auto genTimeExpend = my_get_current_clock_time();
 		// TODO: Too much memory allocations
         std::normal_distribution<double> distribution(4.5, 2.0);		//doesn't failure with random_device generator
         //std::chi_squared_distribution<double> distribution(3.0);		//failure with random_device (number of freedoms = 3.0)
@@ -168,15 +171,15 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
         }
         else if ("bad" == genName) {
             std::generate_n(std::back_inserter(epsilon), tp.n,
-                [&inputOppositePossibility, &generatorMt19937_64, &distribution]() -> bool {
+                [&inputOppositePossibility, &distribution]() -> bool {
                 static int i = 0;
                 return (i++ < tp.n);
             });
         }
         else if ("lcg" == genName)
 			epsilon = lcg();
-//		else if ("SHA1" == genName) //wrong given results
-//			epsilon = SHA1();
+        else if ("SHA1" == genName) //wrong given results
+            epsilon = SHA1();
         else if ("modExp" == genName)       //slow
 			epsilon = modExp();
         else if ("bbs" == genName)          //slow
@@ -195,27 +198,14 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
             cout << "Error: no such generator" << endl;
             return -1;
         }
-
-//        std::ifstream inData;
-//        //linux
-//        inData.open("data/data.fourierExample", std::ios::in);
-//        //windows
-//        //inData.open("data\\data.fourierExample", std::ios::in);
-//        inData.seekg(0);
-//        for (auto elem : epsilon) {
-//            if (inData.eof())
-//                break;
-//            char ch;
-//            inData >> ch;
-//            elem = (ch == '1') ? true : false;
-//                    //false;
-//           // cout << elem;
-//        }
-//        cout << endl;
-//        inData.close();
+        {
+        cout << "Generator time expend: "
+             << getTimeDifferenceInMillis(genTimeExpend, my_get_current_clock_time()) / 1000
+             << " secs." << endl;
+        }
 
 		size_t accumulatorSize = 0u;
-        for (auto iSize : seqSizes) {
+        for (auto & iSize : seqSizes) {
 			size_t inputSize = //1024u 
 				atom * iSize;
 			
@@ -231,7 +221,7 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 
             //currResults.reserve(60u);     // better don't do it because you can miss segmentation fault
             int traversalCount = TRAVERSAL_COUNT_LARGE;
-			cout << seqSizes.size() << " " << traversalCount << " " << generatorNames.size() << endl;
+            //cout << seqSizes.size() << " " << traversalCount << " " << generatorNames.size() << endl;
 
 #pragma omp parallel for private(currResults) shared(genName, traversalCount, testKey, testResults)
 			for (int jTraver = 0; jTraver < traversalCount; jTraver++) 
@@ -272,26 +262,26 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
                                 return ((p_value < 0.) ? (count - 1000.) : ((p_value < 0.05) + count)); }
                         // p_value < ALPHA - it is failure
                         );
-                        for (auto pValue : currResults) {
-                            cout << pValue << " ";
-                        }
-                        cout << endl;
                     }
                     currResults.clear();
                 }
 			}
 
 			//----------------Write results-----------------//
-			{
-                if (iSize == seqSizes[0]) {
+            {
+                if (&iSize == &seqSizes.front()) {
                     resFile << "\t";
                     std::copy(testNames.begin(), testNames.end(), std::ostream_iterator<string>(resFile, "\t"));
-					resFile << endl;
+                    resFile << endl;
+                    std::copy(testNames.begin(), testNames.end(), std::ostream_iterator<string>(cout, "\t"));
+                    cout << endl;
                 }
                 resFile << iSize << "_Kbits\t";
                 std::copy(testResults.begin(), testResults.end(), std::ostream_iterator<double>(resFile, "\t"));
-				resFile << endl;
-			}
+                resFile << endl;
+                std::copy(testResults.begin(), testResults.end(), std::ostream_iterator<double>(cout, "\t"));
+                cout << endl;
+            }
 			//----------------Extra infos-----------------//
 //            {
 //                //if (iSize <= firstSize) {
@@ -307,7 +297,7 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 //            extraFile.flush();
 			testNames.clear();
 		}
-		resFile.close();
+        resFile.close();
 //        extraFile.close();
 	}
 
@@ -318,3 +308,42 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 
 	return 0;
 }
+
+//        std::ifstream inData;
+//        //linux
+//        inData.open("data/data.fourierExample", std::ios::in);
+//        //windows
+//        //inData.open("data\\data.fourierExample", std::ios::in);
+//        inData.seekg(0);
+//        for (auto elem : epsilon) {
+//            if (inData.eof())
+//                break;
+//            char ch;
+//            inData >> ch;
+//            elem = (ch == '1') ? true : false;
+//                    //false;
+//           // cout << elem;
+//        }
+//        cout << endl;
+//        inData.close();
+
+//                    std::ofstream outFile;
+//                    string inputFile = "genSequences/kek/" + genName + "_" + std::to_string(iSize)
+//                                 + "_" + std::to_string(jTraver);
+//                    outFile.exceptions ( std::ofstream::failbit | std::ofstream::badbit );
+//                    outFile.open(inputFile, std::ios::trunc);
+//                    auto outIter = std::ostream_iterator<char>(outFile);
+//                    int bitPos = 0;
+//                    char buffer = 0;
+//                    for (auto iter = epsilonRange.begin(); iter != epsilonRange.end(); iter++) {
+//                        buffer |= (*iter) << (bitPos++);
+//                        if (bitPos >= 8) {
+//                            bitPos = 0;
+//                            *(outIter++) = buffer;
+//                            buffer = 0;
+//                        }
+//                    }
+//                    if (bitPos > 0)
+//                        *(outIter) = buffer;
+//                    outFile.close();
+

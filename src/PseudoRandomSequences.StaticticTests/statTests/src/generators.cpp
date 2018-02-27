@@ -275,7 +275,7 @@ modExp()
 			ModExp(x, g, 64, y, 20, p, 64);	      /* NOTE:  g must be less than p */
 			done = convertToBits(x, 512, static_cast<int>(tp.n), &num_0s, &num_1s, &bitsRead, epsilon);
 			memcpy(y, x+44, 20);
-			} while ( !done );
+        } while ( !done );
 		//fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
 		//nist_test_suite();
 	}

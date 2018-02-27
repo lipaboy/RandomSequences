@@ -170,6 +170,8 @@ void bshr(BYTE *x, int l)
 **  NOTE:  A MUST be LB+LC in length     *
 **                                       *
 ******************************************/
+
+// ------------ Need to be parallelized ----------------- //
 int Mult(BYTE *A, BYTE *B, int LB, BYTE *C, int LC)
 {
 	int		i, j, k, LA;
