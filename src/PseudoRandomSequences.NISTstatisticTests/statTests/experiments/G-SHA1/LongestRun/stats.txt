@@ -2,12 +2,12 @@
 		---------------------------------------------
 		COMPUTATIONAL INFORMATION:
 		---------------------------------------------
-		(a) N (# of substrings)  = 125
-		(b) M (Substring Length) = 8
-		(c) Chi^2                = 62.360713
+		(a) N (# of substrings)  = 104
+		(b) M (Substring Length) = 10000
+		(c) Chi^2                = 991.468876
 		---------------------------------------------
 		      F R E Q U E N C Y
 		---------------------------------------------
-		  <=1     2     3    >=4   P-value  Assignment
-		  61  20  18   26 FAILURE		p_value = 0.000000
+		<=10  11  12  13  14  15 >=16 P-value  Assignment
+		   0   0   0   0   1  13   90 FAILURE		p_value = 0.000000
 

@@ -11,7 +11,7 @@ Sequence	quadRes2();
 Sequence	cubicRes();
 Sequence	exclusiveOR();
 Sequence	modExp();
-Sequence	bbs();
+Sequence    bbs();
 Sequence	micali_schnorr();
 Sequence	SHA1();
 

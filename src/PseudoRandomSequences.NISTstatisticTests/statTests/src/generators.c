@@ -450,6 +450,15 @@ SHA1()
 			add(Xkey, 20, One, 1);
 		} while ( !done );
 		fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
+FILE * fOutput;
+fOutput = fopen("sha1.seq", "wb");
+int j;
+for (j = 0; j < tp.n; j++) {
+	fprintf(fOutput, "%d", epsilon[j]);
+	//fprintf(fOutput, "kek");
+	fflush(fOutput);
+}
+fclose(fOutput);
 		nist_test_suite();
 	}
 	free(epsilon);

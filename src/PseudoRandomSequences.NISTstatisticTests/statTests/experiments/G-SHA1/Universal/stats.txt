@@ -1,5 +1,16 @@
 		UNIVERSAL STATISTICAL TEST
-		---------------------------------------------
-		ERROR:  L IS OUT OF RANGE.
-		-OR- :  Q IS LESS THAN 320.000000.
-		-OR- :  Unable to allocate T.
+		--------------------------------------------
+		COMPUTATIONAL INFORMATION:
+		--------------------------------------------
+		(a) L         = 7
+		(b) Q         = 1280
+		(c) K         = 148516
+		(d) sum       = 688240.814334
+		(e) sigma     = 0.002703
+		(f) variance  = 3.125000
+		(g) exp_value = 6.196251
+		(h) phi       = 4.634119
+		(i) WARNING:  4 bits were discarded.
+		-----------------------------------------
+FAILURE		p_value = 0.000000
+

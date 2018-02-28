@@ -179,10 +179,11 @@ int Mult(BYTE *A, BYTE *B, int LB, BYTE *C, int LC)
 
 	LA = LB + LC;
 
+//#pragma omp parallel for private(result, i, j, k) shared(A, B, C, LA, LB, LC)
 	for ( i=LB-1; i>=0; i-- ) {
 		result = 0;
 		for ( j=LC-1; j>=0; j-- ) {
-			k = i+j+1;
+            k = i+j+1;          // it is degree exponent (position in A)
 			result = (DIGIT)A[k] + ((DIGIT)(B[i] * C[j])) + (result >> 8);
 			A[k] = (BYTE)result;
 			}

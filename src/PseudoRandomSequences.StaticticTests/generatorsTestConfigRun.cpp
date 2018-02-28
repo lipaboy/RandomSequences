@@ -16,6 +16,8 @@
 #include <cmath>
 #include <chrono>
 
+#include <openssl/sha.h>
+
 #include "statTests/include/stat_fncs.h"
 #include "lipaboyLibrary/src/maths/fixed_precision_number.h"
 #include "statTests/include/generators.h"
@@ -111,66 +113,68 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
         const size_t TRAVERSAL_THRESHOLD = size_t(1e5);
         Sequence epsilon;
 		tp.n = 0;
-		tp.numOfBitStreams = 1;
-        for (auto jSize : seqSizes) {
-			tp.n += jSize * atom * ((jSize < TRAVERSAL_THRESHOLD) ? TRAVERSAL_COUNT_LARGE
-				: TRAVERSAL_COUNT_SMALL);
-		}
+        tp.numOfBitStreams = TRAVERSAL_COUNT_LARGE;
+        tp.n = seqSizes[0] * atom;
+//        for (auto jSize : seqSizes) {
+//			tp.n += jSize * atom * ((jSize < TRAVERSAL_THRESHOLD) ? TRAVERSAL_COUNT_LARGE
+//				: TRAVERSAL_COUNT_SMALL);
+//		}
 
+        const size_t seqSize = tp.n * tp.numOfBitStreams;
         auto genTimeExpend = my_get_current_clock_time();
 		// TODO: Too much memory allocations
         std::normal_distribution<double> distribution(4.5, 2.0);		//doesn't failure with random_device generator
         //std::chi_squared_distribution<double> distribution(3.0);		//failure with random_device (number of freedoms = 3.0)
         if ("minstd_rand" == genName) {
-            std::generate_n(std::back_inserter(epsilon), tp.n,
+            std::generate_n(std::back_inserter(epsilon), seqSize,
                 [&inputOppositePossibility, &generatorMinstdRand, &distribution]() -> bool {
                 return (int(std::round(distribution(generatorMinstdRand))) % inputOppositePossibility == 0);
             });
         }
         else if ("minstd_rand0" == genName) {
-            std::generate_n(std::back_inserter(epsilon), tp.n,
+            std::generate_n(std::back_inserter(epsilon), seqSize,
                 [&inputOppositePossibility, &generatorMinstdRand0, &distribution]() -> bool {
                 return (int(std::round(distribution(generatorMinstdRand0))) % inputOppositePossibility == 0);
             });
         }
         else if ("knuth_b" == genName) {
-            std::generate_n(std::back_inserter(epsilon), tp.n,
+            std::generate_n(std::back_inserter(epsilon), seqSize,
                 [&inputOppositePossibility, &generatorKnuthB, &distribution]() -> bool {
                 return (int(std::round(distribution(generatorKnuthB))) % inputOppositePossibility == 0);
             });
         }
         else if ("ranlux24" == genName) {
-            std::generate_n(std::back_inserter(epsilon), tp.n,
+            std::generate_n(std::back_inserter(epsilon), seqSize,
                 [&inputOppositePossibility, &generatorRanlux24, &distribution]() -> bool {
                 return (int(std::round(distribution(generatorRanlux24))) % inputOppositePossibility == 0);
             });
         }
         else if ("ranlux48" == genName) {
-            std::generate_n(std::back_inserter(epsilon), tp.n,
+            std::generate_n(std::back_inserter(epsilon), seqSize,
                 [&inputOppositePossibility, &generatorRanlux48, &distribution]() -> bool {
                 return (int(std::round(distribution(generatorRanlux48))) % inputOppositePossibility == 0);
             });
         }
         else if ("random_device" == genName) {
-            std::generate_n(std::back_inserter(epsilon), tp.n,
+            std::generate_n(std::back_inserter(epsilon), seqSize,
                 [&inputOppositePossibility, &generatorRandomDevice, &distribution]() -> bool {
                 return (int(std::round(distribution(generatorRandomDevice))) % inputOppositePossibility == 0);
             });
         }
         else if ("rand" == genName) {
-            std::generate_n(std::back_inserter(epsilon), tp.n,
+            std::generate_n(std::back_inserter(epsilon), seqSize,
                 [&inputOppositePossibility, &generatorDefaultRandomEngine, &distribution]() -> bool {
                 return ((std::rand() % 2) == 0);
             });
         }
-        else if ("mt19937_64" == genName) {
-            std::generate_n(std::back_inserter(epsilon), tp.n,
+        else if ("mersenne" == genName) {
+            std::generate_n(std::back_inserter(epsilon), seqSize,
                 [&inputOppositePossibility, &generatorMt19937_64, &distribution]() -> bool {
                 return (int(std::round(distribution(generatorMt19937_64))) % inputOppositePossibility == 0);
             });
         }
         else if ("bad" == genName) {
-            std::generate_n(std::back_inserter(epsilon), tp.n,
+            std::generate_n(std::back_inserter(epsilon), seqSize,
                 [&inputOppositePossibility, &distribution]() -> bool {
                 static int i = 0;
                 return (i++ < tp.n);
@@ -178,12 +182,13 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
         }
         else if ("lcg" == genName)
 			epsilon = lcg();
-        else if ("SHA1" == genName) //wrong given results
+        else if ("SHA1" == genName) { //wrong given results
             epsilon = SHA1();
+        }
         else if ("modExp" == genName)       //slow
 			epsilon = modExp();
         else if ("bbs" == genName)          //slow
-			epsilon = bbs();
+            epsilon = bbs();
 		else if ("exclusiveOR" == genName)
 			epsilon = exclusiveOR();
         else if ("micali_schnorr" == genName)
@@ -242,12 +247,12 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 					}
 				}
 
-//				{
-//					auto iterEnd = epsilonRange.begin();
-//					std::advance(iterEnd, 10);
-//					std::copy(epsilonRange.begin(), iterEnd,
-//						std::ostream_iterator<bool>(cout, ""));
-//					std::cout << std::endl;
+//                {
+//                    auto iterEnd = epsilonRange.begin();
+//                    std::advance(iterEnd, 10);
+//                    std::copy(epsilonRange.begin(), iterEnd,
+//                        std::ostream_iterator<bool>(cout, ""));
+//                    std::cout << std::endl;
 //                }
 
 				//----------------Tests-----------------//

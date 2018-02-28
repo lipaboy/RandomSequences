@@ -2,7 +2,7 @@
 		-------------------------------------------
 		COMPUTATIONAL INFORMATION:
 		-------------------------------------------
-		(a) The maximum partial sum = 270
+		(a) The maximum partial sum = 317472
 		-------------------------------------------
 FAILURE		p_value = 0.000000
 
@@ -10,7 +10,7 @@ FAILURE		p_value = 0.000000
 		-------------------------------------------
 		COMPUTATIONAL INFORMATION:
 		-------------------------------------------
-		(a) The maximum partial sum = 284
+		(a) The maximum partial sum = 317457
 		-------------------------------------------
 FAILURE		p_value = 0.000000
 

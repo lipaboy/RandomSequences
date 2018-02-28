@@ -8,7 +8,7 @@
 #include "../include/generators.h"
 #include "../include/genutils.h"
 
-
+#include "../../pseudoRandomSequences.h"
 
 double
 lcg_rand(int N, double SEED, double* DUNIF, int NDIM)
@@ -256,7 +256,7 @@ modExp()
 	int		k, num_0s, num_1s, bitsRead, done;
 	BYTE	p[64], g[64], x[192], y[20];
     Sequence epsilon;
-	epsilon.resize(tp.n);
+    epsilon.resize(tp.n * tp.numOfBitStreams);
 	/*if ( (epsilon = (BitSequence *)calloc(tp.n, sizeof(BitSequence))) == NULL ) {
 		printf("Insufficient memory available.\n");
 		exit(1);
@@ -268,12 +268,12 @@ modExp()
 	for ( k=0; k<tp.numOfBitStreams; k++ ) {
 		num_0s = 0;
 		num_1s = 0;
-		bitsRead = 0;
+        bitsRead = k * tp.n;
 		done = 0;
 		do {
 			memset(x, 0x00, 128);
 			ModExp(x, g, 64, y, 20, p, 64);	      /* NOTE:  g must be less than p */
-			done = convertToBits(x, 512, static_cast<int>(tp.n), &num_0s, &num_1s, &bitsRead, epsilon);
+            done = convertToBits(x, 512, static_cast<int>(tp.n) + k * tp.n, &num_0s, &num_1s, &bitsRead, epsilon);
 			memcpy(y, x+44, 20);
         } while ( !done );
 		//fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
@@ -287,11 +287,14 @@ modExp()
 Sequence
 bbs()
 {
+    using namespace PseudoRandomSequences;
+
 	int		i, v, bitsRead;
 	BYTE	p[64], q[64], n[128], s[64], x[256];
 	int		num_0s, num_1s;
     Sequence epsilon;
-	epsilon.resize(tp.n);
+
+    epsilon.resize(tp.n * tp.numOfBitStreams);
 	/*if ( (epsilon = (BitSequence*)calloc(tp.n, sizeof(BitSequence))) == NULL ) {
 		printf("Insufficient memory available.\n");
 		exit(1);
@@ -304,27 +307,36 @@ bbs()
     ahtopb((char*)"10d6333cfac8e30e808d2192f7c0439480da79db9bbca1667d73be9a677ed31311f3b830937763837cb7b1b1dc75f14eea417f84d9625628750de99e7ef1e976", s, 64);
 	memset(x, 0x00, 256);
 	ModSqr(x, s, 64, n, 128);
- 
+
+    volatile int count1 = 0;
+    volatile int count2 = 0;
+    auto kekTime2 = my_get_current_clock_time();
 	for ( v=0; v<tp.numOfBitStreams; v++ ) {
 		num_0s = 0;
 		num_1s = 0;
 		bitsRead = 0;
+
 		for ( i=0; i<tp.n; i++ ) {
+          //  auto kekTime = my_get_current_clock_time();
 			ModSqr(x, x, 128, n, 128);
+           // count1 += getTimeDifferenceInMillis(kekTime, my_get_current_clock_time());
+           // kekTime = my_get_current_clock_time();
 			memcpy(x, x+128, 128);
 			if ( (x[127] & 0x01) == 0 ) {
 				num_0s++;
-				epsilon[i] = 0;
+                epsilon[i + v * tp.n] = 0;
 			}
 			else {
 				num_1s++;
-				epsilon[i] = 1;
+                epsilon[i + v * tp.n] = 1;
 			}
 			bitsRead++;
+          //  count2 += getTimeDifferenceInMillis(kekTime, my_get_current_clock_time());
 			//if ( (i % 50000) == 0 )
 				//printf("\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s);
 		}
-
+ //   std::cout << "bbs " << getTimeDifferenceInMillis(kekTime2, my_get_current_clock_time()) << "ms. ";
+//std::cout << "BBS time: " << count1 << " " << count2 << "ms." << std::endl;
 		//fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
 		//nist_test_suite();
 	}
@@ -386,11 +398,11 @@ SHA1()
 	ULONG	A, B, C, D, E, temp, Wbuff[16];
 	BYTE	Xkey[20], G[20], M[64];
 	BYTE	One[1] = { 0x01 };
-	int		i, num_0s, num_1s, bitsRead;
+    int		i, num_0s, num_1s, bitsRead;
 	int		done;
 	ULONG	tx[5] = { 0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0 };
     Sequence epsilon;
-	epsilon.resize(tp.n);
+    epsilon.resize(tp.n * tp.numOfBitStreams);
 	/*if ( ((epsilon = (BitSequence *) calloc(tp.n,sizeof(BitSequence))) == NULL) ) {
 		printf("Insufficient memory available.\n");
 		exit(1);
@@ -405,7 +417,7 @@ SHA1()
 	for ( i=0; i<tp.numOfBitStreams; i++ ) {
 		num_0s = 0;
 		num_1s = 0;
-		bitsRead = 0;
+        bitsRead = i * tp.n;
 		do {
 			memcpy(M, Xkey, 20);
 			memset(M+20, 0x00, 44);
@@ -458,7 +470,8 @@ SHA1()
 #endif
 			// End: SHA Steps A-E
 
-			done = convertToBits(G, 160, static_cast<int>(tp.n), &num_0s, &num_1s, &bitsRead, epsilon);
+            done = convertToBits(G, 160, static_cast<int>(tp.n) + i * tp.n, &num_0s, &num_1s,
+                                 &bitsRead, epsilon);
 			add(Xkey, 20, G, 20);
 			add(Xkey, 20, One, 1);
 		} while ( !done );
