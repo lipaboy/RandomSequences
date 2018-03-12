@@ -51,10 +51,12 @@ void PseudoRandomSequences::runTests(
         string inputFile = "bookStackInput" + std::to_string(omp_get_thread_num())
                 + uniqueSequenceName + std::to_string(EPSILON_SIZE) + ".dat";
         {
+            typedef u_char BlockReadType;   //when was char instead of u_char nothing to change
+
             std::ofstream outFile;
             outFile.exceptions ( std::ofstream::failbit | std::ofstream::badbit );
             outFile.open(inputFile, std::ios::trunc);
-            auto outIter = std::ostream_iterator<char>(outFile);
+            auto outIter = std::ostream_iterator<BlockReadType>(outFile);
             int bitPos = 0;
             char buffer = 0;
             for (auto iter = epsilonBegin; iter != epsilonEnd; iter++) {
@@ -334,7 +336,7 @@ PseudoRandomSequences::TestParameters::TestParameters(uint64_t EPSILON_SIZE)
     serialTest = { 2, 3, //logSize / 2, logSize
                  5, 11};
     uint64_t logSize2 = uint64_t(std::floor(std::log2(EPSILON_SIZE)) - 5);
-    approximateEntropyTest = { 1,2, //logSize2 / 2, logSize2
+    approximateEntropyTest = { 1, 2, //logSize2 / 2, logSize2
                              4, 8};
 }
 

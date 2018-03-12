@@ -41,7 +41,6 @@ DiscreteFourierTransform(int n, BoolIterator epsilon)
         X[i] = 2 * (*(epsilon++)) - 1;
         //std::cout << (int)kek;
     }
-    printf("\n");
 		//X[i] = 2 * getRand(i) - 1;
 		//X[i] = 2 * (int)seq[i] - 1;
 	

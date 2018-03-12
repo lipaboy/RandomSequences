@@ -16,18 +16,24 @@
 #include <cmath>
 #include <chrono>
 
+#include <memory>
+
 #include <openssl/sha.h>
 
 #include "statTests/include/stat_fncs.h"
 #include "lipaboyLibrary/src/maths/fixed_precision_number.h"
 #include "statTests/include/generators.h"
 
-using namespace PseudoRandomSequences;
+namespace PseudoRandomSequences {
+
 using namespace std::chrono;
 
-//TODO: try to use GoogleTests
+using std::string;
+using std::vector;
+using std::cout;
+using std::endl;
 
-//typedef std::vector<char> Sequence;
+//TODO: try to use GoogleTests
 
 const int TEST_COUNT = 16;
 
@@ -42,13 +48,63 @@ namespace {
 	};
 }
 
-int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
+static Sequence readSequenceByBitFromFile(string const & inputFile, size_t sequenceSize) {
+    // TODO: write catching exceptions
+
+    using std::ifstream;
+    typedef u_char BlockReadType;
+
+    ifstream inFile;
+    Sequence epsilon(sequenceSize);
+
+    inFile.open(inputFile, std::ios::in);
+
+    BlockReadType buffer;
+    for (size_t i = 0; i < epsilon.size() / 8; i++) {
+        char symbol;
+        inFile >> symbol;
+        buffer = static_cast<BlockReadType>(symbol);
+        for (int bit = 0; bit < 8 * sizeof(BlockReadType); bit++) {
+            epsilon[i * 8 + bit] = static_cast<BitSequence>((buffer & (1 << bit)) >> bit);
+        }
+    }
+    std::copy_n(epsilon.begin(), 16, std::ostream_iterator<BitSequence>(cout));
+    cout << endl;
+
+    inFile.close();
+
+    return std::move(epsilon);
+}
+
+static Sequence readSequenceByByteFromFile(string const & inputFile, size_t sequenceSize, char isZero = '0') {
+    // TODO: write catching exceptions
+
+    using std::ifstream;
+
+    ifstream inFile;
+    Sequence epsilon(sequenceSize);
+
+    inFile.open(inputFile, std::ios::in);
+
+    for (int i = 0; i < epsilon.size(); i++) {
+        char symbol;
+        inFile >> symbol;
+        epsilon[i] = (symbol == isZero)
+                //((symbol & 1) != 0)
+                    ? 0 : 1;
+    }
+    cout << endl;
+    std::copy_n(epsilon.begin(), 16, std::ostream_iterator<BitSequence>(cout));
+    cout << endl;
+
+    inFile.close();
+
+    return std::move(epsilon);
+}
+
+int generatorsTestConfigRun(int argc, char * argv[]) {
 	time_t t;
     std::srand((unsigned int)(std::time(&t)));
-	using std::string;
-	using std::vector;
-	using std::cout;
-	using std::endl;
 
     //-----------------------------Input data-----------------------------//
 
@@ -67,7 +123,7 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
     int inputOppositePossibility = static_cast<int>(
         std::round(1.0 / boost::lexical_cast<double>(argv[2]))
     );
-    std::vector<string> generatorNames { argv[4] };
+   // std::vector<string> generatorNames { argv[4] };
     const int TRAVERSAL_COUNT_SMALL = std::atoi(argv[3]);
     string testKey(argv[1]);
     vector<size_t> seqSizes;
@@ -90,19 +146,8 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
     std::mt19937_64 generatorMt19937_64;
 
     auto wholeTimeExpend = my_get_current_clock_time();
-	for (int iGen = 0; iGen < generatorNames.size(); iGen++) {
-		std::string & genName = generatorNames[iGen];
-		
-		std::ofstream resFile;
-        string outFilename = "resStdGenerators_" + genName;
-        for (auto iSize : seqSizes)
-            outFilename += "_" + std::to_string(iSize);
-        resFile.open(outFilename + ".dat", std::ios::out | std::ios::trunc);
-        // Extra data (p_values)
-//        std::ofstream extraFile;
-//        extraFile.open("extraStdGenerators_" + genName + "_" + std::to_string(firstSize)
-//                       + "-" + std::to_string(lastSize) + ".dat",
-//            std::ios::out | std::ios::trunc);
+//	for (int iGen = 0; iGen < generatorNames.size(); iGen++) {
+        std::string genName = argv[4];
 
 		//--------------------Container---------------------//
 
@@ -112,20 +157,48 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
         const int TRAVERSAL_COUNT_LARGE = TRAVERSAL_COUNT_SMALL;
         const size_t TRAVERSAL_THRESHOLD = size_t(1e5);
         Sequence epsilon;
+        // TODO: Remove this crutch
 		tp.n = 0;
         tp.numOfBitStreams = TRAVERSAL_COUNT_LARGE;
         tp.n = seqSizes[0] * atom;
+        const size_t seqSize = tp.n * tp.numOfBitStreams;
 //        for (auto jSize : seqSizes) {
 //			tp.n += jSize * atom * ((jSize < TRAVERSAL_THRESHOLD) ? TRAVERSAL_COUNT_LARGE
 //				: TRAVERSAL_COUNT_SMALL);
 //		}
 
-        const size_t seqSize = tp.n * tp.numOfBitStreams;
         auto genTimeExpend = my_get_current_clock_time();
 		// TODO: Too much memory allocations
         std::normal_distribution<double> distribution(4.5, 2.0);		//doesn't failure with random_device generator
         //std::chi_squared_distribution<double> distribution(3.0);		//failure with random_device (number of freedoms = 3.0)
-        if ("minstd_rand" == genName) {
+
+        char genNameStr[80];
+        strcpy(genNameStr, genName.c_str());
+        char * inputFilename = strtok(genNameStr, "=");
+        genName = inputFilename;
+
+        // ------------------------- Output Results ----------------------------- //
+        std::ofstream resFile;
+        string outFilename = "resStdGenerators_" + genName;
+        for (auto iSize : seqSizes)
+            outFilename += "_" + std::to_string(iSize);
+        resFile.open(outFilename + ".dat", std::ios::out | std::ios::trunc);
+        cout << outFilename << endl;
+        // Extra data (p_values)
+//        std::ofstream extraFile;
+//        extraFile.open("extraStdGenerators_" + genName + "_" + std::to_string(firstSize)
+//                       + "-" + std::to_string(lastSize) + ".dat",
+//            std::ios::out | std::ios::trunc);
+
+        if ("file" == genName) {
+            char * isBitRead = strtok(NULL, "=");
+            inputFilename = strtok(NULL, "=");
+            if (strcmp(isBitRead, "2") == 0)
+                epsilon = readSequenceByBitFromFile(inputFilename, seqSize);
+            else
+                epsilon = readSequenceByByteFromFile(inputFilename, seqSize);
+        }
+        else if ("minstd_rand" == genName) {
             std::generate_n(std::back_inserter(epsilon), seqSize,
                 [&inputOppositePossibility, &generatorMinstdRand, &distribution]() -> bool {
                 return (int(std::round(distribution(generatorMinstdRand))) % inputOppositePossibility == 0);
@@ -249,7 +322,7 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 
 //                {
 //                    auto iterEnd = epsilonRange.begin();
-//                    std::advance(iterEnd, 10);
+//                    std::advance(iterEnd, 20);
 //                    std::copy(epsilonRange.begin(), iterEnd,
 //                        std::ostream_iterator<bool>(cout, ""));
 //                    std::cout << std::endl;
@@ -304,7 +377,7 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 		}
         resFile.close();
 //        extraFile.close();
-	}
+//	}
 
     cout << endl << "Whole time expend: "
          << getTimeDifferenceInMillis(wholeTimeExpend, my_get_current_clock_time()) / 1000
@@ -314,13 +387,15 @@ int PseudoRandomSequences::generatorsTestConfigRun(int argc, char * argv[]) {
 	return 0;
 }
 
+}
+
 //        std::ifstream inData;
 //        //linux
 //        inData.open("data/data.fourierExample", std::ios::in);
 //        //windows
 //        //inData.open("data\\data.fourierExample", std::ios::in);
 //        inData.seekg(0);
-//        for (auto elem : epsilon) {
+//        for (auto & elem : epsilon) {
 //            if (inData.eof())
 //                break;
 //            char ch;
