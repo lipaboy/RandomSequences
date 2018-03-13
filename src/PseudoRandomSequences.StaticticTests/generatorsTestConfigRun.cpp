@@ -37,6 +37,8 @@ using std::endl;
 
 const int TEST_COUNT = 16;
 
+const double MEANING_LEVEL = 0.5;
+
 namespace {
 	class MyBoolRange {
 	private:
@@ -76,7 +78,8 @@ static Sequence readSequenceByBitFromFile(string const & inputFile, size_t seque
     return std::move(epsilon);
 }
 
-static Sequence readSequenceByByteFromFile(string const & inputFile, size_t sequenceSize, char isZero = '0') {
+static Sequence readSequenceByByteFromFile(string const & inputFile, size_t sequenceSize,
+                                           char isZero = '0', bool isSpecialFormat = false) {
     // TODO: write catching exceptions
 
     using std::ifstream;
@@ -89,13 +92,14 @@ static Sequence readSequenceByByteFromFile(string const & inputFile, size_t sequ
     for (int i = 0; i < epsilon.size(); i++) {
         char symbol;
         inFile >> symbol;
-        epsilon[i] = (symbol == isZero)
-                //((symbol & 1) != 0)
-                    ? 0 : 1;
+        epsilon[i] = (!isSpecialFormat && symbol == isZero)       //for others
+                    ||
+                     (isSpecialFormat && (symbol & 1) != 0)             //for PI number file
+                        ? 0 : 1;
     }
-    cout << endl;
-    std::copy_n(epsilon.begin(), 16, std::ostream_iterator<BitSequence>(cout));
-    cout << endl;
+//    cout << endl;
+//    std::copy_n(epsilon.begin(), 16, std::ostream_iterator<BitSequence>(cout));
+//    cout << endl;
 
     inFile.close();
 
@@ -303,7 +307,11 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
 
 #pragma omp parallel for private(currResults) shared(genName, traversalCount, testKey, testResults)
 			for (int jTraver = 0; jTraver < traversalCount; jTraver++) 
-			{
+            {
+                {
+                    if (jTraver % 10 == 0)
+                        cout << "(INFO) Traversal: " << jTraver << endl;
+                }
 				// Generator factory
                 MyBoolRange epsilonRange(epsilon.begin(), epsilon.end());
                 {
@@ -337,7 +345,7 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
                             testResults.begin(),                                //second source
                             testResults.begin(),                                //destination
                             [](double p_value, double count) -> double {
-                                return ((p_value < 0.) ? (count - 1000.) : ((p_value < 0.05) + count)); }
+                                return ((p_value < 0.) ? (count - 1000.) : ((p_value < MEANING_LEVEL) + count)); }
                         // p_value < ALPHA - it is failure
                         );
                     }
