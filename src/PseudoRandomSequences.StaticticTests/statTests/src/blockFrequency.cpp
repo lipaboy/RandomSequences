@@ -33,13 +33,14 @@ BlockFrequency(int M, int n, BoolIterator epsilon)
 	fprintf(stats[TEST_BLOCK_FREQUENCY], "\t\t---------------------------------------------\n");
 	fprintf(stats[TEST_BLOCK_FREQUENCY], "\t\tCOMPUTATIONAL INFORMATION:\n");
 	fprintf(stats[TEST_BLOCK_FREQUENCY], "\t\t---------------------------------------------\n");
-	fprintf(stats[TEST_BLOCK_FREQUENCY], "\t\t(a) Chi^2           = %f\n", chi_squared);
+    fprintf(stats[TEST_BLOCK_FREQUENCY], "\t\t(a) Chi^2           = %f\n", chi_squared);
 	fprintf(stats[TEST_BLOCK_FREQUENCY], "\t\t(b) # of substrings = %d\n", N);
 	fprintf(stats[TEST_BLOCK_FREQUENCY], "\t\t(c) block length    = %d\n", M);
 	fprintf(stats[TEST_BLOCK_FREQUENCY], "\t\t(d) Note: %d bits were discarded.\n", n % M);
 	fprintf(stats[TEST_BLOCK_FREQUENCY], "\t\t---------------------------------------------\n");*/
 
 	//printf("Block frequency:\t\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);// fflush(stats[TEST_BLOCK_FREQUENCY]);
+//    printf( "%f, chi = %f\n", p_value, chi_squared);
 	return (p_value);
-	//printf( "%f\n", p_value); fflush(results[TEST_BLOCK_FREQUENCY]);
+     //fflush(results[TEST_BLOCK_FREQUENCY]);
 }

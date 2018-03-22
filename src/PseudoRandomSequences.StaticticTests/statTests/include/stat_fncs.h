@@ -10,8 +10,6 @@
 #include <vector>
 
 
-//#define _CRT_SECURE_NO_WARNINGS
-
 // TODO: move all the tests into namespace
 
 void  __ogg_fdrffti(int n, double *wsave, int *ifac);

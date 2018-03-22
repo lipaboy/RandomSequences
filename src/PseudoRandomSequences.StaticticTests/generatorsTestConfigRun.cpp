@@ -79,7 +79,7 @@ static Sequence readSequenceByBitFromFile(string const & inputFile, size_t seque
 }
 
 static Sequence readSequenceByByteFromFile(string const & inputFile, size_t sequenceSize,
-                                           char isZero = '0', bool isSpecialFormat = false) {
+                                           char isZero = '0', bool isSpecialFormat = true) {
     // TODO: write catching exceptions
 
     using std::ifstream;
@@ -97,9 +97,9 @@ static Sequence readSequenceByByteFromFile(string const & inputFile, size_t sequ
                      (isSpecialFormat && (symbol & 1) != 0)             //for PI number file
                         ? 0 : 1;
     }
-//    cout << endl;
-//    std::copy_n(epsilon.begin(), 16, std::ostream_iterator<BitSequence>(cout));
-//    cout << endl;
+    cout << endl;
+    std::copy_n(epsilon.begin(), 100, std::ostream_iterator<BitSequence>(cout));
+    cout << endl;
 
     inFile.close();
 
@@ -280,6 +280,7 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
             cout << "Error: no such generator" << endl;
             return -1;
         }
+
         {
         cout << "Generator time expend: "
              << getTimeDifferenceInMillis(genTimeExpend, my_get_current_clock_time()) / 1000

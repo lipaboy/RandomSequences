@@ -14,6 +14,7 @@
 #endif
 
 #include "statTests/include/stat_fncs.h"
+#include "bookStackTest/order_test.h"
 
 namespace PseudoRandomSequences {
 

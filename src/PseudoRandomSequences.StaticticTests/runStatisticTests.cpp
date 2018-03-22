@@ -180,18 +180,18 @@ void PseudoRandomSequences::runTests(
 	}
     // #The Slowest test
     // #Parameterized
-    if (testKey[10] == '1') {		// think: neccessary try all the variant of blockSize (read documentation of test)
-        testCountExec++;
-        auto start = my_get_current_clock_time();
-        for (auto param : testParameters.linearComplexityTest) {
-            testResults.push_back(
-                LinearComplexity(param, EPSILON_SIZE, epsilonBegin)
-            );
-            //cout << testResults.back() << " ";
-        }
-        //cout << endl;
-//        cout << "LinearComplexity Time: " << getTimeDifferenceInMillis(start, my_get_current_clock_time()) << endl;
-    }
+//    if (testKey[10] == '1') {
+//        testCountExec++;
+//        auto start = my_get_current_clock_time();
+//        for (auto param : testParameters.linearComplexityTest) {
+//            testResults.push_back(
+//                LinearComplexity(param, EPSILON_SIZE, epsilonBegin)
+//            );
+//            //cout << testResults.back() << " ";
+//        }
+//        //cout << endl;
+////        cout << "LinearComplexity Time: " << getTimeDifferenceInMillis(start, my_get_current_clock_time()) << endl;
+//    }
     // #Slow (time grows very much)
 	// #Parameterized
 	if (testKey[11] == '1') {// think: neccessary try all the variant of blockSize (read documentation of test)
@@ -284,9 +284,9 @@ vector<string> PseudoRandomSequences::getStatisticTestNames(string testKey, size
             testNames.push_back("OverlappingTemplateMatchings_" + std::to_string(param));
     if (testKey[9] == '1')
         testNames.push_back("Universal");
-    if (testKey[10] == '1')
-        for (auto param : testParameters.linearComplexityTest)
-            testNames.push_back("LinearComplexity_" + std::to_string(param));
+//    if (testKey[10] == '1')
+//        for (auto param : testParameters.linearComplexityTest)
+//            testNames.push_back("LinearComplexity_" + std::to_string(param));
     if (testKey[11] == '1')
         for (auto param : testParameters.serialTest) {
             testNames.push_back("Serial_" + std::to_string(param) + "_1");
@@ -309,7 +309,8 @@ vector<string> PseudoRandomSequences::getStatisticTestNames(string testKey, size
 
 PseudoRandomSequences::TestParameters::TestParameters(uint64_t EPSILON_SIZE)
     : blockFrequencyTest({ 2, //EPSILON_SIZE / 4, EPSILON_SIZE / 2
-                         16, 32, 128
+                         //16, 32, 128
+                         10
                          }),
       nonOverlappingTemplateMatchingsTest({ 3, 5, 7, //14
                                           }),                    //slow test!!!!

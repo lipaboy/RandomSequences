@@ -16,6 +16,8 @@ set(APP_SOURCES
 	pseudoRandomSequences.h
 
 #book stack test
+        bookStackTest/order_test.h
+#book stack test
 	bookStackTest/bs.cpp
 #stat headers
 	statTests/include/assess.h
