@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
 //    return beaconRun(argc, argv);
 //    return generatorsTestConfigRun(argc, argv);
 
-    OrderTest<> orderTest;
+    OrderTest orderTest;
     orderTest.initialize(6);
 }
 

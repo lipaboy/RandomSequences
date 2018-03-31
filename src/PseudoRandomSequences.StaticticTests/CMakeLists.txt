@@ -15,7 +15,7 @@ set(APP_SOURCES
 	lipaboyLibrary/src/maths/precision_number.h
 	pseudoRandomSequences.h
 
-#book stack test
+#order test
         bookStackTest/order_test.h
 #book stack test
 	bookStackTest/bs.cpp

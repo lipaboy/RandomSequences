@@ -14,18 +14,18 @@ using std::vector;
 using std::unordered_map;
 using std::pair;
 
-template <class WordStorageType = unsigned int>       //word is binary
 class OrderTest {
 public:
-    typedef size_t size_type;       //! Be careful to use unsigned int
-    typedef size_type FrequencyType;
+    using WordStorageType = unsigned int;
+    using size_type = size_t;       //! Be careful to use unsigned int
+    using FrequencyType = size_type;
     struct NodeType { WordStorageType word; FrequencyType freq; };
-    typedef vector<NodeType> OrderContainerType;
-    typedef vector<size_type> WordMapType;  // word -> Node index
-    typedef unordered_map<size_type, size_type> BorderContainerType; // Set(i) -> "border pointer"
-    typedef BorderContainerType::iterator BorderIterator;
+    using OrderContainerType = vector<NodeType>;
+    using WordMapType = vector<size_type>;  // word -> Node index
+    using BorderContainerType = unordered_map<size_type, size_type>; // Set(i) -> "border pointer"
+    using BorderIterator = BorderContainerType::iterator;
 
-    typedef WordStorageType & WordRef;
+    using NodeRef = NodeType &;
 
 public:
     OrderTest() : dimension_(0), orderContainer_(1, {0, 0}),
@@ -60,26 +60,26 @@ public:
             word |= (1 << (bitpos++)) * bit;
             if (bitpos >= dimension()) {
                 auto index = wordMap_[word];
-                WordRef node = orderContainer_[index];
+                NodeRef node = orderContainer_[index];
                 auto oldFreq = node.freq;
                 node.freq++;
                 auto newFreq = node.freq;
 
                 // TODO: optimize with insert
-                BorderIterator newFreqBorderIter = border_.find(newFreq);
+                BorderIterator newFreqBorderIter = borders_.find(newFreq);
                 if (newFreqBorderIter == borders_.end())
-                    newFreqBorderIter = borders_.insert(newFreq, 0).first;  // make the new set empty
+                    newFreqBorderIter = borders_.emplace(newFreq, 0).first;  // make the new set empty
 
-                WordRef upperSetNode = orderContainer_[ *newFreqBorderIter ];
+                NodeRef upperSetNode = orderContainer_[ newFreqBorderIter->second ];
                 std::swap(node, upperSetNode);
 
                 // update border of set
-                ++(*newFreqBorderIter);
+                ++(newFreqBorderIter->second);
 
                 // remove border of empty set
-                BorderIterator oldFreqBorderIter = border.find(oldFreq);
+                BorderIterator oldFreqBorderIter = borders_.find(oldFreq);
                 if ((*newFreqBorderIter) == (*oldFreqBorderIter))
-                    border_.extract(oldFreqBorderIter);
+                    borders_.erase(oldFreqBorderIter);
 
                 bitpos = 0;
                 word = 0;
