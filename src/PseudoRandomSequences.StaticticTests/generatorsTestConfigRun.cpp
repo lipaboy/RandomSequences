@@ -20,7 +20,6 @@
 
 #include <openssl/sha.h>
 
-#include "statTests/include/stat_fncs.h"
 #include "lipaboyLibrary/src/maths/fixed_precision_number.h"
 #include "statTests/include/generators.h"
 

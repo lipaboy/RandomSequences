@@ -13,10 +13,16 @@
 #include <time.h>
 #endif
 
-#include "statTests/include/stat_fncs.h"
-#include "bookStackTest/order_test.h"
+#include "i_statistical_test.h"
 
 namespace statistical_tests_space {
+
+using std::vector;
+using std::pair;
+using std::string;
+typedef size_t Word;
+const uint32_t MAX_DIMENSION = sizeof(Word) * 8;
+using AlphabetType = std::bitset<MAX_DIMENSION>;
 
 #ifdef __linux__
     using std::chrono::time_point;
@@ -25,45 +31,24 @@ namespace statistical_tests_space {
     typedef int TimeType;
 #endif
 
-    // return in milliseconds
-    TimeType my_get_current_clock_time();
+// return in milliseconds
+TimeType my_get_current_clock_time();
 
-    int getTimeDifferenceInMillis(TimeType const & from, TimeType const & to);
+int getTimeDifferenceInMillis(TimeType const & from, TimeType const & to);
 
-    using std::vector;
-    using std::pair;
-    using std::string;
 
-    class TestParameters {
-    public:
-        TestParameters(uint64_t EPSILON_SIZE);
 
-        struct BookStackPair { uint64_t upperPart; uint64_t dimension; };
-        vector<BookStackPair> bookStackTest;
+vector<string> getStatisticTestNames(string testKey, size_t sequenceSize);
 
-        vector<uint64_t> blockFrequencyTest;
-        vector<uint64_t> nonOverlappingTemplateMatchingsTest;
-        vector<uint64_t> overlappingTemplateMatchingsTest;		// TODO: CHECK
-        vector<uint64_t> linearComplexityTest;	// must be > 3
-        vector<uint64_t> serialTest;
-        vector<uint64_t> approximateEntropyTest;
-    };
+void runTests(BoolIterator epsilonBegin,
+    BoolIterator epsilonEnd,
+    std::vector<double> & testResults,
+    std::string const & testKey,
+    const std::string &uniqueSequenceName);
 
-    vector<string> getStatisticTestNames(string testKey, size_t sequenceSize);
+int beaconRun(int argc, char * argv[]);
 
-	typedef size_t Word;
-	const uint32_t MAX_DIMENSION = sizeof(Word) * 8;
-	using AlphabetType = std::bitset<MAX_DIMENSION>;
-
-    void runTests(BoolIterator epsilonBegin,
-        BoolIterator epsilonEnd,
-        std::vector<double> & testResults,
-        std::string const & testKey,
-        const std::string &uniqueSequenceName);
-
-	int beaconRun(int argc, char * argv[]);
-
-	int generatorsTestConfigRun(int argc, char * argv[]);
+int generatorsTestConfigRun(int argc, char * argv[]);
 
 }
 

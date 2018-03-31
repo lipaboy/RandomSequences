@@ -11,10 +11,14 @@ set(APP_SOURCES
 	runStatisticTests.cpp
 	beaconConfigsRun.cpp
 
+#lipaboyLib
 	lipaboyLibrary/src/maths/fixed_precision_number.h
 	lipaboyLibrary/src/maths/precision_number.h
 	pseudoRandomSequences.h
 
+#IStatTest
+        i_statistical_test.h
+        i_statistical_test.cpp
 #order test
         bookStackTest/order_test.h
 #book stack test

@@ -312,17 +312,13 @@ bbs()
 
     volatile int count1 = 0;
     volatile int count2 = 0;
-    auto kekTime2 = my_get_current_clock_time();
 	for ( v=0; v<tp.numOfBitStreams; v++ ) {
 		num_0s = 0;
 		num_1s = 0;
 		bitsRead = 0;
 
-		for ( i=0; i<tp.n; i++ ) {
-          //  auto kekTime = my_get_current_clock_time();
-			ModSqr(x, x, 128, n, 128);
-           // count1 += getTimeDifferenceInMillis(kekTime, my_get_current_clock_time());
-           // kekTime = my_get_current_clock_time();
+        for ( i=0; i<tp.n; i++ ) {
+            ModSqr(x, x, 128, n, 128);
 			memcpy(x, x+128, 128);
 			if ( (x[127] & 0x01) == 0 ) {
 				num_0s++;
@@ -332,17 +328,13 @@ bbs()
 				num_1s++;
                 epsilon[i + v * tp.n] = 1;
 			}
-			bitsRead++;
-          //  count2 += getTimeDifferenceInMillis(kekTime, my_get_current_clock_time());
+            bitsRead++;
 			//if ( (i % 50000) == 0 )
 				//printf("\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s);
-		}
- //   std::cout << "bbs " << getTimeDifferenceInMillis(kekTime2, my_get_current_clock_time()) << "ms. ";
-//std::cout << "BBS time: " << count1 << " " << count2 << "ms." << std::endl;
+        }
 		//fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s); fflush(freqfp);
 		//nist_test_suite();
-	}
-	//free(epsilon);
+    }
 	return std::move(epsilon);
 }
 
