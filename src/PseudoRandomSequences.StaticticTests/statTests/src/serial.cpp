@@ -6,6 +6,8 @@
 #include "../include/cephes.h"  
 #include "../include/stat_fncs.h"
 
+namespace statistical_tests_space {
+
 double psi2(int m, int n, BoolIterator epsilon);
 
 std::pair<double, double>
@@ -87,4 +89,6 @@ psi2(int m, int n, BoolIterator epsilon)
 	free(P);
 	
 	return sum;
+}
+
 }

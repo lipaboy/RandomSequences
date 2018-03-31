@@ -7,12 +7,14 @@
 #include "../include/cephes.h"
 #include "../include/stat_fncs.h"
 
+using namespace statistical_tests_space;
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                          U N I V E R S A L  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 double
-Universal(int n, BoolIterator epsilon)
+statistical_tests_space::Universal(int n, BoolIterator epsilon)
 {
 	int		i, j, p, L, Q, K;
 	double	arg, sqrt2, sigma, phi, sum, p_value, c;

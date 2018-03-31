@@ -7,14 +7,14 @@
 #include "../include/cephes.h"  
 #include "../include/stat_fncs.h"
 
-//#define _CRT_SECURE_NO_WARNINGS
+using namespace statistical_tests_space;
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
           N O N O V E R L A P P I N G  T E M P L A T E  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 std::vector<double>
-NonOverlappingTemplateMatchings(int m, int n, BoolIterator epsilon)
+statistical_tests_space::NonOverlappingTemplateMatchings(int m, int n, BoolIterator epsilon)
 {
 	int		numOfTemplates[100] = {0, 0, 2, 4, 6, 12, 20, 40, 74, 148, 284, 568, 1116,
 						2232, 4424, 8848, 17622, 35244, 70340, 140680, 281076, 562152};
@@ -94,7 +94,7 @@ NonOverlappingTemplateMatchings(int m, int n, BoolIterator epsilon)
 			sum = 0;
 
 			for ( k=0; k<m; k++ ) {
-                fscanf(fp, "%d", &bit);		//! forbide for removing
+                fscanf(fp, "%u", &bit);		//! forbide for removing
 				sequence[k] = bit;
 			}
 			for ( k=0; k<=K; k++ )

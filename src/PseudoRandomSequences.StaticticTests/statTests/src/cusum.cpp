@@ -10,8 +10,10 @@
 		    C U M U L A T I V E  S U M S  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+using namespace statistical_tests_space;
+
 std::pair<double, double>
-CumulativeSums(int n, BoolIterator epsilon)
+statistical_tests_space::CumulativeSums(int n, BoolIterator epsilon)
 {
 	int		S, sup, inf, z, zrev, k;
 	double	sum1, sum2, p_value;

@@ -6,15 +6,14 @@
 #include "../include/assess.h"
 #include "../include/stat_fncs.h"
 
+using namespace statistical_tests_space;
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                           F R E Q U E N C Y  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-
-
 double
-Frequency(int n, BoolIterator epsilon)
+statistical_tests_space::Frequency(int n, BoolIterator epsilon)
 {
 	int		i;
 	double	f, s_obs, p_value, sum, sqrt2 = 1.41421356237309504880;

@@ -9,8 +9,7 @@
 #include "externs.h"
 #include <vector>
 
-
-// TODO: move all the tests into namespace
+namespace statistical_tests_space {
 
 void  __ogg_fdrffti(int n, double *wsave, int *ifac);
 void  __ogg_fdrfftf(int n, double *X, double *wsave, int *ifac);
@@ -32,5 +31,7 @@ std::vector<double>	RandomExcursions(int n, BoolIterator epsilon);
 std::vector<double>	RandomExcursionsVariant(int n, BoolIterator epsilon);
 double	LinearComplexity(int M, int n, BoolIterator epsilon);
 std::pair<double, double>	Serial(int m, int n, BoolIterator epsilon);
+
+}
 
 #endif //STAT_FNCS_H

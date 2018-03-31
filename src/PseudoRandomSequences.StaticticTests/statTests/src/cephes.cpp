@@ -2,6 +2,8 @@
 #include <math.h>
 #include "../include/cephes.h"
 
+namespace statistical_tests_space {
+
 static const double	rel_error = 1E-12;
 
 double MACHEP = 1.11022302462515654042E-16;		// 2**-53
@@ -327,4 +329,6 @@ cephes_normal(double x)
 	}
 
 	return( result);
+}
+
 }

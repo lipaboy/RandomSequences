@@ -57,6 +57,9 @@ length. */
 #include "../include/stat_fncs.h"
 
 #include <math.h>
+
+namespace statistical_tests_space {
+
 #define STIN static
 
 static void drfti1(int n, double *wa, int *ifac)
@@ -1462,3 +1465,5 @@ void __ogg_fdcosqb(int n, double *x, double *wsave, int *ifac)
 	dcsqb1(n, x, wsave, wsave+n, ifac);
 }
 #endif
+
+}

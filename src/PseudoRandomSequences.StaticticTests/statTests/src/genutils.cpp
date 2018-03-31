@@ -9,6 +9,8 @@
 
 #include	"../include/genutils.h"
 
+namespace statistical_tests_space {
+
 #define	MAXPLEN		384
 
 
@@ -667,4 +669,6 @@ ahtopb (char *ascii_hex, BYTE *p_binary, int bin_len)
         nibble -= '0';
 		p_binary[i] += nibble;
 	}
+}
+
 }

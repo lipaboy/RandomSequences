@@ -7,6 +7,8 @@
 #include "../include/cephes.h"  
 #include "../include/stat_fncs.h"
 
+namespace statistical_tests_space {
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                O V E R L A P P I N G  T E M P L A T E  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -113,4 +115,6 @@ Pr(int u, double eta)
 		p = sum;
 	}
 	return p;
+}
+
 }

@@ -8,6 +8,9 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include "config.h"
+#include <stdlib.h>
+
+namespace statistical_tests_space {
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                               M A C R O S
@@ -52,11 +55,8 @@
                    G L O B A L   D A T A  S T R U C T U R E S
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-//----------typedef unsigned char BitSequence;
-
-#include <stdlib.h>
-
-typedef bool	BitSequence;
+//typedef unsigned char BitSequence;
+typedef bool BitSequence;
 
 typedef struct _testParameters {
 	size_t		n;
@@ -68,5 +68,7 @@ typedef struct _testParameters {
 	int		approximateEntropyBlockLength;
 	int		numOfBitStreams;
 } TP;
+
+}
 
 #endif //STAT_TESTS_DEFS_H

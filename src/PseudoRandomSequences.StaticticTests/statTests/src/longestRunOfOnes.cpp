@@ -10,6 +10,8 @@
                       L O N G E S T  R U N S  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+namespace statistical_tests_space {
+
 double
 LongestRunOfOnes(int n, BoolIterator epsilon)
 {
@@ -116,4 +118,6 @@ LongestRunOfOnes(int n, BoolIterator epsilon)
 	//printf("Longest Runs of ones:\t\t%s\t\tp_value = %f\n\n", pval < ALPHA ? "FAILURE" : "SUCCESS", pval); //fflush(stats[TEST_LONGEST_RUN]);
 	return double(pval);
 	//fprintf(results[TEST_LONGEST_RUN], "%f\n", pval); fflush(results[TEST_LONGEST_RUN]);
+}
+
 }

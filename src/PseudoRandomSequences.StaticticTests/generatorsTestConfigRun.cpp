@@ -24,7 +24,7 @@
 #include "lipaboyLibrary/src/maths/fixed_precision_number.h"
 #include "statTests/include/generators.h"
 
-namespace PseudoRandomSequences {
+namespace statistical_tests_space {
 
 using namespace std::chrono;
 
@@ -66,7 +66,7 @@ static Sequence readSequenceByBitFromFile(string const & inputFile, size_t seque
         char symbol;
         inFile >> symbol;
         buffer = static_cast<BlockReadType>(symbol);
-        for (int bit = 0; bit < 8 * sizeof(BlockReadType); bit++) {
+        for (int bit = 0; bit < static_cast<int>(8 * sizeof(BlockReadType)); bit++) {
             epsilon[i * 8 + bit] = static_cast<BitSequence>((buffer & (1 << bit)) >> bit);
         }
     }
@@ -89,7 +89,7 @@ static Sequence readSequenceByByteFromFile(string const & inputFile, size_t sequ
 
     inFile.open(inputFile, std::ios::in);
 
-    for (int i = 0; i < epsilon.size(); i++) {
+    for (int i = 0; i < static_cast<int>(epsilon.size()); i++) {
         char symbol;
         inFile >> symbol;
         epsilon[i] = (!isSpecialFormat && symbol == isZero)       //for others
@@ -115,7 +115,7 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
     int sizesStartIndex = 5;
     size_t len = (argc > 1) ? std::strlen(argv[1]) : 0;
     size_t countSizes = (argc >= sizesStartIndex + 1) ? std::atoi(argv[sizesStartIndex]) : 0;
-    if (countSizes <= 0 || argc < sizesStartIndex + 1 + countSizes || len < TEST_COUNT) {
+    if (countSizes <= 0 || argc < int(sizesStartIndex + 1 + countSizes) || len < TEST_COUNT) {
 		cout << "Not enough parameters ( testKey ("
 			<< TEST_COUNT << ", current = " << len << "), "
             << "input possibility, "
@@ -158,8 +158,8 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
         uint32_t atom = //1u;
                 1024u;
 
-        const int TRAVERSAL_COUNT_LARGE = TRAVERSAL_COUNT_SMALL;
-        const size_t TRAVERSAL_THRESHOLD = size_t(1e5);
+        const size_t TRAVERSAL_COUNT_LARGE = TRAVERSAL_COUNT_SMALL;
+//        const size_t TRAVERSAL_THRESHOLD = size_t(1e5);
         Sequence epsilon;
         // TODO: Remove this crutch
 		tp.n = 0;
@@ -254,7 +254,7 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
             std::generate_n(std::back_inserter(epsilon), seqSize,
                 [&inputOppositePossibility, &distribution]() -> bool {
                 static int i = 0;
-                return (i++ < tp.n);
+                return (i++ < int(tp.n));
             });
         }
         else if ("lcg" == genName)

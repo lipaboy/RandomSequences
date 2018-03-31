@@ -19,7 +19,7 @@
 #include "statTests/include/stat_fncs.h"
 #include "lipaboyLibrary/src/maths/fixed_precision_number.h"
 
-using namespace PseudoRandomSequences;
+using namespace statistical_tests_space;
 using namespace std::chrono;
 
 //TODO: try to use GoogleTests
@@ -28,7 +28,7 @@ using namespace std::chrono;
 
 const int TEST_COUNT = 16;
 
-int PseudoRandomSequences::beaconRun(int argc, char * argv[]) {
+int statistical_tests_space::beaconRun(int argc, char * argv[]) {
 	time_t t;
     std::srand((unsigned int)(std::time(&t)));
 	using std::string;

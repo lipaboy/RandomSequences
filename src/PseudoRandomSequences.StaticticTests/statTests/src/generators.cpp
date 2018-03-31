@@ -10,6 +10,8 @@
 
 #include "../../pseudoRandomSequences.h"
 
+namespace statistical_tests_space {
+
 double
 lcg_rand(int N, double SEED, double* DUNIF, int NDIM)
 {
@@ -287,7 +289,7 @@ modExp()
 Sequence
 bbs()
 {
-    using namespace PseudoRandomSequences;
+    using namespace statistical_tests_space;
 
 	int		i, v, bitsRead;
 	BYTE	p[64], q[64], n[128], s[64], x[256];
@@ -480,4 +482,6 @@ SHA1()
 	}
 	//free(epsilon);
 	return std::move(epsilon);
+}
+
 }

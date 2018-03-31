@@ -7,11 +7,9 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                    G L O B A L   D A T A  S T R U C T U R E S 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+namespace statistical_tests_space {
 
-//BitSequence	*epsilon;				// BIT STREAM
 TP			tp;						// TEST PARAMETER STRUCTURE
-//FILE		*stats[NUMOFTESTS+1];	// FILE OUTPUT STREAM
-//FILE		*results[NUMOFTESTS+1];	// FILE OUTPUT STREAM
 FILE		*freqfp;				// FILE OUTPUT STREAM
 FILE		*summary;				// FILE OUTPUT STREAM
 int			testVector[NUMOFTESTS+1];
@@ -22,5 +20,7 @@ char	generatorDir[NUMOFGENERATORS][20] = { "AlgorithmTesting", "LCG", "QCG1", "Q
 char	testNames[NUMOFTESTS+1][32] = { " ", "Frequency", "BlockFrequency", "CumulativeSums", "Runs", "LongestRun", "Rank",
 			"FFT", "NonOverlappingTemplate", "OverlappingTemplate", "Universal", "ApproximateEntropy", "RandomExcursions",
 			"RandomExcursionsVariant", "Serial", "LinearComplexity" };
+
+}
 
 #endif //DECLS_STAT_TEST_H

@@ -6,12 +6,14 @@
 #include "../include/cephes.h"
 #include "../include/stat_fncs.h"
 
+using namespace statistical_tests_space;
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                               R U N S  T E S T 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 double
-Runs(int n, BoolIterator epsilon)
+statistical_tests_space::Runs(int n, BoolIterator epsilon)
 {
 	int		S, k;
 	double	pi, V, erfc_arg, p_value;

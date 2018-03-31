@@ -16,7 +16,7 @@
 #include "statTests/include/stat_fncs.h"
 #include "bookStackTest/order_test.h"
 
-namespace PseudoRandomSequences {
+namespace statistical_tests_space {
 
 #ifdef __linux__
     using std::chrono::time_point;

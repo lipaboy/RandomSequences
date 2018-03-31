@@ -3,6 +3,8 @@
 
 #include "externs.h"
 
+namespace statistical_tests_space {
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
        R A N K  A L G O R I T H M  F U N C T I O N  P R O T O T Y P E S 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -16,5 +18,7 @@ BitSequence**	create_matrix(int M, int Q);
 //void			display_matrix(int M, int Q, BitSequence **m);
 void			def_matrix(int M, int Q, BitSequence **m,int k, BoolIterator epsilon);
 void			delete_matrix(int M, BitSequence **matrix);
+
+}
 
 #endif //STAT_TESTS_MATRIX_H

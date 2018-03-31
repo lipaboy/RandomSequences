@@ -7,6 +7,8 @@
 #include <string.h>
 #include "config.h"
 
+namespace statistical_tests_space {
+
 typedef struct _MP_struct {
 	int		size;	/*  in bytes  */
 	int		bitlen;	/*  in bits, duh  */
@@ -44,5 +46,7 @@ BYTE	add(BYTE *A, int LA, BYTE *B, int LB);
 void	prettyprintBstr(char *S, BYTE *A, int L);
 void	byteReverse(ULONG *buffer, int byteCount);
 void	ahtopb (char *ascii_hex, BYTE *p_binary, int bin_len);
+
+}
 
 #endif  /* _GENUTILS_H_ */

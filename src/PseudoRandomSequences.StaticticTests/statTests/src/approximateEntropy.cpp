@@ -11,6 +11,8 @@
                 A P P R O X I M A T E  E N T R O P Y   T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+namespace statistical_tests_space {
+
 double
 ApproximateEntropy(int m, int n, BoolIterator epsilon)
 {
@@ -90,4 +92,6 @@ ApproximateEntropy(int m, int n, BoolIterator epsilon)
 	//printf("Approximate Entropy:\t%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value); //fflush(stats[TEST_APEN]);
 	return double(p_value);
 	/*fprintf(results[TEST_APEN], "%f\n", p_value); fflush(results[TEST_APEN]);*/
+}
+
 }

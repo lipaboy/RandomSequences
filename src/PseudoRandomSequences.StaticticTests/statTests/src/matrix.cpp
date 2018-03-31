@@ -3,6 +3,8 @@
 #include "../include/externs.h"
 #include "../include/matrix.h"
 
+namespace statistical_tests_space {
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 R A N K  A L G O R I T H M  R O U T I N E S
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -167,4 +169,6 @@ delete_matrix(int M, BitSequence **matrix)
 	for ( i=0; i<M; i++ )
 		free(matrix[i]);
 	free(matrix);
+}
+
 }

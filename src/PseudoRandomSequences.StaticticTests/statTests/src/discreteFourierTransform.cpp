@@ -12,13 +12,15 @@
 
 #include <vector>
 #include <iostream>
+
+using namespace statistical_tests_space;
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
          D I S C R E T E  F O U R I E R  T R A N S F O R M  T E S T 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-
 double
-DiscreteFourierTransform(int n, BoolIterator epsilon)
+statistical_tests_space::DiscreteFourierTransform(int n, BoolIterator epsilon)
 {
 	double	p_value, upperBound, percentile, N_l, N_o, d, *m = NULL, *X = NULL, *wsave = NULL;
 	int		i, count, ifac[15];
@@ -37,9 +39,7 @@ DiscreteFourierTransform(int n, BoolIterator epsilon)
 			return -1.;
 	}
     for ( i=0; i<n; i++ ) {
-        auto kek = *(epsilon);
         X[i] = 2 * (*(epsilon++)) - 1;
-        //std::cout << (int)kek;
     }
 		//X[i] = 2 * getRand(i) - 1;
 		//X[i] = 2 * (int)seq[i] - 1;

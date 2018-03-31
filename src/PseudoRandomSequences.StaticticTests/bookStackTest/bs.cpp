@@ -2,7 +2,6 @@
 bs.cpp - Book Stack Test
 Written by Alexey Lubkin
 */
-//#include "stdafx.h"
 #include "../statTests/include/stat_fncs.h"
 #include <iostream>
 #include <string>
@@ -10,6 +9,7 @@ Written by Alexey Lubkin
 #include <boost/math/distributions/chi_squared.hpp>
 #include <stdio.h>
 
+namespace statistical_tests_space {
 
 #if (defined _MSC_VER) || (defined __BORLANDC__)
 #include <io.h>
@@ -582,3 +582,5 @@ double bookStackTestMain(int argc, const char* argv[])
 	return p_value;
 }
 
+
+}

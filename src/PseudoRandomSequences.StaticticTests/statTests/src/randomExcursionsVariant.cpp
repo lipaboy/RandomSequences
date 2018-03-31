@@ -6,18 +6,19 @@
 #include "../include/cephes.h"
 #include "../include/stat_fncs.h"
 
+using namespace statistical_tests_space;
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
             R A N D O M  E X C U R S I O N S  V A R I A N T  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 std::vector<double>
-RandomExcursionsVariant(int n, BoolIterator epsilon)
+statistical_tests_space::RandomExcursionsVariant(int n, BoolIterator epsilon)
 {
 	int		i, p, J, x, constraint, count, *S_k;
 	int		stateX[18] = { -9, -8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 	double	p_value;
 
-	int successCount = 0;
 	std::vector<double> result;
 	
 	//printf("RandomExcursionsVariant:");

@@ -2,7 +2,7 @@
 
 //#include	"../include/sha.h"
 
-
+namespace statistical_tests_space {
 
 Sequence	lcg();
 double	lcg_rand(int, double, double*, int);
@@ -88,3 +88,5 @@ Sequence	SHA1();
 	 B = A; \
 	 A = temp; \
 	 }
+
+}

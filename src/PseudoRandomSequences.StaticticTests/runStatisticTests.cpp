@@ -21,7 +21,7 @@
 #include "statTests/include/stat_fncs.h"
 #include "lipaboyLibrary/src/maths/fixed_precision_number.h"
 
-using namespace PseudoRandomSequences;
+using namespace statistical_tests_space;
 
 
 using std::vector;
@@ -32,7 +32,7 @@ using std::endl;
 
     // TODO: take off the responsibility of return names of active tests and give it to another function with argument testKey
 
-void PseudoRandomSequences::runTests(
+void statistical_tests_space::runTests(
 	BoolIterator epsilonBegin,
     BoolIterator epsilonEnd,
 	std::vector<double> & testResults,
@@ -254,7 +254,7 @@ void PseudoRandomSequences::runTests(
     //cout << "Test count executed: " << testCountExec << endl;
 }
 
-vector<string> PseudoRandomSequences::getStatisticTestNames(string testKey, size_t sequenceSize) {
+vector<string> statistical_tests_space::getStatisticTestNames(string testKey, size_t sequenceSize) {
     vector<string> testNames;
     TestParameters testParameters(sequenceSize);
 
@@ -307,7 +307,7 @@ vector<string> PseudoRandomSequences::getStatisticTestNames(string testKey, size
     return std::move(testNames);
 }
 
-PseudoRandomSequences::TestParameters::TestParameters(uint64_t EPSILON_SIZE)
+statistical_tests_space::TestParameters::TestParameters(uint64_t EPSILON_SIZE)
     : blockFrequencyTest({ 2, //EPSILON_SIZE / 4, EPSILON_SIZE / 2
                          //16, 32, 128
                          10
@@ -342,7 +342,7 @@ PseudoRandomSequences::TestParameters::TestParameters(uint64_t EPSILON_SIZE)
 }
 
 
-TimeType PseudoRandomSequences::my_get_current_clock_time() {
+TimeType statistical_tests_space::my_get_current_clock_time() {
 #ifdef __linux__
 //       struct tms curr;
 //       long clocks_per_sec = sysconf(_SC_CLK_TCK);
@@ -356,7 +356,7 @@ TimeType PseudoRandomSequences::my_get_current_clock_time() {
 
 using std::chrono::time_point;
 
-int PseudoRandomSequences::getTimeDifferenceInMillis(TimeType const & from, TimeType const & to) {
+int statistical_tests_space::getTimeDifferenceInMillis(TimeType const & from, TimeType const & to) {
 #ifdef __linux__
    return std::chrono::duration_cast<std::chrono::milliseconds>(to - from).count();
 #elif _WIN32   //Windows

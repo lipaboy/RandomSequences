@@ -9,8 +9,10 @@
                     B L O C K  F R E Q U E N C Y  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+using namespace statistical_tests_space;
+
 double
-BlockFrequency(int M, int n, BoolIterator epsilon)
+statistical_tests_space::BlockFrequency(int M, int n, BoolIterator epsilon)
 {
 	int		i, j, N, blockSum;
 	double	p_value, sum, pi, v, chi_squared;

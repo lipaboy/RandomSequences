@@ -1,4 +1,6 @@
 
+namespace statistical_tests_space {
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -50,3 +52,5 @@ typedef ULONG WORD64[2];  /* 64-bit word */
 #ifdef __cplusplus
 }
 #endif
+
+}

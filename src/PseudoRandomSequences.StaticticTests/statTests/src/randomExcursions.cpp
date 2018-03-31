@@ -6,12 +6,14 @@
 #include "../include/cephes.h"  
 #include "../include/stat_fncs.h"
 
+using namespace statistical_tests_space;
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                      R A N D O M  E X C U R S I O N S  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 std::vector<double>
-RandomExcursions(int n, BoolIterator epsilon)
+statistical_tests_space::RandomExcursions(int n, BoolIterator epsilon)
 {
 	int		b, i, j, k, J, x;
 	int		cycleStart, cycleStop, *cycle = NULL, *S_k = NULL;
@@ -24,7 +26,6 @@ RandomExcursions(int n, BoolIterator epsilon)
 						 {0.8333333333, 0.02777777778, 0.02314814815, 0.01929012346, 0.01607510288, 0.0803755143},
 						 {0.8750000000, 0.01562500000, 0.01367187500, 0.01196289063, 0.01046752930, 0.0732727051} };
 
-	int successCount = 0;
 	std::vector<double> result;
 
 	//printf("RandomExcursions:");

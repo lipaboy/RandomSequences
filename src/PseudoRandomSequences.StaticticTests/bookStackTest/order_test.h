@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-namespace PseudoRandomSequences {
+namespace statistical_tests_space {
 
 using std::cout;
 using std::endl;
@@ -60,7 +60,7 @@ public:
         for (IterType iter = epsilonBegin; iter != epsilonEnd; iter++) {
             auto bit = *iter;
             word |= (1 << (bitpos++)) * bit;
-            if (bitpos >= dimension()) {
+            if (bitpos >= static_cast<int>(dimension())) {
                 // find node of word
                 auto index = wordMap_[word];
                 NodeRef node = orderContainer_[index];
