@@ -22,7 +22,7 @@ public:
     struct NodeType { WordStorageType word; FrequencyType freq; };
     using OrderContainerType = vector<NodeType>;
     using WordMapType = vector<size_type>;  // word -> Node index
-    using BorderContainerType = unordered_map<size_type, size_type>; // Set(i) -> "border pointer"
+    using BorderContainerType = unordered_map<size_type, size_type>; // Set(freq) -> border position
     using BorderIterator = BorderContainerType::iterator;
 
     using NodeRef = NodeType &;
@@ -50,34 +50,41 @@ public:
         }
     }
 
-    // TODO: use iterator_traits
+    // test sequence of bits
     template <class IterType>
     void test(IterType epsilonBegin, IterType epsilonEnd) {
+        // TODO: use iterator_traits
+
         WordStorageType word = 0;
         int bitpos = 0;
         for (IterType iter = epsilonBegin; iter != epsilonEnd; iter++) {
             auto bit = *iter;
             word |= (1 << (bitpos++)) * bit;
             if (bitpos >= dimension()) {
+                // find node of word
                 auto index = wordMap_[word];
                 NodeRef node = orderContainer_[index];
-                auto oldFreq = node.freq;
+                // update frequence of word
+                auto prevFreq = node.freq;
                 node.freq++;
-                auto newFreq = node.freq;
+                auto nextFreq = node.freq;
 
                 // TODO: optimize with insert
-                BorderIterator newFreqBorderIter = borders_.find(newFreq);
+                // find border of Set(nextFreq)
+                BorderIterator newFreqBorderIter = borders_.find(nextFreq);
+                // create new Set(nextFreq) if such one doesn't exist
                 if (newFreqBorderIter == borders_.end())
-                    newFreqBorderIter = borders_.emplace(newFreq, 0).first;  // make the new set empty
+                    newFreqBorderIter = borders_.emplace(nextFreq, 0).first; // create empty Set
 
-                NodeRef upperSetNode = orderContainer_[ newFreqBorderIter->second ];
-                std::swap(node, upperSetNode);
+                // get upper boundary node of previous Set
+                NodeRef upperNodeOfPreviousSet = orderContainer_[ newFreqBorderIter->second ];
+                std::swap(node, upperNodeOfPreviousSet);
 
-                // update border of set
+                // update border of Set(nextFreq)
                 ++(newFreqBorderIter->second);
 
-                // remove border of empty set
-                BorderIterator oldFreqBorderIter = borders_.find(oldFreq);
+                // remove Set(prevFreq) if it's empty
+                BorderIterator oldFreqBorderIter = borders_.find(prevFreq);
                 if ((*newFreqBorderIter) == (*oldFreqBorderIter))
                     borders_.erase(oldFreqBorderIter);
 
@@ -93,7 +100,7 @@ private:
     size_type dimension_;
     OrderContainerType orderContainer_;
     WordMapType wordMap_;
-    // index refers to next elem after last one of set that has such border
+    // border position refers to next elem after last one of set that has such border
     BorderContainerType borders_;
 };
 

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(PseudoRandomSequencesApp)
+project(RandomSequences)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_STANDARD 14)
@@ -52,15 +52,14 @@ set(APP_SOURCES
 	statTests/src/runs.cpp
 	statTests/src/serial.cpp
 	statTests/src/universal.cpp
-	statTests/src/utilities.cpp)
+        statTests/src/utilities.cpp
+)
 
-    find_package(OpenMP)
-    if (OPENMP_FOUND)
-        set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-        set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-    endif()
-
-
+find_package(OpenMP)
+if (OPENMP_FOUND)
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+endif()
 
 if(WIN32)
         add_executable(PseudoRandomSequencesApp WIN32 ${APP_SOURCES})
@@ -69,8 +68,8 @@ else(WIN32)
 endif(WIN32)
 
 if(WIN32)
-	add_custom_command(
+        add_custom_command(
                 TARGET PseudoRandomSequencesApp POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
                         $<TARGET_FILE_DIR:PseudoRandomSequencesApp>)
 endif(WIN32)
