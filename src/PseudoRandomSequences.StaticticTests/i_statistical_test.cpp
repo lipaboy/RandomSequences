@@ -2,8 +2,16 @@
 
 namespace statistical_tests_space {
 
-TestParameters::TestParameters(uint64_t EPSILON_SIZE)
-    : blockFrequencyTest({ 2, //EPSILON_SIZE / 4, EPSILON_SIZE / 2
+IStatisticalTest::ReturnValueType BlockFrequencyTest::test(BoolIterator sequenceIter, size_type size) {
+    ReturnValueType container;
+    TestParameters testParameters(size);
+    for (auto & param : testParameters.blockFrequencyTest)
+        container.push_back(BlockFrequency(param, size, sequenceIter));
+    return std::move(container);
+}
+
+TestParameters::TestParameters(size_t EPSILON_SIZE)
+    : blockFrequencyTest({ 2, //EPSILON_SIZE / 4, EPSILON_SIZE / 2,
                          //16, 32, 128
                          10
                          }),

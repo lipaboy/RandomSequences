@@ -15,6 +15,7 @@
 #include <chrono>
 #include <exception>
 #include <cstdio>
+#include <memory>
 
 #include <omp.h>
 
@@ -28,6 +29,10 @@ using std::pair;
 using std::string;
 using std::cout;
 using std::endl;
+using std::unique_ptr;
+using std::make_unique;
+
+using TestsContainerType = vector<unique_ptr<IStatisticalTest> >;
 
     // TODO: take off the responsibility of return names of active tests and give it to another function with argument testKey
 
@@ -42,6 +47,18 @@ void statistical_tests_space::runTests(
 	const int EPSILON_SIZE = int(std::distance(epsilonBegin, epsilonEnd));
     TestParameters testParameters(EPSILON_SIZE);
     int testCountExec = 0;
+
+    TestsContainerType packOfTests;
+    packOfTests.emplace_back(make_unique<FrequencyTest>());
+    packOfTests.emplace_back(make_unique<BlockFrequencyTest>());
+
+    for (auto & testObj : packOfTests) {
+        auto res = testObj->test(epsilonBegin, EPSILON_SIZE);
+        for (auto & elem : res)
+            testResults.push_back(elem);
+    }
+
+    return;
 
     // #Slow in case where sequence is short
 	// #Parameterized

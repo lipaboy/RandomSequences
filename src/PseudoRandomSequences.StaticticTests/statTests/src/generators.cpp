@@ -310,8 +310,6 @@ bbs()
 	memset(x, 0x00, 256);
 	ModSqr(x, s, 64, n, 128);
 
-    volatile int count1 = 0;
-    volatile int count2 = 0;
 	for ( v=0; v<tp.numOfBitStreams; v++ ) {
 		num_0s = 0;
 		num_1s = 0;
