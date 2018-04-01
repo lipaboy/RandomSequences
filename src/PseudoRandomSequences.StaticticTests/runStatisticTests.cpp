@@ -149,14 +149,12 @@ void statistical_tests_space::runTests(
 	if (testKey[6] == '1') {
         testCountExec++;
         auto start = my_get_current_clock_time();
-		// Has a little difference between results of my own discreteFourier Test version
 		testResults.push_back(
 			DiscreteFourierTransform(EPSILON_SIZE, epsilonBegin));
         //cout << "Discrete Fourier test: " << testResults.back() << endl;
         ////cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
-    // #The Slowest test
-	// #Parameterized
+
     if (testKey[7] == '1') {	// TODO: need to check
         testCountExec++;
         auto start = my_get_current_clock_time();

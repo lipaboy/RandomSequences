@@ -34,10 +34,6 @@ using std::endl;
 
 //TODO: try to use GoogleTests
 
-const int TEST_COUNT = 16;
-
-const double MEANING_LEVEL = 0.5;
-
 namespace {
 	class MyBoolRange {
 	private:

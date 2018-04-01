@@ -10,6 +10,13 @@ namespace statistical_tests_space {
 
 using std::vector;
 
+const int TEST_COUNT = 16;
+const double MEANING_LEVEL = 0.05;
+
+inline bool isTestSuccessful(double pValueOfTest) {
+    return (pValueOfTest >= MEANING_LEVEL);
+}
+
 // TODO: test must have the additional parameters (except length of sequence)
 class IStatisticalTest {
 public:
@@ -33,11 +40,98 @@ public:
         return ReturnValueType(Frequency(size, sequenceIter));
     }
 };
-
+// #Parameterized
 class BlockFrequencyTest : public IStatisticalTest {
 public:
     virtual ReturnValueType test(BoolIterator sequenceIter, size_type size);
 };
+
+class RunsTest : public IStatisticalTest {
+public:
+    virtual ReturnValueType test(BoolIterator sequenceIter, size_type size) {
+        return ReturnValueType(Runs(size, sequenceIter));
+    }
+};
+
+class LongestRunOfOnesTest : public IStatisticalTest {
+public:
+    virtual ReturnValueType test(BoolIterator sequenceIter, size_type size) {
+        return ReturnValueType(LongestRunOfOnes(size, sequenceIter));
+    }
+};
+
+class RankTest : public IStatisticalTest {
+public:
+    virtual ReturnValueType test(BoolIterator sequenceIter, size_type size) {
+        return ReturnValueType(Rank(size, sequenceIter));
+    }
+};
+
+class DiscreteFourierTransformTest : public IStatisticalTest {
+public:
+    virtual ReturnValueType test(BoolIterator sequenceIter, size_type size) {
+        return ReturnValueType(DiscreteFourierTransform(size, sequenceIter));
+    }
+};
+// #The Slowest test
+// #Parameterized
+//2 - is minimum (depends on existing files)
+class NonOverlappingTemplateMatchingsTest : public IStatisticalTest {
+public:
+    virtual ReturnValueType test(BoolIterator sequenceIter, size_type size);
+};
+// #Parameterized
+class OverlappingTemplateMatchingsTest : public IStatisticalTest {
+public:
+    virtual ReturnValueType test(BoolIterator sequenceIter, size_type size);
+};
+
+class UniversalTest : public IStatisticalTest {
+public:
+    virtual ReturnValueType test(BoolIterator sequenceIter, size_type size) {
+        return ReturnValueType(Universal(size, sequenceIter));
+    }
+};
+// #The Slowest test
+// #Parameterized
+// #Wrong test. Excluded from the pack of tests. (Reason why: discredits the random sequences)
+class LinearComplexityTest : public IStatisticalTest {
+public:
+    virtual ReturnValueType test(BoolIterator sequenceIter, size_type size);
+};
+// #Slow (time grows very much)
+// #Parameterized
+class SerialTest : public IStatisticalTest {
+public:
+    virtual ReturnValueType test(BoolIterator sequenceIter, size_type size);
+};
+// #Parameterized
+class ApproximateEntropyTest : public IStatisticalTest {
+public:
+    virtual ReturnValueType test(BoolIterator sequenceIter, size_type size);
+};
+
+class CumulativeSumsTest : public IStatisticalTest {
+public:
+    virtual ReturnValueType test(BoolIterator sequenceIter, size_type size);
+};
+
+class RandomExcursionsTest : public IStatisticalTest {
+public:
+    virtual ReturnValueType test(BoolIterator sequenceIter, size_type size);
+};
+
+class RandomExcursionsVariantTest : public IStatisticalTest {
+public:
+    virtual ReturnValueType test(BoolIterator sequenceIter, size_type size);
+};
+
+class BookStackTest : public IStatisticalTest {
+public:
+    virtual ReturnValueType test(BoolIterator sequenceIter, size_type size);
+};
+
+//----------------------Test parameters----------------------//
 
 class TestParameters {
 public:

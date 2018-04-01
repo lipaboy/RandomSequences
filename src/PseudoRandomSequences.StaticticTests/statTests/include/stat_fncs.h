@@ -11,6 +11,8 @@
 
 namespace statistical_tests_space {
 
+// TODO: rename all the test functions to camel case
+
 void  __ogg_fdrffti(int n, double *wsave, int *ifac);
 void  __ogg_fdrfftf(int n, double *X, double *wsave, int *ifac);
 
