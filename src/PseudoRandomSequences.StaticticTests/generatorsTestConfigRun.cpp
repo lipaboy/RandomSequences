@@ -297,10 +297,9 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
             vector<double> testResults(testNames.size());
             vector<double> currResults;
 
-            //currResults.reserve(60u);     // better don't do it because you can miss segmentation fault
             int traversalCount = TRAVERSAL_COUNT_LARGE;
-            //cout << seqSizes.size() << " " << traversalCount << " " << generatorNames.size() << endl;
 
+// TODO: create define for DEBUG to remove omp parallelism
 #pragma omp parallel for private(currResults) shared(genName, traversalCount, testKey, testResults)
 			for (int jTraver = 0; jTraver < traversalCount; jTraver++) 
             {

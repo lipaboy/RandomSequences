@@ -18,7 +18,7 @@ void  __ogg_fdrfftf(int n, double *X, double *wsave, int *ifac);
 
 double bookStackTestMain(int argc, const char* argv[]);
 
-double	Frequency(int n, BoolIterator epsilon);
+double	testFrequency(int n, BoolIterator epsilon);
 double	BlockFrequency(int M, int n, BoolIterator epsilon);
 std::pair<double, double> 	CumulativeSums(int n, BoolIterator epsilon);
 double	Runs(int n, BoolIterator epsilon);

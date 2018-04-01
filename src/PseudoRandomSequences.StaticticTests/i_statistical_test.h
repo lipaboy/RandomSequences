@@ -2,6 +2,11 @@
 #define I_STATISTICAL_TEST_H
 
 #include <vector>
+#include <string>
+#include <fstream>
+#include <ostream>
+#include <iterator>
+#include <omp.h>
 
 #include "statTests/include/stat_fncs.h"
 #include "bookStackTest/order_test.h"
@@ -9,6 +14,7 @@
 namespace statistical_tests_space {
 
 using std::vector;
+using std::string;
 
 const int TEST_COUNT = 16;
 const double MEANING_LEVEL = 0.05;
@@ -37,7 +43,7 @@ class TestParameters;
 class FrequencyTest : public IStatisticalTest {
 public:
     virtual ReturnValueType test(BoolIterator sequenceIter, size_type size) {
-        return ReturnValueType(Frequency(size, sequenceIter));
+        return ReturnValueType( { testFrequency(size, sequenceIter) } );
     }
 };
 // #Parameterized
@@ -49,28 +55,28 @@ public:
 class RunsTest : public IStatisticalTest {
 public:
     virtual ReturnValueType test(BoolIterator sequenceIter, size_type size) {
-        return ReturnValueType(Runs(size, sequenceIter));
+        return ReturnValueType( { Runs(size, sequenceIter) } );
     }
 };
 
 class LongestRunOfOnesTest : public IStatisticalTest {
 public:
     virtual ReturnValueType test(BoolIterator sequenceIter, size_type size) {
-        return ReturnValueType(LongestRunOfOnes(size, sequenceIter));
+        return ReturnValueType( { LongestRunOfOnes(size, sequenceIter) } );
     }
 };
 
 class RankTest : public IStatisticalTest {
 public:
     virtual ReturnValueType test(BoolIterator sequenceIter, size_type size) {
-        return ReturnValueType(Rank(size, sequenceIter));
+        return ReturnValueType( { Rank(size, sequenceIter) } );
     }
 };
 
 class DiscreteFourierTransformTest : public IStatisticalTest {
 public:
     virtual ReturnValueType test(BoolIterator sequenceIter, size_type size) {
-        return ReturnValueType(DiscreteFourierTransform(size, sequenceIter));
+        return ReturnValueType( { DiscreteFourierTransform(size, sequenceIter) } );
     }
 };
 // #The Slowest test
@@ -89,7 +95,7 @@ public:
 class UniversalTest : public IStatisticalTest {
 public:
     virtual ReturnValueType test(BoolIterator sequenceIter, size_type size) {
-        return ReturnValueType(Universal(size, sequenceIter));
+        return ReturnValueType( { Universal(size, sequenceIter) } );
     }
 };
 // #The Slowest test
@@ -125,7 +131,8 @@ class RandomExcursionsVariantTest : public IStatisticalTest {
 public:
     virtual ReturnValueType test(BoolIterator sequenceIter, size_type size);
 };
-
+// #Slow in case where sequence is short
+// #Parameterized
 class BookStackTest : public IStatisticalTest {
 public:
     virtual ReturnValueType test(BoolIterator sequenceIter, size_type size);

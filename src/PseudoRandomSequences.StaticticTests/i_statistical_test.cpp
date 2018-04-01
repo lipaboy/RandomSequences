@@ -92,7 +92,7 @@ RandomExcursionsTest::test(BoolIterator sequenceIter, size_type size) {
     average /= resSize;
     // TODO: very complex expression. Need to simplify it
     container.push_back(resSize == 0 ? -1.
-        : average + resSize * (ALPHA - (resSize - 1.) / resSize + 1e-3) * (1. - average));
+        : average + resSize * (MEANING_LEVEL - (resSize - 1.) / resSize + 1e-3) * (1. - average));
     return std::move(container);
 }
 
@@ -108,9 +108,62 @@ RandomExcursionsVariantTest::test(BoolIterator sequenceIter, size_type size) {
     average /= resSize;
     // TODO: very complex expression. Need to simplify it
     container.push_back(resSize == 0 ? -1.
-        : average + resSize * (ALPHA - (resSize - 1.) / resSize + 1e-3) * (1. - average));
+        : average + resSize * (MEANING_LEVEL - (resSize - 1.) / resSize + 1e-3) * (1. - average));
     return std::move(container);
 }
+
+IStatisticalTest::ReturnValueType
+BookStackTest::test(BoolIterator sequenceIter, size_type size) {
+    ReturnValueType container;
+
+    string inputFile = "bookStackInput" + std::to_string(omp_get_thread_num())
+             + "_" + std::to_string(size) + ".dat";
+    {
+        typedef u_char BlockReadType;   //when was char instead of u_char nothing to change
+
+        std::ofstream outFile;
+        outFile.exceptions ( std::ofstream::failbit | std::ofstream::badbit );
+        outFile.open(inputFile, std::ios::trunc);
+        auto outIter = std::ostream_iterator<BlockReadType>(outFile);
+        int bitPos = 0;
+        char buffer = 0;
+        auto iter = sequenceIter;
+        for (size_t i = 0; i < size; i++) {
+            buffer |= (*(iter++)) << (bitPos++);
+            if (bitPos >= 8) {
+                bitPos = 0;
+                *(outIter++) = buffer;
+                buffer = 0;
+            }
+        }
+        if (bitPos > 0)
+            *(outIter) = buffer;
+        outFile.close();
+    }
+
+    TestParameters testParameters(size);
+    // ! Each bit means 0 or 1 (you can't pass to bookStackTest 0 or 1 in whole byte for example)
+    for (auto param : testParameters.bookStackTest) {
+        string sizeStr = std::to_string(size);
+        string dimStr = std::to_string(param.dimension);
+        string upperPartStr = std::to_string(param.upperPart);
+        string filename = inputFile;
+        std::vector<const char *> arguments{ "bs.exe",
+            "-f", filename.c_str(),
+            "-n", sizeStr.c_str(),	// file size (in bits)
+            "-w", dimStr.c_str(),				// word size (or alphabet symbol length (see yourself book stack version)
+            //"-b", "0",				// blank between words
+            "-u", upperPartStr.c_str()				// size of upper part book stack
+        };
+        if (param.upperPart > (1LL << 28))
+            continue;
+        container.push_back(bookStackTestMain(static_cast<int>(arguments.size()), &arguments[0]));
+    }
+    std::remove(inputFile.c_str());
+
+    return std::move(container);
+}
+
 
 //----------------------Test parameters----------------------//
 

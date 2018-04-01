@@ -49,8 +49,23 @@ void statistical_tests_space::runTests(
     int testCountExec = 0;
 
     TestsContainerType packOfTests;
+    packOfTests.emplace_back(make_unique<BookStackTest>());
     packOfTests.emplace_back(make_unique<FrequencyTest>());
     packOfTests.emplace_back(make_unique<BlockFrequencyTest>());
+    packOfTests.emplace_back(make_unique<RunsTest>());
+    packOfTests.emplace_back(make_unique<LongestRunOfOnesTest>());
+    packOfTests.emplace_back(make_unique<RankTest>());
+    packOfTests.emplace_back(make_unique<DiscreteFourierTransformTest>());
+    packOfTests.emplace_back(make_unique<NonOverlappingTemplateMatchingsTest>());
+    packOfTests.emplace_back(make_unique<OverlappingTemplateMatchingsTest>());
+    packOfTests.emplace_back(make_unique<UniversalTest>());
+    // TODO: check on discreditation
+//    packOfTests.emplace_back(make_unique<LinearComplexityTest>());
+    packOfTests.emplace_back(make_unique<SerialTest>());
+    packOfTests.emplace_back(make_unique<ApproximateEntropyTest>());
+    packOfTests.emplace_back(make_unique<CumulativeSumsTest>());
+    packOfTests.emplace_back(make_unique<RandomExcursionsTest>());
+    packOfTests.emplace_back(make_unique<RandomExcursionsVariantTest>());
 
     for (auto & testObj : packOfTests) {
         auto res = testObj->test(epsilonBegin, EPSILON_SIZE);
@@ -115,7 +130,7 @@ void statistical_tests_space::runTests(
 	if (testKey[1] == '1') {
         testCountExec++;
         auto start = my_get_current_clock_time();
-		testResults.push_back(Frequency(EPSILON_SIZE, epsilonBegin));
+        testResults.push_back(testFrequency(EPSILON_SIZE, epsilonBegin));
         //cout << "Time: " << my_get_current_clock_time() - start << endl;
 	}
 	// #Parameterized
