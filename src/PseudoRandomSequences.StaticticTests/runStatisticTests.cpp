@@ -72,6 +72,7 @@ void statistical_tests_space::runTests(
     }
 }
 
+// TODO: join TestWrappers with their names
 vector<string> statistical_tests_space::getStatisticTestNames(string testKey, size_t sequenceSize) {
     vector<string> testNames;
     TestParameters testParameters(sequenceSize);
