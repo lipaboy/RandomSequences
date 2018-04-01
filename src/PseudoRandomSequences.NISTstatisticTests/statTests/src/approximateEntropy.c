@@ -4,13 +4,11 @@
 #include <stdlib.h>
 #include "../include/externs.h"
 #include "../include/utilities.h"
-#include "../include/cephes.h"
-
+#include "../include/cephes.h"  
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                 A P P R O X I M A T E  E N T R O P Y   T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
 
 void
 ApproximateEntropy(int m, int n)

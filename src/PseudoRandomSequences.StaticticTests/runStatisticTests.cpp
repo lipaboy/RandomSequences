@@ -65,10 +65,15 @@ void statistical_tests_space::runTests(
     packOfTests.emplace_back(make_unique<RandomExcursionsTest>());
     packOfTests.emplace_back(make_unique<RandomExcursionsVariantTest>());
 
+    int charPos = 0;
     for (auto & testObj : packOfTests) {
-        auto res = testObj->test(epsilonBegin, EPSILON_SIZE);
-        for (auto & elem : res)
-            testResults.push_back(elem);
+        if (charPos == 10)
+            charPos++;
+        if (testKey[charPos++] == '1') {
+            auto res = testObj->test(epsilonBegin, EPSILON_SIZE);
+            for (auto & elem : res)
+                testResults.push_back(elem);
+        }
     }
 }
 

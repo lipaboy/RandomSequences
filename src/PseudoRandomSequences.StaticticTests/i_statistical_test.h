@@ -76,7 +76,7 @@ public:
 class DiscreteFourierTransformTest : public IStatisticalTest {
 public:
     virtual ReturnValueType test(BoolIterator sequenceIter, size_type size) {
-        return ReturnValueType( { doDiscreteFourierTransformTest(size, sequenceIter) } );
+        return ReturnValueType( { statistical_tests_space::doDiscreteFourierTransformTest(size, sequenceIter) } );
     }
 };
 // #The Slowest test

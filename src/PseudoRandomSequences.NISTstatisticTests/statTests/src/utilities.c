@@ -381,15 +381,10 @@ openOutputStreams(int option)
 		exit(-1);
 	}
 	
-    char resDir2[160];
-    sprintf(resDir2, "experiments/my/results.txt"//, generatorDir[option], testNames[i]
-            );
-    FILE * tempResultFile = fopen(resDir2, "w");
 	for( i=1; i<=NUMOFTESTS; i++ ) {
 		if ( testVector[i] == 1 ) {
 			sprintf(statsDir, "experiments/%s/%s/stats.txt", generatorDir[option], testNames[i]);
-            sprintf(resultsDir, "experiments/my/results.txt"//, generatorDir[option], testNames[i]
-                    );
+			sprintf(resultsDir, "experiments/%s/%s/results.txt", generatorDir[option], testNames[i]);
 			if ( (stats[i] = fopen(statsDir, "w")) == NULL ) {	/* STATISTICS LOG */
 				printf("ERROR: LOG FILES COULD NOT BE OPENED.\n");
 				printf("       MAX # OF OPENED FILES HAS BEEN REACHED = %d\n", numOfOpenFiles);
@@ -398,19 +393,14 @@ openOutputStreams(int option)
 			}
 			else
 				numOfOpenFiles++;
-            if ( (results[i] =
-                  //fopen(resultsDir, "a")
-                  //stdout
-                  tempResultFile
-                  ) == NULL ) {	/* P_VALUES LOG   */
+			if ( (results[i] = fopen(resultsDir, "w")) == NULL ) {	/* P_VALUES LOG   */
 				 printf("ERROR: LOG FILES COULD NOT BE OPENED.\n");
 				 printf("       MAX # OF OPENED FILES HAS BEEN REACHED = %d\n", numOfOpenFiles);
 				 printf("-OR-   THE OUTPUT DIRECTORY DOES NOT EXIST.\n");
 				 exit(-1);
 			}
-            else {
+			else
 				numOfOpenFiles++;
-            }
 		}
 	}
 	printf("   How many bitstreams? ");
@@ -473,66 +463,48 @@ invokeTestSuite(int option, char *streamFile)
 void
 nist_test_suite()
 {
-    int i;
-    i = 1;
-    fprintf(results[i], "%s\t", testNames[i]);fflush(results[i]);
 	if ( (testVector[0] == 1) || (testVector[TEST_FREQUENCY] == 1) ) 
 		Frequency(tp.n);
-    i = 2;
-    fprintf(results[i], "%s\t", testNames[i]);fflush(results[i]);
+	
 	if ( (testVector[0] == 1) || (testVector[TEST_BLOCK_FREQUENCY] == 1) ) 
 		BlockFrequency(tp.blockFrequencyBlockLength, tp.n);
-    i = 3;
-    fprintf(results[i], "%s\t", testNames[i]);fflush(results[i]);
+	
 	if ( (testVector[0] == 1) || (testVector[TEST_CUSUM] == 1) )
 		CumulativeSums(tp.n);
-    i = 4;
-    fprintf(results[i], "%s\t", testNames[i]);fflush(results[i]);
+	
 	if ( (testVector[0] == 1) || (testVector[TEST_RUNS] == 1) )
 		Runs(tp.n); 
-    i = 5;
-    fprintf(results[i], "%s\t", testNames[i]);fflush(results[i]);
+	
 	if ( (testVector[0] == 1) || (testVector[TEST_LONGEST_RUN] == 1) )
 		LongestRunOfOnes(tp.n);
-    i = 6;
-    fprintf(results[i], "%s\t", testNames[i]);fflush(results[i]);
+	
 	if ( (testVector[0] == 1) || (testVector[TEST_RANK] == 1) )
 		Rank(tp.n);
-    i = 7;
-    fprintf(results[i], "%s\t", testNames[i]);fflush(results[i]);
+	
 	if ( (testVector[0] == 1) || (testVector[TEST_FFT] == 1) )
 		DiscreteFourierTransform(tp.n);
-    i = 8;
-    fprintf(results[i], "%s\t", testNames[i]);fflush(results[i]);
+	
 	if ( (testVector[0] == 1) || (testVector[TEST_NONPERIODIC] == 1) )
 		NonOverlappingTemplateMatchings(tp.nonOverlappingTemplateBlockLength, tp.n);
-    i = 9;
-    fprintf(results[i], "%s\t", testNames[i]);fflush(results[i]);
+	
 	if ( (testVector[0] == 1) || (testVector[TEST_OVERLAPPING] == 1) )
 		OverlappingTemplateMatchings(tp.overlappingTemplateBlockLength, tp.n);
-    i = 10;
-    fprintf(results[i], "%s\t", testNames[i]);fflush(results[i]);
+	
 	if ( (testVector[0] == 1) || (testVector[TEST_UNIVERSAL] == 1) )
 		Universal(tp.n);
-    i = 11;
-    fprintf(results[i], "%s\t", testNames[i]);fflush(results[i]);
+	
 	if ( (testVector[0] == 1) || (testVector[TEST_APEN] == 1) )
 		ApproximateEntropy(tp.approximateEntropyBlockLength, tp.n);
-    i = 12;
-    fprintf(results[i], "%s\t", testNames[i]);fflush(results[i]);
+	
 	if ( (testVector[0] == 1) || (testVector[TEST_RND_EXCURSION] == 1) )
 		RandomExcursions(tp.n);
-    i = 13;
-    fprintf(results[i], "%s\t", testNames[i]);fflush(results[i]);
+	
 	if ( (testVector[0] == 1) || (testVector[TEST_RND_EXCURSION_VAR] == 1) )
 		RandomExcursionsVariant(tp.n);
-    i = 14;
-    fprintf(results[i], "%s\t", testNames[i]);fflush(results[i]);
+	
 	if ( (testVector[0] == 1) || (testVector[TEST_SERIAL] == 1) )
 		Serial(tp.serialBlockLength,tp.n);
-    i = 15;
-    fprintf(results[i], "%s\t", testNames[i]);fflush(results[i]);
+	
 	if ( (testVector[0] == 1) || (testVector[TEST_LINEARCOMPLEXITY] == 1) )
 		LinearComplexity(tp.linearComplexitySequenceLength, tp.n);
-
 }

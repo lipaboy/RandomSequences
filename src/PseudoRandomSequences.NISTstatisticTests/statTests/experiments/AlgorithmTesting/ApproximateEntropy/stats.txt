@@ -3,15 +3,15 @@
 		COMPUTATIONAL INFORMATION:
 		--------------------------------------------
 		(a) m (block length)    = 10
-		(b) n (sequence length) = 100
-		(c) Chi^2               = 130.311670
-		(d) Phi(m)	       = -4.563581
-		(e) Phi(m+1)	       = -4.605170
-		(f) ApEn                = 0.041589
+		(b) n (sequence length) = 10240
+		(c) Chi^2               = 12114.006654
+		(d) Phi(m)	       = -3.415751
+		(e) Phi(m+1)	       = -3.517394
+		(f) ApEn                = 0.101643
 		(g) Log(2)              = 0.693147
 		--------------------------------------------
-		Note: The blockSize = 10 exceeds recommended value of 1
+		Note: The blockSize = 10 exceeds recommended value of 8
 		Results are inaccurate!
 		--------------------------------------------
-SUCCESS		p_value = 1.000000
+FAILURE		p_value = 0.000000
 

@@ -50,18 +50,14 @@
 #include "../include/cephes.h"  
 #include "../include/utilities.h"
 
-//#include "../../assess.h"
-
 void	partitionResultFile(int numOfFiles, int numOfSequences, int option, int testNameID);
 void	postProcessResults(int option);
 int		cmp(const double *a, const double *b);
 int		computeMetrics(char *s, int test);
 
 int
-main(int argc, char **argv)
+main(int argc, char *argv[])
 {
-	//int SIZE = 1000;
-
 	int		i;
 	int		option;			/* TEMPLATE LENGTH/STREAM LENGTH/GENERATOR*/
 	char	*streamFile;	/* STREAM FILENAME     */
@@ -112,8 +108,6 @@ main(int argc, char **argv)
 	fprintf(summary, "------------------------------------------------------------------------------\n");
 	postProcessResults(option);
 	fclose(summary);
-
-	system("pause");
 
 	return 1;
 }

@@ -2,9 +2,9 @@
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
-//#include "../include/externs.h"
-//#include "../include/utilities.h"
-//#include "cephes.h"
+#include "../include/externs.h"
+#include "../include/utilities.h"
+#include "../include/cephes.h"
 
 #include "../include/defs.h"
 #include "../include/assess.h"
