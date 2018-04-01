@@ -7,7 +7,7 @@ BlockFrequencyTest::test(BoolIterator sequenceIter, size_type size) {
     ReturnValueType container;
     TestParameters testParameters(size);
     for (auto & param : testParameters.blockFrequencyTest)
-        container.push_back(BlockFrequency(param, size, sequenceIter));
+        container.push_back(doBlockFrequencyTest(param, size, sequenceIter));
     return std::move(container);
 }
 
@@ -16,7 +16,7 @@ NonOverlappingTemplateMatchingsTest::test(BoolIterator sequenceIter, size_type s
     ReturnValueType container;
     TestParameters testParameters(size);
     for (auto & param : testParameters.nonOverlappingTemplateMatchingsTest) {
-        std::vector<double> temp = NonOverlappingTemplateMatchings(param, size, sequenceIter);
+        std::vector<double> temp = doNonOverlappingTemplateMatchingsTest(param, size, sequenceIter);
         double average = 0.;
         for (auto & elem : temp) {
             average += isTestSuccessful(elem);
@@ -35,7 +35,7 @@ OverlappingTemplateMatchingsTest::test(BoolIterator sequenceIter, size_type size
     ReturnValueType container;
     TestParameters testParameters(size);
     for (auto & param : testParameters.overlappingTemplateMatchingsTest)
-        container.push_back(OverlappingTemplateMatchings(param, size, sequenceIter));
+        container.push_back(doOverlappingTemplateMatchingsTest(param, size, sequenceIter));
     return std::move(container);
 }
 
@@ -44,7 +44,7 @@ LinearComplexityTest::test(BoolIterator sequenceIter, size_type size) {
     ReturnValueType container;
     TestParameters testParameters(size);
     for (auto & param : testParameters.linearComplexityTest)
-        container.push_back(LinearComplexity(param, size, sequenceIter));
+        container.push_back(doLinearComplexityTest(param, size, sequenceIter));
     return std::move(container);
 }
 
@@ -53,7 +53,7 @@ SerialTest::test(BoolIterator sequenceIter, size_type size) {
     ReturnValueType container;
     TestParameters testParameters(size);
     for (auto & param : testParameters.serialTest) {
-        auto res = Serial(param, size, sequenceIter);
+        auto res = doSerialTest(param, size, sequenceIter);
         container.push_back(res.first);
         container.push_back(res.second);
     }
@@ -66,7 +66,7 @@ ApproximateEntropyTest::test(BoolIterator sequenceIter, size_type size) {
     TestParameters testParameters(size);
     for (auto & param : testParameters.approximateEntropyTest) {
         // (M + 1) - bit block is used to compare
-        container.push_back(ApproximateEntropy(param, size, sequenceIter));
+        container.push_back(doApproximateEntropyTest(param, size, sequenceIter));
     }
     return std::move(container);
 }
@@ -83,7 +83,7 @@ CumulativeSumsTest::test(BoolIterator sequenceIter, size_type size) {
 IStatisticalTest::ReturnValueType
 RandomExcursionsTest::test(BoolIterator sequenceIter, size_type size) {
     ReturnValueType container;
-    auto result = RandomExcursions(size, sequenceIter);
+    auto result = doRandomExcursionsTest(size, sequenceIter);
     double average = 0.;
     for (auto & elem : result) {
         average += isTestSuccessful(elem);
@@ -99,7 +99,7 @@ RandomExcursionsTest::test(BoolIterator sequenceIter, size_type size) {
 IStatisticalTest::ReturnValueType
 RandomExcursionsVariantTest::test(BoolIterator sequenceIter, size_type size) {
     ReturnValueType container;
-    auto result = RandomExcursionsVariant(size, sequenceIter);
+    auto result = doRandomExcursionsVariantTest(size, sequenceIter);
     double average = 0.;
     for (auto & elem : result) {
         average += isTestSuccessful(elem);
@@ -157,7 +157,7 @@ BookStackTest::test(BoolIterator sequenceIter, size_type size) {
         };
         if (param.upperPart > (1LL << 28))
             continue;
-        container.push_back(bookStackTestMain(static_cast<int>(arguments.size()), &arguments[0]));
+        container.push_back(doBookStackTest(static_cast<int>(arguments.size()), &arguments[0]));
     }
     std::remove(inputFile.c_str());
 

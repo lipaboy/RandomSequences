@@ -15,7 +15,7 @@ namespace statistical_tests_space {
 double	Pr(int u, double eta);
 
 double
-OverlappingTemplateMatchings(int m, int n, BoolIterator epsilon)
+doOverlappingTemplateMatchingsTest(int m, int n, BoolIterator epsilon)
 {
 	int				i, k, match;
 	double			W_obs, eta, sum, chi2, p_value, lambda;

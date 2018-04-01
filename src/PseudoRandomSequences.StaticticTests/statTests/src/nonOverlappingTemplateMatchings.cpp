@@ -14,7 +14,7 @@ using namespace statistical_tests_space;
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 std::vector<double>
-statistical_tests_space::NonOverlappingTemplateMatchings(int m, int n, BoolIterator epsilon)
+statistical_tests_space::doNonOverlappingTemplateMatchingsTest(int m, int n, BoolIterator epsilon)
 {
 	int		numOfTemplates[100] = {0, 0, 2, 4, 6, 12, 20, 40, 74, 148, 284, 568, 1116,
 						2232, 4424, 8848, 17622, 35244, 70340, 140680, 281076, 562152};
@@ -31,9 +31,7 @@ statistical_tests_space::NonOverlappingTemplateMatchings(int m, int n, BoolItera
     char			directory[100] = "";
 	BitSequence		*sequence = NULL;
 
-	std::vector<double> result;
-	int successCount = 0;
-	int failureCount = 0;
+    std::vector<double> result;
 
 	N = 8;
 	M = n/N;

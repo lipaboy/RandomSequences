@@ -13,7 +13,7 @@ using namespace statistical_tests_space;
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 double
-statistical_tests_space::testFrequency(int n, BoolIterator epsilon)
+statistical_tests_space::doFrequencyTest(int n, BoolIterator epsilon)
 {
 	int		i;
 	double	f, s_obs, p_value, sum, sqrt2 = 1.41421356237309504880;

@@ -11,7 +11,7 @@ namespace statistical_tests_space {
 double psi2(int m, int n, BoolIterator epsilon);
 
 std::pair<double, double>
-Serial(int m, int n, BoolIterator epsilon)
+doSerialTest(int m, int n, BoolIterator epsilon)
 {
 	double	p_value1, p_value2, psim0, psim1, psim2, del1, del2;
 	

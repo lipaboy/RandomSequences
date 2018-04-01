@@ -13,7 +13,7 @@ using namespace statistical_tests_space;
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 double
-statistical_tests_space::Runs(int n, BoolIterator epsilon)
+statistical_tests_space::doRunsTest(int n, BoolIterator epsilon)
 {
 	int		S, k;
 	double	pi, V, erfc_arg, p_value;

@@ -14,7 +14,7 @@
 namespace statistical_tests_space {
 
 double
-ApproximateEntropy(int m, int n, BoolIterator epsilon)
+doApproximateEntropyTest(int m, int n, BoolIterator epsilon)
 {
 	int				i, j, k, r, blockSize, seqLength, powLen, index;
 	double			sum, numOfBlocks, ApEn[2], apen, chi_squared, p_value;

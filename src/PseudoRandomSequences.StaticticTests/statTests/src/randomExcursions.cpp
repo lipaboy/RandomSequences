@@ -13,7 +13,7 @@ using namespace statistical_tests_space;
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 std::vector<double>
-statistical_tests_space::RandomExcursions(int n, BoolIterator epsilon)
+statistical_tests_space::doRandomExcursionsTest(int n, BoolIterator epsilon)
 {
 	int		b, i, j, k, J, x;
 	int		cycleStart, cycleStop, *cycle = NULL, *S_k = NULL;

@@ -445,7 +445,7 @@ void Quit()
 	exit(1);
 }
 
-double bookStackTestMain(int argc, const char* argv[])
+double doBookStackTest(int argc, const char* argv[])
 {
 #ifdef _MSC_VER
 	_setmode(_fileno(stdin), _O_BINARY);

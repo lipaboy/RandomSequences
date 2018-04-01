@@ -16,23 +16,23 @@ namespace statistical_tests_space {
 void  __ogg_fdrffti(int n, double *wsave, int *ifac);
 void  __ogg_fdrfftf(int n, double *X, double *wsave, int *ifac);
 
-double bookStackTestMain(int argc, const char* argv[]);
+double doBookStackTest(int argc, const char* argv[]);
 
-double	testFrequency(int n, BoolIterator epsilon);
-double	BlockFrequency(int M, int n, BoolIterator epsilon);
+double	doFrequencyTest(int n, BoolIterator epsilon);
+double	doBlockFrequencyTest(int M, int n, BoolIterator epsilon);
 std::pair<double, double> 	CumulativeSums(int n, BoolIterator epsilon);
-double	Runs(int n, BoolIterator epsilon);
-double	LongestRunOfOnes(int n, BoolIterator epsilon);
-double	Rank(int n, BoolIterator epsilon);
-double	DiscreteFourierTransform(int n, BoolIterator epsilon);
-std::vector<double>	NonOverlappingTemplateMatchings(int m, int n, BoolIterator epsilon);
-double	OverlappingTemplateMatchings(int m, int n, BoolIterator epsilon);
-double	Universal(int n, BoolIterator epsilon);
-double	ApproximateEntropy(int m, int n, BoolIterator epsilon);
-std::vector<double>	RandomExcursions(int n, BoolIterator epsilon);
-std::vector<double>	RandomExcursionsVariant(int n, BoolIterator epsilon);
-double	LinearComplexity(int M, int n, BoolIterator epsilon);
-std::pair<double, double>	Serial(int m, int n, BoolIterator epsilon);
+double	doRunsTest(int n, BoolIterator epsilon);
+double	doLongestRunOfOnesTest(int n, BoolIterator epsilon);
+double	doRankTest(int n, BoolIterator epsilon);
+double	doDiscreteFourierTransformTest(int n, BoolIterator epsilon);
+std::vector<double>	doNonOverlappingTemplateMatchingsTest(int m, int n, BoolIterator epsilon);
+double	doOverlappingTemplateMatchingsTest(int m, int n, BoolIterator epsilon);
+double	doUniversalTest(int n, BoolIterator epsilon);
+double	doApproximateEntropyTest(int m, int n, BoolIterator epsilon);
+std::vector<double>	doRandomExcursionsTest(int n, BoolIterator epsilon);
+std::vector<double>	doRandomExcursionsVariantTest(int n, BoolIterator epsilon);
+double	doLinearComplexityTest(int M, int n, BoolIterator epsilon);
+std::pair<double, double>	doSerialTest(int m, int n, BoolIterator epsilon);
 
 }
 

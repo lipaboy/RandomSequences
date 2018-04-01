@@ -43,7 +43,7 @@ class TestParameters;
 class FrequencyTest : public IStatisticalTest {
 public:
     virtual ReturnValueType test(BoolIterator sequenceIter, size_type size) {
-        return ReturnValueType( { testFrequency(size, sequenceIter) } );
+        return ReturnValueType( { doFrequencyTest(size, sequenceIter) } );
     }
 };
 // #Parameterized
@@ -55,28 +55,28 @@ public:
 class RunsTest : public IStatisticalTest {
 public:
     virtual ReturnValueType test(BoolIterator sequenceIter, size_type size) {
-        return ReturnValueType( { Runs(size, sequenceIter) } );
+        return ReturnValueType( { doRunsTest(size, sequenceIter) } );
     }
 };
 
 class LongestRunOfOnesTest : public IStatisticalTest {
 public:
     virtual ReturnValueType test(BoolIterator sequenceIter, size_type size) {
-        return ReturnValueType( { LongestRunOfOnes(size, sequenceIter) } );
+        return ReturnValueType( { doLongestRunOfOnesTest(size, sequenceIter) } );
     }
 };
 
 class RankTest : public IStatisticalTest {
 public:
     virtual ReturnValueType test(BoolIterator sequenceIter, size_type size) {
-        return ReturnValueType( { Rank(size, sequenceIter) } );
+        return ReturnValueType( { doRankTest(size, sequenceIter) } );
     }
 };
 
 class DiscreteFourierTransformTest : public IStatisticalTest {
 public:
     virtual ReturnValueType test(BoolIterator sequenceIter, size_type size) {
-        return ReturnValueType( { DiscreteFourierTransform(size, sequenceIter) } );
+        return ReturnValueType( { doDiscreteFourierTransformTest(size, sequenceIter) } );
     }
 };
 // #The Slowest test
@@ -95,7 +95,7 @@ public:
 class UniversalTest : public IStatisticalTest {
 public:
     virtual ReturnValueType test(BoolIterator sequenceIter, size_type size) {
-        return ReturnValueType( { Universal(size, sequenceIter) } );
+        return ReturnValueType( { doUniversalTest(size, sequenceIter) } );
     }
 };
 // #The Slowest test

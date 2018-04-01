@@ -14,7 +14,7 @@ using namespace statistical_tests_space;
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 double
-statistical_tests_space::Rank(int n, BoolIterator epsilon)
+statistical_tests_space::doRankTest(int n, BoolIterator epsilon)
 {
 	int			N, i, k, r;
 	double		p_value, product, chi_squared, arg1, p_32, p_31, p_30, R, F_32, F_31, F_30;

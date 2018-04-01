@@ -9,7 +9,7 @@
 using namespace statistical_tests_space;
 
 double
-statistical_tests_space::LinearComplexity(int M, int n, BoolIterator epsilon)
+statistical_tests_space::doLinearComplexityTest(int M, int n, BoolIterator epsilon)
 {
 	int       i, ii, j, d, N, L, m, N_, parity, sign, K = 6;
 	double    p_value, T_, mean, nu[7], chi2;

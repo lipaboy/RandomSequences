@@ -14,7 +14,7 @@ using namespace statistical_tests_space;
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 double
-statistical_tests_space::Universal(int n, BoolIterator epsilon)
+statistical_tests_space::doUniversalTest(int n, BoolIterator epsilon)
 {
 	int		i, j, p, L, Q, K;
 	double	arg, sqrt2, sigma, phi, sum, p_value, c;

@@ -20,7 +20,7 @@ using namespace statistical_tests_space;
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 double
-statistical_tests_space::DiscreteFourierTransform(int n, BoolIterator epsilon)
+statistical_tests_space::doDiscreteFourierTransformTest(int n, BoolIterator epsilon)
 {
 	double	p_value, upperBound, percentile, N_l, N_o, d, *m = NULL, *X = NULL, *wsave = NULL;
 	int		i, count, ifac[15];

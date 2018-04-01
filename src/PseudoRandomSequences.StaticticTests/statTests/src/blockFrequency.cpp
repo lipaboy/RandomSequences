@@ -12,7 +12,7 @@
 using namespace statistical_tests_space;
 
 double
-statistical_tests_space::BlockFrequency(int M, int n, BoolIterator epsilon)
+statistical_tests_space::doBlockFrequencyTest(int M, int n, BoolIterator epsilon)
 {
 	int		i, j, N, blockSum;
 	double	p_value, sum, pi, v, chi_squared;

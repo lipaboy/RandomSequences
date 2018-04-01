@@ -13,7 +13,7 @@
 namespace statistical_tests_space {
 
 double
-LongestRunOfOnes(int n, BoolIterator epsilon)
+doLongestRunOfOnesTest(int n, BoolIterator epsilon)
 {
 	double			pval, chi2, pi[7];
 	int				run, v_n_obs, N, i, j, K, M, V[7];

@@ -13,7 +13,7 @@ using namespace statistical_tests_space;
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 std::vector<double>
-statistical_tests_space::RandomExcursionsVariant(int n, BoolIterator epsilon)
+statistical_tests_space::doRandomExcursionsVariantTest(int n, BoolIterator epsilon)
 {
 	int		i, p, J, x, constraint, count, *S_k;
 	int		stateX[18] = { -9, -8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
