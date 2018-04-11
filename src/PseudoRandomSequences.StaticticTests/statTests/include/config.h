@@ -1,12 +1,12 @@
 
+#ifndef _CONFIG_H_
+#define	_CONFIG_H_
+
 namespace statistical_tests_space {
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#ifndef _CONFIG_H_
-#define	_CONFIG_H_
 
 //#define	WINDOWS32
 //#define	PROTOTYPES
@@ -47,10 +47,10 @@ typedef ULONG DBLWORD;  /* 32-bit word */
 typedef ULONG WORD64[2];  /* 64-bit word */
 #endif
 
-#endif /* _CONFIG_H_ */
-
 #ifdef __cplusplus
 }
 #endif
 
 }
+
+#endif /* _CONFIG_H_ */

@@ -6,3 +6,5 @@
 **/.vscode/*
 **/build*/**
 **/id_rsa*
+**/experiments/*
+**/obj/*

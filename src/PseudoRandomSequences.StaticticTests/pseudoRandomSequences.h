@@ -1,5 +1,5 @@
-#ifndef PSEUDO_RANDOM_SEQUENCES
-#define PSEUDO_RANDOM_SEQUENCES
+#ifndef PSEUDO_RANDOM_SEQUENCES_H
+#define PSEUDO_RANDOM_SEQUENCES_H
 
 #include <vector>
 #include <bitset>
@@ -36,11 +36,16 @@ TimeType my_get_current_clock_time();
 
 int getTimeDifferenceInMillis(TimeType const & from, TimeType const & to);
 
-
+Sequence readSequenceByBitFromFile(string const & inputFile, size_t sequenceSize);
 
 vector<string> getStatisticTestNames(string testKey, size_t sequenceSize);
 
-void runTests(BoolIterator epsilonBegin,
+Sequence readSequenceByByteFromFile(string const & inputFile, size_t sequenceSize,
+                                           char isZero = '0', bool isSpecialFormat = false);
+
+//--------------------------------------------------------------//
+
+void runStatisticalTests(BoolIterator epsilonBegin,
     BoolIterator epsilonEnd,
     std::vector<double> & testResults,
     std::string const & testKey,
@@ -50,6 +55,8 @@ int beaconRun(int argc, char * argv[]);
 
 int generatorsTestConfigRun(int argc, char * argv[]);
 
+bool runUnitTests();
+
 }
 
-#endif //PSEUDO_RANDOM_SEQUENCES
+#endif //PSEUDO_RANDOM_SEQUENCES_H

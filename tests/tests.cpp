@@ -11,13 +11,13 @@
 #include <gtest/gtest.h>
 
 //#include "i_statistical_test.h"
-#include "statTests/include/stat_fncs.h"
-#include "pseudoRandomSequences.h"
-#include "statTests/include/generators.h"
-#include <lipaboyLibrary/src/maths/fixed_precision_number.h>
-#include "statTests/include/externs.h"
 
-namespace random_sequences_tests {
+#include <pseudoRandomSequences.h>
+//#include "statTests/include/generators.h"
+//#include <lipaboyLibrary/src/maths/fixed_precision_number.h>
+#include <statTests/include/externs.h>
+
+namespace random_sequences_unit_tests {
 
 using std::cout;
 using std::endl;
@@ -29,14 +29,15 @@ using std::unique_ptr;
 using statistical_tests_space::OrderTest;
 using statistical_tests_space::Sequence;
 using statistical_tests_space::DiscreteFourierTransformTest;
-//using namespace statistical_tests_space;
+using statistical_tests_space::FrequencyTest;
+using namespace statistical_tests_space;
 
 
 //---------------------------------Tests-------------------------------//
 
 //---------Constructors---------//
 
-TEST(OrderTest, check_method_test) {
+TEST(OrderTest_test, check_method_test) {
     OrderTest orderTest;
     orderTest.initialize(1);
     Sequence seq = { 0, 1, 0, 1, 1, 0, 0 };
@@ -45,10 +46,12 @@ TEST(OrderTest, check_method_test) {
     ASSERT_EQ(1, 1);
 }
 
-TEST(DiscreteFourierTransformTest, check_method_test) {
-    DiscreteFourierTransformTest dftTest;
-    FrequencyTest freqTest;
-using namespace statistical_tests_space;
+TEST(DiscreteFourierTransformTest_test, check_method_test) {
+
+ //   DiscreteFourierTransformTest dftTest;
+    //FrequencyTest freqTest;
+    //statistical_tests_space::doFrequencyTest(1, vector<bool>({1, 0}).begin());
+
 //    tp.n = 1000000;
 //    tp.numOfBitStreams = 1;
 //    auto epsilon = quadRes2();

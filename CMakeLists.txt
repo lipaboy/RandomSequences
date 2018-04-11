@@ -29,5 +29,6 @@ enable_cxx_compiler_flag_if_supported("-pedantic")
 #set(CMAKE_C_COMPILER gcc-7)
 #set(CMAKE_CXX_COMPILER g++-7)
 
-add_subdirectory(src/PseudoRandomSequences.StaticticTests)
 add_subdirectory(tests)
+add_subdirectory(src/PseudoRandomSequences.StaticticTests)
+

@@ -36,7 +36,7 @@ using TestsContainerType = vector<unique_ptr<IStatisticalTest> >;
 
     // TODO: take off the responsibility of return names of active tests and give it to another function with argument testKey
 
-void statistical_tests_space::runTests(
+void statistical_tests_space::runStatisticalTests(
 	BoolIterator epsilonBegin,
     BoolIterator epsilonEnd,
 	std::vector<double> & testResults,

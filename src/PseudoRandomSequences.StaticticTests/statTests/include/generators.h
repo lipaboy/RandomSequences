@@ -1,3 +1,6 @@
+#ifndef STAT_TESTS_GENERATORS_H
+#define STAT_TESTS_GENERATORS_H
+
 #include <vector>
 
 //#include	"../include/sha.h"
@@ -90,3 +93,5 @@ Sequence	SHA1();
 	 }
 
 }
+
+#endif //STAT_TESTS_GENERATORS_H

@@ -45,58 +45,62 @@ namespace {
 	};
 }
 
-static Sequence readSequenceByBitFromFile(string const & inputFile, size_t sequenceSize) {
+Sequence readSequenceByBitFromFile(string const & inputFile, size_t sequenceSize) {
     // TODO: write catching exceptions
 
     using std::ifstream;
     typedef u_char BlockReadType;
 
-    ifstream inFile;
     Sequence epsilon(sequenceSize);
+    try {
+        ifstream inFile;
 
-    inFile.open(inputFile, std::ios::in);
+        inFile.exceptions ( std::ifstream::failbit | std::ifstream::badbit );
+        inFile.open(inputFile, std::ios::in);
 
-    BlockReadType buffer;
-    for (size_t i = 0; i < epsilon.size() / 8; i++) {
-        char symbol;
-        inFile >> symbol;
-        buffer = static_cast<BlockReadType>(symbol);
-        for (int bit = 0; bit < static_cast<int>(8 * sizeof(BlockReadType)); bit++) {
-            epsilon[i * 8 + bit] = static_cast<BitSequence>((buffer & (1 << bit)) >> bit);
+        BlockReadType buffer;
+        for (size_t i = 0; i < epsilon.size() / 8; i++) {
+            char symbol;
+            inFile >> symbol;
+            buffer = static_cast<BlockReadType>(symbol);
+            for (int bit = 0; bit < static_cast<int>(8 * sizeof(BlockReadType)); bit++) {
+                epsilon[i * 8 + bit] = static_cast<BitSequence>((buffer & (1 << bit)) >> bit);
+            }
         }
-    }
-    std::copy_n(epsilon.begin(), 16, std::ostream_iterator<BitSequence>(cout));
-    cout << endl;
+        std::copy_n(epsilon.begin(), 16, std::ostream_iterator<BitSequence>(cout));
+        cout << endl;
 
-    inFile.close();
+        inFile.close();
+    } catch(ifstream::failure e) {
+        std::cerr << "Exception opening/reading/closing file " << inputFile << endl;
+    }
 
     return std::move(epsilon);
 }
 
-static Sequence readSequenceByByteFromFile(string const & inputFile, size_t sequenceSize,
-                                           char isZero = '0', bool isSpecialFormat = true) {
+Sequence readSequenceByByteFromFile(string const & inputFile, size_t sequenceSize,
+                                           char isZero, bool isSpecialFormat) {
     // TODO: write catching exceptions
-
     using std::ifstream;
 
-    ifstream inFile;
     Sequence epsilon(sequenceSize);
+    try {
+        ifstream inFile;
+        inFile.exceptions ( std::ifstream::failbit | std::ifstream::badbit );
+        inFile.open(inputFile, std::ios::in);
 
-    inFile.open(inputFile, std::ios::in);
-
-    for (int i = 0; i < static_cast<int>(epsilon.size()); i++) {
-        char symbol;
-        inFile >> symbol;
-        epsilon[i] = (!isSpecialFormat && symbol == isZero)       //for others
-                    ||
-                     (isSpecialFormat && (symbol & 1) != 0)             //for PI number file
-                        ? 0 : 1;
+        for (int i = 0; i < static_cast<int>(epsilon.size()); i++) {
+            char symbol;
+            inFile >> symbol;
+            epsilon[i] = (!isSpecialFormat && symbol == isZero)       //for others
+                        ||
+                         (isSpecialFormat && (symbol & 1) != 0)             //for PI number file
+                            ? 0 : 1;
+        }
+        inFile.close();
+    } catch(ifstream::failure e) {
+        std::cerr << "Exception opening/reading/closing file " << inputFile << endl;
     }
-    cout << endl;
-    std::copy_n(epsilon.begin(), 100, std::ostream_iterator<BitSequence>(cout));
-    cout << endl;
-
-    inFile.close();
 
     return std::move(epsilon);
 }
@@ -333,14 +337,14 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
 
 				//----------------Tests-----------------//
 				{
-                    runTests(epsilonRange.begin(), epsilonRange.end(), currResults, testKey, genName);
+                    runStatisticalTests(epsilonRange.begin(), epsilonRange.end(), currResults, testKey, genName);
                     #pragma omp critical
                     {
                         std::transform(currResults.begin(), currResults.end(), //first source
                             testResults.begin(),                                //second source
                             testResults.begin(),                                //destination
                             [](double p_value, double count) -> double {
-                                return ((p_value < 0.) ? (count - 1000.) : ((p_value < MEANING_LEVEL) + count)); }
+                                return ((p_value < 0.) ? (count - 1000.) : (!isTestSuccessful(p_value) + count)); }
                         // p_value < ALPHA - it is failure
                         );
                     }

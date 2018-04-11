@@ -8,6 +8,7 @@
 #include <iterator>
 #include <omp.h>
 
+#include "statTests/include/externs.h"
 #include "statTests/include/stat_fncs.h"
 #include "bookStackTest/order_test.h"
 
@@ -43,7 +44,7 @@ class TestParameters;
 class FrequencyTest : public IStatisticalTest {
 public:
     virtual ReturnValueType test(BoolIterator sequenceIter, size_type size) {
-        return ReturnValueType( { doFrequencyTest(size, sequenceIter) } );
+        return ReturnValueType( { statistical_tests_space::doFrequencyTest(int(size), sequenceIter) } );
     }
 };
 // #Parameterized

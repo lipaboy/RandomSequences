@@ -1,26 +1,23 @@
-#include <stdio.h>
 #include <math.h>
-#include <string.h>
-//#include "../include/externs.h"
+#include "../include/externs.h"
 #include "../include/defs.h"
-#include "../include/assess.h"
 #include "../include/stat_fncs.h"
 
-using namespace statistical_tests_space;
+namespace statistical_tests_space {
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                           F R E Q U E N C Y  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 double
-statistical_tests_space::doFrequencyTest(int n, BoolIterator epsilon)
+doFrequencyTest(int n, BoolIterator epsilon)
 {
 	int		i;
 	double	f, s_obs, p_value, sum, sqrt2 = 1.41421356237309504880;
 	
 	sum = 0.0;
 	for ( i=0; i<n; i++ )
-		sum += 2*(int)*(epsilon++) - 1;
+        sum += 2 * ((int)*(epsilon++)) - 1;
 		//sum += 2 * (int)getRand(i) - 1;
 	s_obs = fabs(sum)/sqrt(n);
 	f = s_obs/sqrt2;
@@ -41,4 +38,6 @@ statistical_tests_space::doFrequencyTest(int n, BoolIterator epsilon)
 	return (p_value);
 	//fflush(stats[TEST_FREQUENCY]);
     //printf("%f/n", p_value); fflush(results[TEST_FREQUENCY]);
+}
+
 }

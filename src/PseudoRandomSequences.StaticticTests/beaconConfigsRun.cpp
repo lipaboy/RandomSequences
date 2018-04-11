@@ -88,7 +88,7 @@ int statistical_tests_space::beaconRun(int argc, char * argv[]) {
             Sequence epsilon;
             epsilon = std::move(result);
 
-            runTests(epsilon.begin(), epsilon.end(), testResults, testKey, "beacon"
+            runStatisticalTests(epsilon.begin(), epsilon.end(), testResults, testKey, "beacon"
                 //outFilename + std::to_string(fileIndex) + ".tmp"
                      );
         }
