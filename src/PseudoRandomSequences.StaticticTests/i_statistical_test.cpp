@@ -5,8 +5,7 @@ namespace statistical_tests_space {
 IStatisticalTest::ReturnValueType
 BlockFrequencyTest::test(BoolIterator sequenceIter, size_type size) {
     ReturnValueType container;
-    TestParameters testParameters(size);
-    for (auto & param : testParameters.blockFrequencyTest)
+    for (auto & param : getTestParameters().blockFrequencyTest)
         container.push_back(doBlockFrequencyTest(param, size, sequenceIter));
     return std::move(container);
 }
@@ -14,8 +13,7 @@ BlockFrequencyTest::test(BoolIterator sequenceIter, size_type size) {
 IStatisticalTest::ReturnValueType
 NonOverlappingTemplateMatchingsTest::test(BoolIterator sequenceIter, size_type size) {
     ReturnValueType container;
-    TestParameters testParameters(size);
-    for (auto & param : testParameters.nonOverlappingTemplateMatchingsTest) {
+    for (auto & param : getTestParameters().nonOverlappingTemplateMatchingsTest) {
         std::vector<double> temp = doNonOverlappingTemplateMatchingsTest(param, size, sequenceIter);
         double average = 0.;
         for (auto & elem : temp) {
@@ -33,8 +31,7 @@ NonOverlappingTemplateMatchingsTest::test(BoolIterator sequenceIter, size_type s
 IStatisticalTest::ReturnValueType
 OverlappingTemplateMatchingsTest::test(BoolIterator sequenceIter, size_type size) {
     ReturnValueType container;
-    TestParameters testParameters(size);
-    for (auto & param : testParameters.overlappingTemplateMatchingsTest)
+    for (auto & param : getTestParameters().overlappingTemplateMatchingsTest)
         container.push_back(doOverlappingTemplateMatchingsTest(param, size, sequenceIter));
     return std::move(container);
 }
@@ -42,8 +39,7 @@ OverlappingTemplateMatchingsTest::test(BoolIterator sequenceIter, size_type size
 IStatisticalTest::ReturnValueType
 LinearComplexityTest::test(BoolIterator sequenceIter, size_type size) {
     ReturnValueType container;
-    TestParameters testParameters(size);
-    for (auto & param : testParameters.linearComplexityTest)
+    for (auto & param : getTestParameters().linearComplexityTest)
         container.push_back(doLinearComplexityTest(param, size, sequenceIter));
     return std::move(container);
 }
@@ -51,8 +47,7 @@ LinearComplexityTest::test(BoolIterator sequenceIter, size_type size) {
 IStatisticalTest::ReturnValueType
 SerialTest::test(BoolIterator sequenceIter, size_type size) {
     ReturnValueType container;
-    TestParameters testParameters(size);
-    for (auto & param : testParameters.serialTest) {
+    for (auto & param : getTestParameters().serialTest) {
         auto res = doSerialTest(param, size, sequenceIter);
         container.push_back(res.first);
         container.push_back(res.second);
@@ -63,8 +58,7 @@ SerialTest::test(BoolIterator sequenceIter, size_type size) {
 IStatisticalTest::ReturnValueType
 ApproximateEntropyTest::test(BoolIterator sequenceIter, size_type size) {
     ReturnValueType container;
-    TestParameters testParameters(size);
-    for (auto & param : testParameters.approximateEntropyTest) {
+    for (auto & param : getTestParameters().approximateEntropyTest) {
         // (M + 1) - bit block is used to compare
         container.push_back(doApproximateEntropyTest(param, size, sequenceIter));
     }
@@ -141,9 +135,8 @@ BookStackTest::test(BoolIterator sequenceIter, size_type size) {
         outFile.close();
     }
 
-    TestParameters testParameters(size);
     // ! Each bit means 0 or 1 (you can't pass to bookStackTest 0 or 1 in whole byte for example)
-    for (auto param : testParameters.bookStackTest) {
+    for (auto param : getTestParameters().bookStackTest) {
         string sizeStr = std::to_string(size);
         string dimStr = std::to_string(param.dimension);
         string upperPartStr = std::to_string(param.upperPart);
@@ -167,7 +160,7 @@ BookStackTest::test(BoolIterator sequenceIter, size_type size) {
 
 //----------------------Test parameters----------------------//
 
-TestParameters::TestParameters(size_t EPSILON_SIZE)
+TestParameters::TestParameters()
     : blockFrequencyTest({ 2, //EPSILON_SIZE / 4, EPSILON_SIZE / 2,
                          //16, 32, 128
                          10
@@ -176,7 +169,7 @@ TestParameters::TestParameters(size_t EPSILON_SIZE)
                                           }),                    //slow test!!!!
       overlappingTemplateMatchingsTest({ 2, 6, 12 })
 {
-    EPSILON_SIZE++;
+//    EPSILON_SIZE++;
     for (int upperPart = 0; upperPart < 3; upperPart++) {
         for (uint64_t dim = 8; dim <= 32; dim *= 2) {	//8, 16, 32
             uint64_t upperPartSize = (upperPart == 0) ? 16LL

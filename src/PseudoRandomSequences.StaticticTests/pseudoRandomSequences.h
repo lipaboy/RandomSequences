@@ -45,17 +45,15 @@ Sequence readSequenceByByteFromFile(string const & inputFile, size_t sequenceSiz
 
 //--------------------------------------------------------------//
 
-void runStatisticalTests(BoolIterator epsilonBegin,
+IStatisticalTest::ReturnValueType
+runStatisticalTests(BoolIterator epsilonBegin,
     BoolIterator epsilonEnd,
-    std::vector<double> & testResults,
     std::string const & testKey,
-    const std::string &uniqueSequenceName);
-
-int beaconRun(int argc, char * argv[]);
+    IStatisticalTest::TestParametersPtr pTestParams);
 
 int generatorsTestConfigRun(int argc, char * argv[]);
 
-bool runUnitTests();
+std::string runUnitTests();
 
 }
 

@@ -19,16 +19,18 @@
 #include "statTests/include/stat_fncs.h"
 #include "lipaboyLibrary/src/maths/fixed_precision_number.h"
 
-using namespace statistical_tests_space;
+namespace statistical_tests_space {
+
 using namespace std::chrono;
 
 //TODO: try to use GoogleTests
 
 //typedef std::vector<char> Sequence;
 
-const int TEST_COUNT = 16;
+//-----------------------------Deprecated-----------------------//
+namespace {
 
-int statistical_tests_space::beaconRun(int argc, char * argv[]) {
+static int beaconRun(int argc, char * argv[]) {
 	time_t t;
     std::srand((unsigned int)(std::time(&t)));
 	using std::string;
@@ -88,9 +90,9 @@ int statistical_tests_space::beaconRun(int argc, char * argv[]) {
             Sequence epsilon;
             epsilon = std::move(result);
 
-            runStatisticalTests(epsilon.begin(), epsilon.end(), testResults, testKey, "beacon"
-                //outFilename + std::to_string(fileIndex) + ".tmp"
-                     );
+//            runStatisticalTests(epsilon.begin(), epsilon.end(), testResults, testKey, "beacon"
+//                //outFilename + std::to_string(fileIndex) + ".tmp"
+//                     );
         }
 		//----------------Write results-----------------//
 		{
@@ -129,5 +131,5 @@ int statistical_tests_space::beaconRun(int argc, char * argv[]) {
 
 	return 0;
 }
-
-
+}
+}

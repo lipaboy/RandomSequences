@@ -36,34 +36,33 @@ using TestsContainerType = vector<unique_ptr<IStatisticalTest> >;
 
     // TODO: take off the responsibility of return names of active tests and give it to another function with argument testKey
 
-void statistical_tests_space::runStatisticalTests(
-	BoolIterator epsilonBegin,
+IStatisticalTest::ReturnValueType
+statistical_tests_space::runStatisticalTests(BoolIterator epsilonBegin,
     BoolIterator epsilonEnd,
-	std::vector<double> & testResults,
     std::string const & testKey,
-    std::string const & uniqueSequenceName
-        )
+    IStatisticalTest::TestParametersPtr pTestParams)
 {
+    IStatisticalTest::ReturnValueType testResults;
     const int EPSILON_SIZE = static_cast<int>(std::distance(epsilonBegin, epsilonEnd));
-
     TestsContainerType packOfTests;
-    packOfTests.emplace_back(make_unique<BookStackTest>());
-    packOfTests.emplace_back(make_unique<FrequencyTest>());
-    packOfTests.emplace_back(make_unique<BlockFrequencyTest>());
-    packOfTests.emplace_back(make_unique<RunsTest>());
-    packOfTests.emplace_back(make_unique<LongestRunOfOnesTest>());
-    packOfTests.emplace_back(make_unique<RankTest>());
-    packOfTests.emplace_back(make_unique<DiscreteFourierTransformTest>());
-    packOfTests.emplace_back(make_unique<NonOverlappingTemplateMatchingsTest>());
-    packOfTests.emplace_back(make_unique<OverlappingTemplateMatchingsTest>());
-    packOfTests.emplace_back(make_unique<UniversalTest>());
+
+    packOfTests.emplace_back(make_unique<BookStackTest>(pTestParams));
+    packOfTests.emplace_back(make_unique<FrequencyTest>(pTestParams));
+    packOfTests.emplace_back(make_unique<BlockFrequencyTest>(pTestParams));
+    packOfTests.emplace_back(make_unique<RunsTest>(pTestParams));
+    packOfTests.emplace_back(make_unique<LongestRunOfOnesTest>(pTestParams));
+    packOfTests.emplace_back(make_unique<RankTest>(pTestParams));
+    packOfTests.emplace_back(make_unique<DiscreteFourierTransformTest>(pTestParams));
+    packOfTests.emplace_back(make_unique<NonOverlappingTemplateMatchingsTest>(pTestParams));
+    packOfTests.emplace_back(make_unique<OverlappingTemplateMatchingsTest>(pTestParams));
+    packOfTests.emplace_back(make_unique<UniversalTest>(pTestParams));
     // TODO: check on discreditation
 //    packOfTests.emplace_back(make_unique<LinearComplexityTest>());    // test doesn't work again
-    packOfTests.emplace_back(make_unique<SerialTest>());
-    packOfTests.emplace_back(make_unique<ApproximateEntropyTest>());
-    packOfTests.emplace_back(make_unique<CumulativeSumsTest>());
-    packOfTests.emplace_back(make_unique<RandomExcursionsTest>());
-    packOfTests.emplace_back(make_unique<RandomExcursionsVariantTest>());
+    packOfTests.emplace_back(make_unique<SerialTest>(pTestParams));
+    packOfTests.emplace_back(make_unique<ApproximateEntropyTest>(pTestParams));
+    packOfTests.emplace_back(make_unique<CumulativeSumsTest>(pTestParams));
+    packOfTests.emplace_back(make_unique<RandomExcursionsTest>(pTestParams));
+    packOfTests.emplace_back(make_unique<RandomExcursionsVariantTest>(pTestParams));
 
     int charPos = 0;
     for (auto & testObj : packOfTests) {
@@ -75,12 +74,14 @@ void statistical_tests_space::runStatisticalTests(
                 testResults.push_back(elem);
         }
     }
+
+    return std::move(testResults);
 }
 
 // TODO: join TestWrappers with their names
 vector<string> statistical_tests_space::getStatisticTestNames(string testKey, size_t sequenceSize) {
     vector<string> testNames;
-    TestParameters testParameters(sequenceSize);
+    TestParameters testParameters;
 
     if (testKey[0] == '1')
         for (auto param : testParameters.bookStackTest)

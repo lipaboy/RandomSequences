@@ -299,12 +299,11 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
             vector<string> testNames =
                     getStatisticTestNames(testKey, inputSize);
             vector<double> testResults(testNames.size());
-            vector<double> currResults;
 
             int traversalCount = TRAVERSAL_COUNT_LARGE;
 
 // TODO: create define for DEBUG to remove omp parallelism
-#pragma omp parallel for private(currResults) shared(genName, traversalCount, testKey, testResults)
+#pragma omp parallel for shared(genName, traversalCount, testKey, testResults)
 			for (int jTraver = 0; jTraver < traversalCount; jTraver++) 
             {
                 {
@@ -337,7 +336,8 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
 
 				//----------------Tests-----------------//
 				{
-                    runStatisticalTests(epsilonRange.begin(), epsilonRange.end(), currResults, testKey, genName);
+                    auto currResults = runStatisticalTests(epsilonRange.begin(), epsilonRange.end(), testKey,
+                                        std::make_shared<TestParameters>());
                     #pragma omp critical
                     {
                         std::transform(currResults.begin(), currResults.end(), //first source
@@ -348,7 +348,6 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
                         // p_value < ALPHA - it is failure
                         );
                     }
-                    currResults.clear();
                 }
 			}
 
