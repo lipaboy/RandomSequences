@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <bitset>
-#include <boost/math/distributions/chi_squared.hpp>
 #include <chrono>
 
 #ifdef __linux__
@@ -15,14 +14,13 @@
 
 #include "i_statistical_test.h"
 
+
 namespace statistical_tests_space {
 
 using std::vector;
 using std::pair;
 using std::string;
-typedef size_t Word;
-const uint32_t MAX_DIMENSION = sizeof(Word) * 8;
-using AlphabetType = std::bitset<MAX_DIMENSION>;
+typedef size_t size_type;
 
 #ifdef __linux__
     using std::chrono::time_point;
@@ -38,10 +36,11 @@ int getTimeDifferenceInMillis(TimeType const & from, TimeType const & to);
 
 Sequence readSequenceByBitFromFile(string const & inputFile, size_t sequenceSize);
 
-vector<string> getStatisticTestNames(string testKey, size_t sequenceSize);
+// TODO: transfer the lambda to function to abstract the processing of data
+Sequence readSequenceByByteFromFile(std::string const & inputFile, size_t sequenceSize,
+                                           char isZero, bool isSpecialFormat);
 
-Sequence readSequenceByByteFromFile(string const & inputFile, size_t sequenceSize,
-                                           char isZero = '0', bool isSpecialFormat = false);
+vector<string> getStatisticTestNames(string testKey, size_t sequenceSize);
 
 //--------------------------------------------------------------//
 

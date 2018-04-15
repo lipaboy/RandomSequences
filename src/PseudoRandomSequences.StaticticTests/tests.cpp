@@ -12,10 +12,12 @@ using std::vector;
 using std::string;
 using LipaboyLib::FixedPrecisionNumber;
 
-string runUnitTests() {
+namespace {
+
+string runUnitTestsForStatisticalTests() {
     using DoubleComparisionType = FixedPrecisionNumber<double, int, 1, -6>;
     const size_t SIZE = 1000000;
-    auto epsilon = readSequenceByByteFromFile("data/data.e", SIZE);
+    auto epsilon = readSequenceByByteFromFile("data/data.e", SIZE, '0', false);
     string isPassed = "";
     shared_ptr<TestParameters> parameters = std::make_shared<TestParameters>();
 
@@ -60,6 +62,23 @@ string runUnitTests() {
 //    res = RandomExcursionsVariantTest(parameters).test(epsilon.begin(), epsilon.size());
 //    isPassed = isPassed + std::to_string (DoubleComparisionType(res.front()) == 0.953749);
 
+    return isPassed;
+}
+
+}
+
+string runUnitTests() {
+
+    string isPassed = "";
+
+    //isPassed += runUnitTestsForStatisticalTests();
+
+    OrderTest orderTest;
+    orderTest.initialize(1, 1);
+    Sequence seq = readSequenceByByteFromFile("data/data.pi", 1000, '0', false);
+    auto pValue = orderTest.test(seq.begin(), seq.end());
+
+    cout << pValue << endl;
 
     return isPassed;
 }

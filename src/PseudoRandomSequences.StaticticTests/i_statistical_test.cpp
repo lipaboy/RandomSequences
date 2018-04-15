@@ -1,5 +1,7 @@
 #include "i_statistical_test.h"
 
+#include <omp.h>
+
 namespace statistical_tests_space {
 
 IStatisticalTest::ReturnValueType

@@ -18,9 +18,8 @@ ExternalProject_Get_Property(gtest source_dir binary_dir)
 # Create a libgtest target to be used as a dependency by test programs
 add_library(libgtest IMPORTED STATIC GLOBAL)
 add_dependencies(libgtest gtest)
-add_dependencies(libgtest PseudoRandomSequences.StaticticTests)
-add_dependencies(libgtest src)
-#add_dependencies(libgtest PseudoRandomSequences.StaticticTests/statTests/include)
+#add_dependencies(libgtest src/PseudoRandomSequences.StaticticTests)
+add_dependencies(libgtest StatTestProject)
 
 # Set libgtest properties
 set_target_properties(libgtest PROPERTIES
@@ -39,7 +38,7 @@ set_target_properties(libgmock PROPERTIES
         )
 
 include_directories(
-        "${CMAKE_SOURCE_DIR}/src"
+#        "${CMAKE_SOURCE_DIR}/src"
         "${CMAKE_SOURCE_DIR}/src/PseudoRandomSequences.StaticticTests"
         "${source_dir}/googletest/include"
         "${source_dir}/googlemock/include")

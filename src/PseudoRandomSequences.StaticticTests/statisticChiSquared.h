@@ -3,25 +3,17 @@
 
 #include <vector>
 #include <cmath>
+#include <boost/math/distributions/chi_squared.hpp>
 
-#include <boost/range/any_range.hpp>
+namespace statistical_tests_space {
 
-#include "pseudoRandomSequences.h"
+    using std::vector;
+    using size_type = size_t;
 
-namespace PseudoRandomSequences {
-
-	using std::vector;
-
-	using WordAnyRange = boost::any_range<
-		Word,
-		boost::bidirectional_traversal_tag,
-		Word,
-		std::ptrdiff_t
-	>;
-
-	double statisticChiSquared(WordAnyRange frequences, double expectedValue) {
+    template <class Iterator>
+    double statisticChiSquared(Iterator begin, Iterator end, double expectedValue) {
 		double statisticX2 = 0;
-		for (auto it = frequences.begin(); it != frequences.end(); it++) {
+        for (auto it = begin; it != end; it++) {
 			statisticX2 +=
 				std::pow(
 						std::abs(*it - expectedValue) 
@@ -31,33 +23,33 @@ namespace PseudoRandomSequences {
 		return statisticX2;
 	}
 
-	template <typename Sequence>
-	double statisticChiSquaredTest(Sequence const & sequence, uint32_t dimension) {
-		if (dimension <= 0)		// TODO: throw exception
-			return 0;
+//    template <typename Iterator>
+//    double statisticChiSquaredTest(Iterator begin, Iterator end, size_type dimension) {
+//		if (dimension <= 0)		// TODO: throw exception
+//            return 0.;
 
-		Word alphabetSize = 1 << dimension;
-		vector<Word> frequences(alphabetSize, 0);
-		AlphabetType symbol;
-		for (Word i = 0; i < sequence.size(); i++) {
-			symbol[i % dimension] = sequence[i];
-			// You have real dependency by data
-			if (0 == (i + 1) % dimension) {
-				Word & currFreq = frequences[static_cast<Word>(symbol.to_ullong())];
-				// What's better: destroyed conveyor and less operations write 
-				// or unbroken conveyor with more write condition operations (not in memory)
-				currFreq += 1;
-			}
-		}
+//        size_type alphabetSize = 1 << dimension;
+//        vector<size_type> frequences(alphabetSize, 0);
+//		AlphabetType symbol;
+//        for (auto iter = begin; iter != end; iter++) {
+//            symbol[i % dimension] = *iter;
+//			// You have real dependency by data
+//			if (0 == (i + 1) % dimension) {
+//                size_type & currFreq = frequences[static_cast<size_type>(symbol.to_ullong())];
+//				// What's better: destroyed conveyor and less operations write
+//				// or unbroken conveyor with more write condition operations (not in memory)
+//				currFreq += 1;
+//			}
+//		}
 
-		double expectedNumber = sequence.size() / (dimension * alphabetSize * 1.);
-		double statisticX2 = statisticChiSquared(frequences, expectedNumber);
-		double possibility = 1 -
-			boost::math::cdf(boost::math::chi_squared_distribution<double>(alphabetSize - 1),
-				statisticX2);
+//		double expectedNumber = sequence.size() / (dimension * alphabetSize * 1.);
+//        double statisticX2 = statisticChiSquared(frequences.begin(), frequences.end(), expectedNumber);
+//		double possibility = 1 -
+//			boost::math::cdf(boost::math::chi_squared_distribution<double>(alphabetSize - 1),
+//				statisticX2);
 
-		return possibility;
-	}
+//		return possibility;
+//	}
 
 }
 

@@ -6,7 +6,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_STANDARD 14)
 
 set(APP_SOURCES 
-	maincrypto.cpp
+        maincrypto.cpp
 	generatorsTestConfigRun.cpp
 	runStatisticTests.cpp
 	beaconConfigsRun.cpp
@@ -22,6 +22,7 @@ set(APP_SOURCES
         i_statistical_test.h
         i_statistical_test.cpp
 #order test
+        statisticChiSquared.h
         bookStackTest/order_test.h
 #book stack test
 	bookStackTest/bs.cpp

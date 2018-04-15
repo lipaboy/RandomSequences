@@ -6,10 +6,9 @@
 #include <fstream>
 #include <ostream>
 #include <iterator>
-#include <omp.h>
 #include <memory>
 
-#include "statTests/include/externs.h"
+//#include "statTests/include/externs.h"
 #include "statTests/include/stat_fncs.h"
 #include "bookStackTest/order_test.h"
 

@@ -10,7 +10,6 @@ using std::cout;
 using std::endl;
 
 int main(int argc, char *argv[]) {
-//    return beaconRun(argc, argv);
     //return generatorsTestConfigRun(argc, argv);
     cout << runUnitTests() << endl;
 }
