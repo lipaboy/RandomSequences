@@ -75,12 +75,21 @@ string runUnitTests() {
 
     OrderTest orderTest;
     orderTest.initialize(1, 1);
-    Sequence seq = readSequenceByByteFromFile("data/data.pi", 1000, '0', false);
+    tp.n = 100000;
+    tp.numOfBitStreams = 1;
+    Sequence seq = readSequenceByByteFromFile("data/data.pi", 100, '0', false);
+//            statistical_tests_space::quadRes1();
+//    std::copy(seq.begin(), seq.end(), std::ostream_iterator<bool>(cout));
+//    cout << endl;
+    auto startTime = my_get_current_clock_time();
     auto pValue = orderTest.test(seq.begin(), seq.end());
 
-    cout << pValue << endl;
+    cout << "Order test result: " << isTestSuccessful(pValue)
+         << endl
+         << "Time elapsed: " << getTimeDifferenceInMillis(startTime, my_get_current_clock_time())
+         << endl;
 
-    return isPassed;
+    return "";
 }
 
 }

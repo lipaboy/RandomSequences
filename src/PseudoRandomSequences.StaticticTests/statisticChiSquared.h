@@ -12,7 +12,7 @@ namespace statistical_tests_space {
 
     template <class Iterator>
     double statisticChiSquared(Iterator begin, Iterator end, double expectedValue) {
-		double statisticX2 = 0;
+        double statisticX2 = 0.;
         for (auto it = begin; it != end; it++) {
 			statisticX2 +=
 				std::pow(

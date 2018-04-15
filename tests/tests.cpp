@@ -12,14 +12,10 @@
 
 //#include "i_statistical_test.h"
 
-#include <pseudoRandomSequences.h>
+//#include <pseudoRandomSequences.h>
 //#include "statTests/include/generators.h"
 //#include <lipaboyLibrary/src/maths/fixed_precision_number.h>
 //#include <statTests/include/externs.h>
-
-namespace statistical_tests_space {
-
-}
 
 namespace random_sequences_tests {
 
@@ -30,9 +26,6 @@ using std::string;
 using std::unordered_map;
 using std::unique_ptr;
 
-using statistical_tests_space::OrderTest;
-using statistical_tests_space::Sequence;
-using namespace statistical_tests_space;
 
 //extern Sequence readSequenceByByteFromFile(string const & inputFile, size_t sequenceSize,
 //                                           char isZero, bool isSpecialFormat);

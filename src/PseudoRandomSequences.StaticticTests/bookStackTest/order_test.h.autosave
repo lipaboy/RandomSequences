@@ -86,7 +86,7 @@ public:
                 BorderIterator newFreqBorderIter = borders_.find(nextFreq);
                 // create new Set(nextFreq) if such one doesn't exist
                 if (newFreqBorderIter == borders_.end())
-                    newFreqBorderIter = borders_.emplace(nextFreq, 0).first; // create empty Set
+                    newFreqBorderIter = borders_.emplace(nextFreq, 0).first; // create empty Set that points to start
 
                 // get upper boundary node of previous Set
                 NodeRef upperNodeOfPreviousSet = orderContainer_[ newFreqBorderIter->second ];
