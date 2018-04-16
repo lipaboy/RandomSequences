@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <unordered_map>
+#include <map>
 
 #include "../statisticChiSquared.h"
 
@@ -14,6 +15,7 @@ using std::cout;
 using std::endl;
 using std::vector;
 using std::unordered_map;
+using std::map;         //sorted container
 using std::pair;
 
 class OrderTest {
@@ -24,7 +26,7 @@ public:
     struct NodeType { WordStorageType word; FrequencyType freq; };
     using OrderContainerType = vector<NodeType>;
     using WordMapType = vector<size_type>;  // word -> Node index
-    using BorderContainerType = unordered_map<size_type, size_type>; // Set(freq) -> border position
+    using BorderContainerType = map<size_type, size_type>; // Set(freq) -> border position
     using BorderIterator = BorderContainerType::iterator;
     using UpperPartContainerType = vector<FrequencyType>;
 
@@ -52,7 +54,8 @@ public:
         orderContainer_.resize(size);
         wordMap_.resize(size);
         encounterFreqInUpperPart_.assign(size, 0);
-        borders_[0] = 0;    // needn't to resize because it's map
+        // needn't to resize the borders_ because it's map
+        borders_[0] = size;     // must point to last element in orderContainer_
         for (WordStorageType word = 0; word < size; word++) {
             orderContainer_[word] = { word, 0 };
             wordMap_[word] = word;
@@ -85,18 +88,27 @@ public:
                 // find border of Set(nextFreq)
                 BorderIterator newFreqBorderIter = borders_.find(nextFreq);
                 // create new Set(nextFreq) if such one doesn't exist
-                if (newFreqBorderIter == borders_.end())
-                    newFreqBorderIter = borders_.emplace(nextFreq, 0).first; // create empty Set
+                if (newFreqBorderIter == borders_.end()) {
+                    auto iter = borders_.find(prevFreq);
+                    iter++;
+                    size_type borderPos;
+                    if (iter == borders_.end())
+                        borderPos = 0;
+                    else
+                        borderPos = iter->second;
+                    // create empty Set that points to upper part of Set(prevFreq)
+                    newFreqBorderIter = borders_.emplace(nextFreq, borderPos).first;
+                }
 
-                // get upper boundary node of previous Set
+                // get upper boundary node of Set(prevFreq)
                 NodeRef upperNodeOfPreviousSet = orderContainer_[ newFreqBorderIter->second ];
                 std::swap(wordMap_[node.word], wordMap_[upperNodeOfPreviousSet.word]);
                 std::swap(node, upperNodeOfPreviousSet);
 
-                // update border of Set(nextFreq)
+                // update border position of Set(nextFreq)
                 ++(newFreqBorderIter->second);
 
-                // doesn't work
+                // TODO: doesn't work
                 // remove Set(prevFreq) if it's empty
                 BorderIterator oldFreqBorderIter = borders_.find(prevFreq);
                 if (oldFreqBorderIter != borders_.end()
