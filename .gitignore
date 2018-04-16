@@ -1,4 +1,5 @@
 **/Debug/*
+**/*.autosave
 **/pi_hex_1b.txt
 **/.vs/*
 **/*.user

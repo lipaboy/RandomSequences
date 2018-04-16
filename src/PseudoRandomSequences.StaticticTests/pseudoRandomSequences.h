@@ -12,10 +12,14 @@
 #include <time.h>
 #endif
 
-#include "i_statistical_test.h"
+#include "nist_tests_wrapper.h"
 
 
 namespace statistical_tests_space {
+
+// LOCAL PLAN
+// TODO: write wrapper around BitWords
+// TODO: test generators by OrderTest
 
 using std::vector;
 using std::pair;
@@ -30,7 +34,7 @@ typedef size_t size_type;
 #endif
 
 // return in milliseconds
-TimeType my_get_current_clock_time();
+TimeType getCurrentClockTime();
 
 int getTimeDifferenceInMillis(TimeType const & from, TimeType const & to);
 
@@ -51,6 +55,8 @@ runStatisticalTests(BoolIterator epsilonBegin,
     IStatisticalTest::TestParametersPtr pTestParams);
 
 int generatorsTestConfigRun(int argc, char * argv[]);
+
+//----------------Tests------------------//
 
 std::string runUnitTests();
 

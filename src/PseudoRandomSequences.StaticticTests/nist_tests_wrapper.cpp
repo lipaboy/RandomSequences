@@ -1,4 +1,4 @@
-#include "i_statistical_test.h"
+#include "nist_tests_wrapper.h"
 
 #include <omp.h>
 
@@ -158,7 +158,6 @@ BookStackTest::test(BoolIterator sequenceIter, size_type size) {
 
     return std::move(container);
 }
-
 
 //----------------------Test parameters----------------------//
 

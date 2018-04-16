@@ -2,7 +2,7 @@
 
 #include <iterator>
 #include <bitset>
-#include <string>
+#include <string.h>
 #include <array>
 #include <cmath>
 #include <random>
@@ -17,6 +17,7 @@
 #include <chrono>
 
 #include <memory>
+#include <boost/lexical_cast.hpp>
 
 #include <openssl/sha.h>
 
@@ -53,7 +54,7 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
     //-----------------------------Input data-----------------------------//
 
     int sizesStartIndex = 5;
-    size_t len = (argc > 1) ? std::strlen(argv[1]) : 0;
+    size_t len = (argc > 1) ? strlen(argv[1]) : 0;
     size_t countSizes = (argc >= sizesStartIndex + 1) ? std::atoi(argv[sizesStartIndex]) : 0;
     if (countSizes <= 0 || argc < int(sizesStartIndex + 1 + countSizes) || len < TEST_COUNT) {
 		cout << "Not enough parameters ( testKey ("
@@ -67,6 +68,7 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
     int inputOppositePossibility = static_cast<int>(
         std::round(1.0 / boost::lexical_cast<double>(argv[2]))
     );
+
    // std::vector<string> generatorNames { argv[4] };
     const int TRAVERSAL_COUNT_SMALL = std::atoi(argv[3]);
     string testKey(argv[1]);
@@ -75,9 +77,9 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
         seqSizes.push_back(std::atoi(argv[i]));
 
 
-	// TODO: add test performance for conversation and tests
+    // TODO: add test performance for conversation(?) and tests
 
-	// TODO: bad computation of input possibility (use another input format) (bad because 2/3)
+    // TODO: bad computation of input possibility (use another input format) (bad because possibility=2/3 won't be work)
     // Kbits
 
 	std::minstd_rand generatorMinstdRand;
@@ -89,7 +91,7 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
     std::default_random_engine generatorDefaultRandomEngine;
     std::mt19937_64 generatorMt19937_64;
 
-    auto wholeTimeExpend = my_get_current_clock_time();
+    auto wholeTimeExpend = getCurrentClockTime();
 //	for (int iGen = 0; iGen < generatorNames.size(); iGen++) {
         std::string genName = argv[4];
 
@@ -111,8 +113,7 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
 //				: TRAVERSAL_COUNT_SMALL);
 //		}
 
-        auto genTimeExpend = my_get_current_clock_time();
-		// TODO: Too much memory allocations
+        auto genTimeExpend = getCurrentClockTime();
         std::normal_distribution<double> distribution(4.5, 2.0);		//doesn't failure with random_device generator
         //std::chi_squared_distribution<double> distribution(3.0);		//failure with random_device (number of freedoms = 3.0)
 
@@ -223,7 +224,7 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
 
         {
         cout << "Generator time expend: "
-             << getTimeDifferenceInMillis(genTimeExpend, my_get_current_clock_time()) / 1000
+             << getTimeDifferenceInMillis(genTimeExpend, getCurrentClockTime()) / 1000
              << " secs." << endl;
         }
 
@@ -327,7 +328,7 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
 //	}
 
     cout << endl << "Whole time expend: "
-         << getTimeDifferenceInMillis(wholeTimeExpend, my_get_current_clock_time()) / 1000
+         << getTimeDifferenceInMillis(wholeTimeExpend, getCurrentClockTime()) / 1000
          << "sec." << endl;
 	
 
@@ -399,41 +400,4 @@ Sequence readSequenceByByteFromFile(string const & inputFile, size_t sequenceSiz
 
 }
 
-//        std::ifstream inData;
-//        //linux
-//        inData.open("data/data.fourierExample", std::ios::in);
-//        //windows
-//        //inData.open("data\\data.fourierExample", std::ios::in);
-//        inData.seekg(0);
-//        for (auto & elem : epsilon) {
-//            if (inData.eof())
-//                break;
-//            char ch;
-//            inData >> ch;
-//            elem = (ch == '1') ? true : false;
-//                    //false;
-//           // cout << elem;
-//        }
-//        cout << endl;
-//        inData.close();
-
-//                    std::ofstream outFile;
-//                    string inputFile = "genSequences/kek/" + genName + "_" + std::to_string(iSize)
-//                                 + "_" + std::to_string(jTraver);
-//                    outFile.exceptions ( std::ofstream::failbit | std::ofstream::badbit );
-//                    outFile.open(inputFile, std::ios::trunc);
-//                    auto outIter = std::ostream_iterator<char>(outFile);
-//                    int bitPos = 0;
-//                    char buffer = 0;
-//                    for (auto iter = epsilonRange.begin(); iter != epsilonRange.end(); iter++) {
-//                        buffer |= (*iter) << (bitPos++);
-//                        if (bitPos >= 8) {
-//                            bitPos = 0;
-//                            *(outIter++) = buffer;
-//                            buffer = 0;
-//                        }
-//                    }
-//                    if (bitPos > 0)
-//                        *(outIter) = buffer;
-//                    outFile.close();
 

@@ -135,7 +135,7 @@ vector<string> statistical_tests_space::getStatisticTestNames(string testKey, si
 
 //--------------------Time measuring-----------------//
 
-TimeType statistical_tests_space::my_get_current_clock_time() {
+TimeType statistical_tests_space::getCurrentClockTime() {
 #ifdef __linux__
 //       struct tms curr;
 //       long clocks_per_sec = sysconf(_SC_CLK_TCK);

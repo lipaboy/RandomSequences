@@ -5,7 +5,8 @@
 #include <unordered_map>
 #include <map>
 
-#include "../statisticChiSquared.h"
+#include "statisticChiSquared.h"
+#include "i_statistical_test.h"
 
 #include <iostream>
 
@@ -18,7 +19,7 @@ using std::unordered_map;
 using std::map;         //sorted container
 using std::pair;
 
-class OrderTest {
+class OrderTest : public IStatisticalTest {
 public:
     using WordStorageType = unsigned int;
     using size_type = size_t;       //! Be careful to use unsigned types
@@ -63,14 +64,13 @@ public:
     }
 
     // test sequence of bits
-    template <class IterType>
-    PValueType test(IterType epsilonBegin, IterType epsilonEnd)
+    virtual ReturnValueType test(BoolIterator sequenceIterBegin, size_type epsilonSize)
     {
         WordStorageType word = 0;
         int bitpos = 0;
-        size_type epsilonSize = 0u;
+        size_type i = 0u;
 
-        for (IterType iter = epsilonBegin; iter != epsilonEnd; iter++, epsilonSize++)
+        for (auto iter = sequenceIterBegin; i < epsilonSize; iter++, i++)
         {
             bool bit = *iter;
             word |= (1 << (bitpos++)) * bit;
@@ -108,16 +108,17 @@ public:
                 // update border position of Set(nextFreq)
                 ++(newFreqBorderIter->second);
 
-                // TODO: doesn't work
                 // remove Set(prevFreq) if it's empty
                 BorderIterator oldFreqBorderIter = borders_.find(prevFreq);
                 if (oldFreqBorderIter != borders_.end()
                         && newFreqBorderIter->second == oldFreqBorderIter->second)
+                {
                     borders_.erase(oldFreqBorderIter);
+                }
 
                 // update information about element encountering in upper part
-                for (FrequencyType ind = 0; ind < upperPartBorder_; ind++) {
-                    ++encounterFreqInUpperPart_[ orderContainer_[ind].word ];
+                for (FrequencyType j = 0; j < upperPartBorder_; j++) {
+                    ++encounterFreqInUpperPart_[ orderContainer_[j].word ];
                 }
 
                 bitpos = 0;
@@ -131,7 +132,7 @@ public:
         PValueType pValue = 1 -
             boost::math::cdf(boost::math::chi_squared_distribution<double>(1),
                 statisticX2);
-        return pValue;
+        return ReturnValueType({pValue});
     }
 
     size_type dimension() const { return dimension_; }

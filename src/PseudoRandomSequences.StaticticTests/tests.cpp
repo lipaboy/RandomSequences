@@ -1,5 +1,6 @@
 #include "pseudoRandomSequences.h"
 #include "statTests/include/generators.h"
+
 #include <lipaboyLibrary/src/maths/fixed_precision_number.h>
 #include <lipaboyLibrary/src/intervals/segment.h>
 
@@ -66,6 +67,38 @@ string runUnitTestsForStatisticalTests() {
     return isPassed;
 }
 
+string runUnitTestsForOrderTest() {
+    OrderTest orderTest;
+    orderTest.initialize(1, 1);
+
+    Sequence seq  = readSequenceByBitFromFile("data/data.sha1", 1000);
+
+
+
+    //------------------For debugging----------------//
+//    tp.n = 1000;
+//    tp.numOfBitStreams = 1;
+    //statistical_tests_space::quadRes1();
+    //readSequenceByByteFromFile("data/data.pi", 10000, '0', false);
+//    std::generate_n(std::back_inserter(seq), 1000,
+//                    [] () -> bool {
+//                        static int i = -1;
+//                        i++;
+//                        return (LipaboyLib::Segment<int>(1, 2).in(i % 4)) ? 1 : 0;
+//                    });
+    std::copy(seq.begin(), seq.end(), std::ostream_iterator<bool>(cout));
+    cout << endl;
+    auto startTime = getCurrentClockTime();
+    auto pValue = orderTest.test(seq.begin(), seq.size());
+
+    cout << "Order test result: " << isTestSuccessful(pValue.front()) << ", " << pValue.front()
+         << endl
+         << "Time elapsed: " << getTimeDifferenceInMillis(startTime, getCurrentClockTime())
+         << endl;
+
+    return std::to_string(pValue.front());
+}
+
 }
 
 string runUnitTests() {
@@ -73,28 +106,8 @@ string runUnitTests() {
     string isPassed = "";
 
     //isPassed += runUnitTestsForStatisticalTests();
+    isPassed += runUnitTestsForOrderTest();
 
-    OrderTest orderTest;
-    orderTest.initialize(1, 1);
-    tp.n = 10000;
-    tp.numOfBitStreams = 1;
-    Sequence seq;// = //readSequenceByByteFromFile("data/data.pi", 10000, '0', false);
-           // statistical_tests_space::quadRes1();
-    std::generate_n(std::back_inserter(seq), 1000,
-                    [] () -> bool {
-                        static int i = -1;
-                        i++;
-                        return (LipaboyLib::Segment<int>(1, 2).in(i % 4)) ? 1 : 0;
-                    });
-//    std::copy(seq.begin(), seq.end(), std::ostream_iterator<bool>(cout));
-//    cout << endl;
-    auto startTime = my_get_current_clock_time();
-    auto pValue = orderTest.test(seq.begin(), seq.end());
-
-    cout << "Order test result: " << isTestSuccessful(pValue)
-         << endl
-         << "Time elapsed: " << getTimeDifferenceInMillis(startTime, my_get_current_clock_time())
-         << endl;
 
     return "";
 }

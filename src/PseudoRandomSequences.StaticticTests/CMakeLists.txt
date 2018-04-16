@@ -8,8 +8,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(APP_SOURCES 
         maincrypto.cpp
 	generatorsTestConfigRun.cpp
-	runStatisticTests.cpp
-	beaconConfigsRun.cpp
+        runStatisticTests.cpp
 
         tests.cpp
 
@@ -20,13 +19,15 @@ set(APP_SOURCES
 
 #IStatTest
         i_statistical_test.h
-        i_statistical_test.cpp
 #order test
         statisticChiSquared.h
         bookStackTest/order_test.h
 #book stack test
 	bookStackTest/bs.cpp
 #stat headers
+        nist_tests_wrapper.h
+        nist_tests_wrapper.cpp
+
 	statTests/include/assess.h
 	statTests/include/cephes.h
 	statTests/include/config.h
