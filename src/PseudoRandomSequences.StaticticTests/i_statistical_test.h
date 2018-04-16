@@ -38,7 +38,7 @@ public:
     IStatisticalTest(TestParametersPtr pTestParams = std::make_shared<TestParameters>())
         : pTestParams_(pTestParams) {}
 
-    // Make methods more common (template for example)
+    // TODO: Make methods more common (template for example) (Big refactoring task)
     virtual ReturnValueType test(BoolIterator sequenceIterBegin, size_type size) = 0;
 
     ReturnValueType test(BoolIterator sequenceIterBegin, BoolIterator sequenceIterEnd) {
@@ -51,6 +51,36 @@ private:
     TestParametersPtr pTestParams_;
 };
 
+//------------------------BitWordStream--------------------//
+
+// Issue:
+// Must return the bit words
+
+// Note: You write the same in C++ course
+
+// Input: all the types of stream (container, files, iterators)
+
+template <typename WordType = unsigned int,
+          class TIterator = typename std::vector<WordType>::iterator >
+class BitWordStream {
+public:
+    using iterator = TIterator;
+
+public:
+
+//    WordType operator>> () const {
+//        return 0u;
+//    }
+
+private:
+    iterator begin_;
+    iterator end_;
+};
+
 }
 
 #endif // I_STATISTICAL_TEST_H
+
+
+
+
