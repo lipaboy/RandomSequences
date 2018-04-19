@@ -16,7 +16,6 @@ using std::vector;
 using std::string;
 using std::shared_ptr;
 
-const int TEST_COUNT = 16;
 const double MEANING_LEVEL = 0.05;
 
 inline bool isTestSuccessful(double pValueOfTest) {
@@ -24,7 +23,23 @@ inline bool isTestSuccessful(double pValueOfTest) {
 }
 
 // TODO: make interface of TestParameters
-class TestParameters;
+class TestParameters {
+public:
+    using size_type = size_t;
+public:
+    TestParameters();
+
+    struct BookStackPair { size_type upperPart; size_type dimension; };
+    vector<BookStackPair> bookStackTest;
+
+    vector<size_type> blockFrequencyTest;
+    vector<size_type> nonOverlappingTemplateMatchingsTest;
+    vector<size_type> overlappingTemplateMatchingsTest;		// TODO: CHECK
+    vector<size_type> linearComplexityTest;	// must be > 3
+    vector<size_type> serialTest;
+    vector<size_type> approximateEntropyTest;
+    vector<BookStackPair> orderTest;
+};
 
 // TODO: test must have the additional parameters (except length of sequence)
 class IStatisticalTest {

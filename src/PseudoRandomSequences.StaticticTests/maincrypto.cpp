@@ -13,11 +13,11 @@ using std::endl;
 using AnyRange = boost::any_range<int, boost::forward_traversal_tag, int, std::ptrdiff_t>;
 
 int main(int argc, char *argv[]) {
-    //return generatorsTestConfigRun(argc, argv);
-    //cout << runUnitTests() << endl;
+    return generatorsTestConfigRun(argc, argv);
+//    cout << runUnitTests() << endl;
 
-    std::vector<int> kek({1, 2, 3, 4, 5, 6});
-    AnyRange range = kek;
-    range.advance_begin(4);
+//    std::vector<int> kek({1, 2, 3, 4, 5, 6});
+//    AnyRange range = kek;
+//    range.advance_begin(4);
 }
 

@@ -136,6 +136,7 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
 //            std::ios::out | std::ios::trunc);
 
         if ("file" == genName) {
+            // TODO: check the data of input
             char * isBitRead = strtok(NULL, "=");
             inputFilename = strtok(NULL, "=");
             if (strcmp(isBitRead, "2") == 0)
@@ -359,8 +360,8 @@ Sequence readSequenceByBitFromFile(string const & inputFile, size_t sequenceSize
                 epsilon[i * 8 + bit] = static_cast<BitSequence>((buffer & (1 << bit)) >> bit);
             }
         }
-        std::copy_n(epsilon.begin(), 16, std::ostream_iterator<BitSequence>(cout));
-        cout << endl;
+//        std::copy_n(epsilon.begin(), 16, std::ostream_iterator<BitSequence>(cout));
+//        cout << endl;
 
         inFile.close();
     } catch(ifstream::failure e) {

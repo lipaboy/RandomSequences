@@ -69,9 +69,11 @@ string runUnitTestsForStatisticalTests() {
 
 string runUnitTestsForOrderTest() {
     OrderTest orderTest;
-    orderTest.initialize(1, 1);
+    orderTest.initialize(2, 1);
 
-    Sequence seq  = readSequenceByBitFromFile("data/data.sha1", 1000);
+    size_t partSize = 1000;
+
+    Sequence seq  = readSequenceByBitFromFile("data/data.sha1", 10 * partSize);
 
 
 
@@ -86,17 +88,24 @@ string runUnitTestsForOrderTest() {
 //                        i++;
 //                        return (LipaboyLib::Segment<int>(1, 2).in(i % 4)) ? 1 : 0;
 //                    });
-    std::copy(seq.begin(), seq.end(), std::ostream_iterator<bool>(cout));
+    //std::copy(seq.begin(), seq.end(), std::ostream_iterator<bool>(cout));
     cout << endl;
     auto startTime = getCurrentClockTime();
-    auto pValue = orderTest.test(seq.begin(), seq.size());
+    int counterFailure = 0;
+    for (int i = 0; i < 10; i++) {
+        auto iter = seq.begin();
+        std::advance(iter, i * partSize);
+        auto pValue = orderTest.test(iter, partSize);
 
-    cout << "Order test result: " << isTestSuccessful(pValue.front()) << ", " << pValue.front()
-         << endl
-         << "Time elapsed: " << getTimeDifferenceInMillis(startTime, getCurrentClockTime())
-         << endl;
+        counterFailure += !isTestSuccessful(pValue.front());
+//        cout << "Order test result: " << isTestSuccessful(pValue.front()) << ", " << pValue.front()
+//             << endl
+//             << "Time elapsed: " << getTimeDifferenceInMillis(startTime, getCurrentClockTime())
+//             << endl;
+    }
+    cout << counterFailure << endl;
 
-    return std::to_string(pValue.front());
+    return "";
 }
 
 }

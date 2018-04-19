@@ -18,23 +18,7 @@ using std::vector;
 using std::string;
 using std::shared_ptr;
 
-
-//----------------------Test parameters----------------------//
-
-class TestParameters {
-public:
-    TestParameters();
-
-    struct BookStackPair { uint64_t upperPart; uint64_t dimension; };
-    vector<BookStackPair> bookStackTest;
-
-    vector<uint64_t> blockFrequencyTest;
-    vector<uint64_t> nonOverlappingTemplateMatchingsTest;
-    vector<uint64_t> overlappingTemplateMatchingsTest;		// TODO: CHECK
-    vector<uint64_t> linearComplexityTest;	// must be > 3
-    vector<uint64_t> serialTest;
-    vector<uint64_t> approximateEntropyTest;
-};
+const int TEST_COUNT = 17;
 
 
 class FrequencyTest : public IStatisticalTest {

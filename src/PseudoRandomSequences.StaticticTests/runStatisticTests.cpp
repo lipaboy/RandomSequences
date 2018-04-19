@@ -56,18 +56,17 @@ statistical_tests_space::runStatisticalTests(BoolIterator epsilonBegin,
     packOfTests.emplace_back(make_unique<NonOverlappingTemplateMatchingsTest>(pTestParams));
     packOfTests.emplace_back(make_unique<OverlappingTemplateMatchingsTest>(pTestParams));
     packOfTests.emplace_back(make_unique<UniversalTest>(pTestParams));
-    // TODO: check on discreditation
-//    packOfTests.emplace_back(make_unique<LinearComplexityTest>());    // test doesn't work again
     packOfTests.emplace_back(make_unique<SerialTest>(pTestParams));
     packOfTests.emplace_back(make_unique<ApproximateEntropyTest>(pTestParams));
     packOfTests.emplace_back(make_unique<CumulativeSumsTest>(pTestParams));
     packOfTests.emplace_back(make_unique<RandomExcursionsTest>(pTestParams));
     packOfTests.emplace_back(make_unique<RandomExcursionsVariantTest>(pTestParams));
+    packOfTests.emplace_back(make_unique<OrderTest>(pTestParams));
+    // TODO: check on discreditation (maybe only parameter 8 doesn't work)
+    packOfTests.emplace_back(make_unique<LinearComplexityTest>());    // test doesn't work again
 
     int charPos = 0;
     for (auto & testObj : packOfTests) {
-        if (charPos == 10)
-            charPos++;
         if (testKey[charPos++] == '1') {
             auto res = testObj->test(epsilonBegin, EPSILON_SIZE);
             for (auto & elem : res)
@@ -80,54 +79,61 @@ statistical_tests_space::runStatisticalTests(BoolIterator epsilonBegin,
 
 // TODO: join TestWrappers with their names
 vector<string> statistical_tests_space::getStatisticTestNames(string testKey, size_t sequenceSize) {
+    using std::to_string;
+
     vector<string> testNames;
     TestParameters testParameters;
 
-    if (testKey[0] == '1')
+    int ind = 0;
+    if (testKey[ind++] == '1')
         for (auto param : testParameters.bookStackTest)
             testNames.push_back("BookStackTest_" + std::to_string(param.dimension)
-                                + "dim_" + std::to_string(param.upperPart) + "up");
-    if (testKey[1] == '1')
+                                + "_dim_" + std::to_string(param.upperPart) + "_up");
+    if (testKey[ind++] == '1')
         testNames.push_back("Frequency");
-    if (testKey[2] == '1')
+    if (testKey[ind++] == '1')
         for (auto blockSize : testParameters.blockFrequencyTest)
             testNames.push_back("BlockFrequency_" + std::to_string(blockSize));
-    if (testKey[3] == '1')
+    if (testKey[ind++] == '1')
         testNames.push_back("Runs");;
-    if (testKey[4] == '1')
+    if (testKey[ind++] == '1')
         testNames.push_back("LongestRunOfOnes");
-    if (testKey[5] == '1')
+    if (testKey[ind++] == '1')
         testNames.push_back("Rank");
-    if (testKey[6] == '1')
+    if (testKey[ind++] == '1')
         testNames.push_back("DiscreteFourierTransform");
-    if (testKey[7] == '1')
+    if (testKey[ind++] == '1')
         for (auto param : testParameters.nonOverlappingTemplateMatchingsTest)
             testNames.push_back("NonOverlappingTemplateMatchings_"
                 + std::to_string(param));
-    if (testKey[8] == '1')
+    if (testKey[ind++] == '1')
         for (auto param : testParameters.overlappingTemplateMatchingsTest)
             testNames.push_back("OverlappingTemplateMatchings_" + std::to_string(param));
-    if (testKey[9] == '1')
+    if (testKey[ind++] == '1')
         testNames.push_back("Universal");
-//    if (testKey[10] == '1')
-//        for (auto param : testParameters.linearComplexityTest)
-//            testNames.push_back("LinearComplexity_" + std::to_string(param));
-    if (testKey[11] == '1')
+    if (testKey[ind++] == '1')
         for (auto param : testParameters.serialTest) {
             testNames.push_back("Serial_" + std::to_string(param) + "_1");
             testNames.push_back("Serial_" + std::to_string(param) + "_2");
         }
-    if (testKey[12] == '1')
+    if (testKey[ind++] == '1')
         for (auto param : testParameters.approximateEntropyTest)
             testNames.push_back("ApproximateEntropy_" + std::to_string(param));
-    if (testKey[13] == '1') {
+    if (testKey[ind++] == '1') {
         testNames.push_back("CumulativeSums_1");
         testNames.push_back("CumulativeSums_2");
     }
-    if (testKey[14] == '1')
+    if (testKey[ind++] == '1')
         testNames.push_back("RandomExcursions");
-    if (testKey[15] == '1')
+    if (testKey[ind++] == '1')
         testNames.push_back("RandomExcursionsVariant");
+    if (testKey[ind++] == '1')
+        for (auto param : testParameters.orderTest)
+            testNames.push_back("OrderTest_" + std::to_string(param.dimension)
+                                + "_dim_" + std::to_string(param.upperPart) + "_up");
+    //    if (testKey[ind++] == '1')
+    //        for (auto param : testParameters.linearComplexityTest)
+    //            testNames.push_back("LinearComplexity_" + std::to_string(param));
 
     return std::move(testNames);
 }

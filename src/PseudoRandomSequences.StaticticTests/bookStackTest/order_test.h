@@ -36,8 +36,9 @@ public:
     using NodeRef = NodeType &;
 
 public:
-    OrderTest() : dimension_(0), orderContainer_(1, {0, 0}),
-        wordMap_(1, 0), upperPartBorder_(1), encounterFreqInUpperPart_(1, 0)
+    OrderTest(TestParametersPtr pTestParams = std::make_shared<TestParameters>())
+        : IStatisticalTest(pTestParams), dimension_(0), orderContainer_(1, {0, 0}),
+          wordMap_(1, 0), upperPartBorder_(1), encounterFreqInUpperPart_(1, 0)
     {
         borders_[0] = 0;
     }
@@ -66,6 +67,16 @@ public:
     // test sequence of bits
     virtual ReturnValueType test(BoolIterator sequenceIterBegin, size_type epsilonSize)
     {
+        ReturnValueType retVal;
+        for (TestParameters::BookStackPair elem : getTestParameters().orderTest) {
+            initialize(elem.dimension, elem.upperPart);
+            retVal.push_back(testSingle(sequenceIterBegin, epsilonSize));
+        }
+        return retVal;
+    }
+
+private:
+    PValueType testSingle(BoolIterator sequenceIterBegin, size_type epsilonSize) {
         WordStorageType word = 0;
         int bitpos = 0;
         size_type i = 0u;
@@ -132,8 +143,10 @@ public:
         PValueType pValue = 1 -
             boost::math::cdf(boost::math::chi_squared_distribution<double>(1),
                 statisticX2);
-        return ReturnValueType({pValue});
+        return pValue;
     }
+
+public:
 
     size_type dimension() const { return dimension_; }
     size_type containerSize() const { return 1 << dimension(); }
