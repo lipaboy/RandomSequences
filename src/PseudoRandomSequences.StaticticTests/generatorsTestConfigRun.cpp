@@ -98,7 +98,8 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
 		//--------------------Container---------------------//
 
         uint32_t atom = //1u;
-                1024u;
+                1000u;
+                //1024u;
 
         const size_t TRAVERSAL_COUNT_LARGE = TRAVERSAL_COUNT_SMALL;
 //        const size_t TRAVERSAL_THRESHOLD = size_t(1e5);
@@ -269,13 +270,13 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
 					}
 				}
 
-//                {
-//                    auto iterEnd = epsilonRange.begin();
-//                    std::advance(iterEnd, 20);
-//                    std::copy(epsilonRange.begin(), iterEnd,
-//                        std::ostream_iterator<bool>(cout, ""));
-//                    std::cout << std::endl;
-//                }
+                {
+                    auto iterEnd = epsilonRange.begin();
+                    std::advance(iterEnd, 20);
+                    std::copy(epsilonRange.begin(), iterEnd,
+                        std::ostream_iterator<bool>(cout, ""));
+                    std::cout << std::endl;
+                }
 
 				//----------------Tests-----------------//
 				{

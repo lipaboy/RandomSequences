@@ -131,9 +131,9 @@ vector<string> statistical_tests_space::getStatisticTestNames(string testKey, si
         for (auto param : testParameters.orderTest)
             testNames.push_back("OrderTest_" + std::to_string(param.dimension)
                                 + "_dim_" + std::to_string(param.upperPart) + "_up");
-    //    if (testKey[ind++] == '1')
-    //        for (auto param : testParameters.linearComplexityTest)
-    //            testNames.push_back("LinearComplexity_" + std::to_string(param));
+        if (testKey[ind++] == '1')
+            for (auto param : testParameters.linearComplexityTest)
+                testNames.push_back("LinearComplexity_" + std::to_string(param));
 
     return std::move(testNames);
 }

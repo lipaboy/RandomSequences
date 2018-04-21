@@ -83,6 +83,7 @@ doApproximateEntropyTest(int m, int n, BoolIterator epsilon)
 	//fprintf(stats[TEST_APEN], "\t\t--------------------------------------------\n");
 
 	if ( m > (int)(log(seqLength)/log(2)-5) ) {
+        printf("\t\tApproximate Entropy\n");
 		printf("\t\tNote: The blockSize = %d exceeds recommended value of %d\n", m,
 			MAX(1, (int)(log(seqLength)/log(2)-5)));
 		printf("\t\tResults are inaccurate!\n");

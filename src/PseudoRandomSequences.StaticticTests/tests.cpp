@@ -114,11 +114,11 @@ string runUnitTests() {
 
     string isPassed = "";
 
-    //isPassed += runUnitTestsForStatisticalTests();
-    isPassed += runUnitTestsForOrderTest();
+    isPassed += runUnitTestsForStatisticalTests();
+//    isPassed += runUnitTestsForOrderTest();
 
 
-    return "";
+    return isPassed;
 }
 
 }

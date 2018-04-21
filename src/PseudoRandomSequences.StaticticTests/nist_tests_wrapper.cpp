@@ -17,12 +17,12 @@ NonOverlappingTemplateMatchingsTest::test(BoolIterator sequenceIter, size_type s
     ReturnValueType container;
     for (auto & param : getTestParameters().nonOverlappingTemplateMatchingsTest) {
         std::vector<double> temp = doNonOverlappingTemplateMatchingsTest(param, size, sequenceIter);
-        double average = 0.;
+        int successCount = 0;
         for (auto & elem : temp) {
-            average += isTestSuccessful(elem);
+            successCount += isTestSuccessful(elem);
         }
         const size_t size = temp.size();
-        average /= size;
+        double average = double(successCount) / size;
         // TODO: very complex expression. Need to simplify it
         container.push_back(size == 0 ? -1.
             : average + size * (MEANING_LEVEL - (size - 1.) / size + 1e-3) * (1. - average));

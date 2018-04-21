@@ -92,7 +92,7 @@ statistical_tests_space::doNonOverlappingTemplateMatchingsTest(int m, int n, Boo
 			sum = 0;
 
 			for ( k=0; k<m; k++ ) {
-                fscanf(fp, "%u", &bit);		//! forbide for removing
+                fscanf(fp, "%u", &bit);		// forbide for removing
 				sequence[k] = bit;
 			}
 			for ( k=0; k<=K; k++ )
