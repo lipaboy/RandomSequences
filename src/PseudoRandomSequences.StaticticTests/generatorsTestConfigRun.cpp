@@ -137,7 +137,7 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
 //            std::ios::out | std::ios::trunc);
 
         if ("file" == genName) {
-            // TODO: check the data of input
+            // TODO: add checking the data of input
             char * isBitRead = strtok(NULL, "=");
             inputFilename = strtok(NULL, "=");
             if (strcmp(isBitRead, "2") == 0)

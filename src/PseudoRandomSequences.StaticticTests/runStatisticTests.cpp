@@ -36,6 +36,8 @@ using TestsContainerType = vector<unique_ptr<IStatisticalTest> >;
 
     // TODO: take off the responsibility of return names of active tests and give it to another function with argument testKey
 
+    // TODO: make perfomance test on removing temporary files in BookStackTest
+
 IStatisticalTest::ReturnValueType
 statistical_tests_space::runStatisticalTests(BoolIterator epsilonBegin,
     BoolIterator epsilonEnd,
