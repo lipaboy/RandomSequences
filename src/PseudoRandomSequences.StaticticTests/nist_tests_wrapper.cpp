@@ -2,6 +2,10 @@
 
 #include <omp.h>
 
+#ifdef __linux__
+#include <unistd.h>
+#endif
+
 namespace statistical_tests_space {
 
 namespace {
@@ -108,9 +112,10 @@ IStatisticalTest::ReturnValueType
 BookStackTest::test(BoolIterator sequenceIter, size_type size) {
     ReturnValueType container;
 
+    auto pid = getpid();
     // TODO: add pid of process to make the file more uniquely
     string inputFile = "bookStackInput" + std::to_string(omp_get_thread_num())
-             + "_" + std::to_string(size) + ".dat";
+             + "_" + std::to_string(size) + "_" + std::to_string(pid) + ".dat";
     {
         typedef u_char BlockReadType;   //when was char instead of u_char nothing to change
 

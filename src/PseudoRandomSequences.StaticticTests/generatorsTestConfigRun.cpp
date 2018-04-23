@@ -142,8 +142,10 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
             inputFilename = strtok(NULL, "=");
             if (strcmp(isBitRead, "2") == 0)
                 epsilon = readSequenceByBitFromFile(inputFilename, seqSize);
+            else if (strcmp(isBitRead, "special") == 0)
+                epsilon = readSequenceByByteFromFile(inputFilename, seqSize, '0', true);
             else
-                epsilon = readSequenceByByteFromFile(inputFilename, seqSize, '0',false);
+                epsilon = readSequenceByByteFromFile(inputFilename, seqSize, '0', false);
         }
         else if ("minstd_rand" == genName) {
             std::generate_n(std::back_inserter(epsilon), seqSize,
@@ -387,13 +389,20 @@ Sequence readSequenceByByteFromFile(string const & inputFile, size_t sequenceSiz
         inFile.exceptions ( std::ifstream::failbit | std::ifstream::badbit );
         inFile.open(inputFile, std::ios::in);
 
-        for (int i = 0; i < static_cast<int>(epsilon.size()); i++) {
-            char symbol;
-            inFile >> symbol;
-            epsilon[i] = (!isSpecialFormat && symbol == isZero)       //for others
-                        ||
-                         (isSpecialFormat && (symbol & 1) != 0)             //for PI number file
-                            ? 0 : 1;
+        if (isSpecialFormat) {
+            for (int i = 0; i < static_cast<int>(epsilon.size()); i++) {
+                char symbol;
+                inFile >> symbol;
+                epsilon[i] = ((symbol & 1) != 0)     //for PI number file if hex format
+                                ? 0 : 1;
+            }
+        }
+        else {
+            for (int i = 0; i < static_cast<int>(epsilon.size()); i++) {
+                char symbol;
+                inFile >> symbol;
+                epsilon[i] = (symbol == isZero);      //for others
+            }
         }
         inFile.close();
     } catch(ifstream::failure e) {
