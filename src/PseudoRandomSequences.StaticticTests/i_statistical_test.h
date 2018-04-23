@@ -39,7 +39,12 @@ public:
 class IStatisticalTest {
 public:
     using PValueType = double;
-    using TestResultType = bool;
+    //using TestResultType = bool;
+    enum TestResultType {
+        SUCCESS,
+        FAILURE,
+        CANCELLED
+    };
     using ReturnValueType = vector<TestResultType>;
     using size_type = size_t;
     using TestParametersPtr = shared_ptr<TestParameters>;
@@ -60,6 +65,14 @@ public:
 private:
     TestParametersPtr pTestParams_;
 };
+
+const double MEANING_LEVEL = 0.05;
+
+inline IStatisticalTest::TestResultType parseTestResult(double pValueOfTest) {
+    return (pValueOfTest >= MEANING_LEVEL) ? IStatisticalTest::TestResultType::SUCCESS
+                            : ((pValueOfTest < 0.) ? IStatisticalTest::TestResultType::CANCELLED
+                                                     : IStatisticalTest::TestResultType::FAILURE);
+}
 
 //------------------------BitWordStream--------------------//
 

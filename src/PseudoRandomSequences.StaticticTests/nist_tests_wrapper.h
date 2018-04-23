@@ -20,18 +20,12 @@ using std::shared_ptr;
 
 const int TEST_COUNT = 17;
 
-const double MEANING_LEVEL = 0.05;
-
-inline bool isTestSuccessful(double pValueOfTest) {
-    return (pValueOfTest >= MEANING_LEVEL);
-}
-
 class FrequencyTest : public IStatisticalTest {
 public:
     FrequencyTest(TestParametersPtr pTestParams = std::make_shared<TestParameters>())
         : IStatisticalTest(pTestParams) {}
     virtual ReturnValueType test(BoolIterator sequenceIter, size_type size) {
-        return ReturnValueType( { isTestSuccessful(doFrequencyTest(int(size), sequenceIter)) } );
+        return ReturnValueType( { parseTestResult(doFrequencyTest(int(size), sequenceIter)) } );
     }
 };
 // #Parameterized
@@ -47,7 +41,7 @@ public:
     RunsTest(TestParametersPtr pTestParams = std::make_shared<TestParameters>())
         : IStatisticalTest(pTestParams) {}
     virtual ReturnValueType test(BoolIterator sequenceIter, size_type size) {
-        return ReturnValueType( { isTestSuccessful(doRunsTest(size, sequenceIter)) } );
+        return ReturnValueType( { parseTestResult(doRunsTest(size, sequenceIter)) } );
     }
 };
 
@@ -56,7 +50,7 @@ public:
     LongestRunOfOnesTest(TestParametersPtr pTestParams = std::make_shared<TestParameters>())
         : IStatisticalTest(pTestParams) {}
     virtual ReturnValueType test(BoolIterator sequenceIter, size_type size) {
-        return ReturnValueType( { isTestSuccessful(doLongestRunOfOnesTest(size, sequenceIter)) } );
+        return ReturnValueType( { parseTestResult(doLongestRunOfOnesTest(size, sequenceIter)) } );
     }
 };
 
@@ -65,7 +59,7 @@ public:
     RankTest(TestParametersPtr pTestParams = std::make_shared<TestParameters>())
         : IStatisticalTest(pTestParams) {}
     virtual ReturnValueType test(BoolIterator sequenceIter, size_type size) {
-        return ReturnValueType( { isTestSuccessful(doRankTest(size, sequenceIter)) } );
+        return ReturnValueType( { parseTestResult(doRankTest(size, sequenceIter)) } );
     }
 };
 
@@ -74,7 +68,7 @@ public:
     DiscreteFourierTransformTest(TestParametersPtr pTestParams = std::make_shared<TestParameters>())
         : IStatisticalTest(pTestParams) {}
     virtual ReturnValueType test(BoolIterator sequenceIter, size_type size) {
-        return ReturnValueType( { isTestSuccessful(doDiscreteFourierTransformTest(size, sequenceIter)) } );
+        return ReturnValueType( { parseTestResult(doDiscreteFourierTransformTest(size, sequenceIter)) } );
     }
 };
 // #The Slowest test
@@ -99,7 +93,7 @@ public:
     UniversalTest(TestParametersPtr pTestParams = std::make_shared<TestParameters>())
         : IStatisticalTest(pTestParams) {}
     virtual ReturnValueType test(BoolIterator sequenceIter, size_type size) {
-        return ReturnValueType( { isTestSuccessful(doUniversalTest(size, sequenceIter)) } );
+        return ReturnValueType( { parseTestResult(doUniversalTest(size, sequenceIter)) } );
     }
 };
 // #The Slowest test

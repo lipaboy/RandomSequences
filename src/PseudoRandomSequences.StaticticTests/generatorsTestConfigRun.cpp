@@ -287,10 +287,14 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
                         std::transform(currResults.begin(), currResults.end(), //first source
                             testResults.begin(),                                //second source
                             testResults.begin(),                                //destination
-                            [](double p_value, double count) -> double {
-                                return ((p_value < 0.) ? (count - 1000.) : (!isTestSuccessful(p_value) + count)); }
-                        // p_value < ALPHA - it is failure
-                        );
+                            [](IStatisticalTest::TestResultType value, double count) -> double {
+                                return ((value ==
+                                         IStatisticalTest::TestResultType::CANCELLED)
+                                        ? (count - 1000.)
+                                        : (value ==
+                                           IStatisticalTest::TestResultType::FAILURE)
+                                          ? (1. + count) : count);
+                        });
                     }
                 }
 			}

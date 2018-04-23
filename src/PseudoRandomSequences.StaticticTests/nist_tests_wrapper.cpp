@@ -4,11 +4,30 @@
 
 namespace statistical_tests_space {
 
+namespace {
+
+IStatisticalTest::TestResultType parsePackOfResults(std::vector<double> const & packOfPValues) {
+    const double LOCAL_MEANING_VALUE = 0.1;
+    int failureCount = 0;
+    for (auto & elem : packOfPValues) {
+        failureCount +=
+                (parseTestResult(elem) == IStatisticalTest::TestResultType::FAILURE);
+    }
+    const size_t size = packOfPValues.size();
+    //double average = double(successCount) / size; // bad because zero division
+    return (size == 0 ? IStatisticalTest::TestResultType::CANCELLED
+                     : ((double(failureCount) / size < LOCAL_MEANING_VALUE)
+                        ? IStatisticalTest::TestResultType::SUCCESS
+                        : IStatisticalTest::TestResultType::FAILURE));
+}
+
+}
+
 IStatisticalTest::ReturnValueType
 BlockFrequencyTest::test(BoolIterator sequenceIter, size_type size) {
     ReturnValueType container;
     for (auto & param : getTestParameters().blockFrequencyTest)
-        container.push_back(isTestSuccessful(doBlockFrequencyTest(param, size, sequenceIter)));
+        container.push_back(parseTestResult(doBlockFrequencyTest(param, size, sequenceIter)));
     return std::move(container);
 }
 
@@ -16,16 +35,9 @@ IStatisticalTest::ReturnValueType
 NonOverlappingTemplateMatchingsTest::test(BoolIterator sequenceIter, size_type size) {
     ReturnValueType container;
     for (auto & param : getTestParameters().nonOverlappingTemplateMatchingsTest) {
-        std::vector<double> temp = doNonOverlappingTemplateMatchingsTest(param, size, sequenceIter);
-        int successCount = 0;
-        for (auto & elem : temp) {
-            successCount += isTestSuccessful(elem);
-        }
-        const size_t size = temp.size();
-        double average = double(successCount) / size;
-        // TODO: very complex expression. Need to simplify it
-        container.push_back(size == 0 ? -1.
-            : average + size * (MEANING_LEVEL - (size - 1.) / size + 1e-3) * (1. - average));
+        container.push_back(
+                    parsePackOfResults(
+                        doNonOverlappingTemplateMatchingsTest(param, size, sequenceIter)));
     }
     return std::move(container);
 }
@@ -35,7 +47,7 @@ OverlappingTemplateMatchingsTest::test(BoolIterator sequenceIter, size_type size
     ReturnValueType container;
     for (auto & param : getTestParameters().overlappingTemplateMatchingsTest)
         container.push_back(
-                    isTestSuccessful(
+                    parseTestResult(
                         doOverlappingTemplateMatchingsTest(param, size, sequenceIter)));
     return std::move(container);
 }
@@ -45,7 +57,7 @@ LinearComplexityTest::test(BoolIterator sequenceIter, size_type size) {
     ReturnValueType container;
     for (auto & param : getTestParameters().linearComplexityTest)
         container.push_back(
-                    isTestSuccessful(
+                    parseTestResult(
                         doLinearComplexityTest(param, size, sequenceIter)));
     return std::move(container);
 }
@@ -55,8 +67,8 @@ SerialTest::test(BoolIterator sequenceIter, size_type size) {
     ReturnValueType container;
     for (auto & param : getTestParameters().serialTest) {
         auto res = doSerialTest(param, size, sequenceIter);
-        container.push_back(isTestSuccessful(res.first));
-        container.push_back(isTestSuccessful(res.second));
+        container.push_back(parseTestResult(res.first));
+        container.push_back(parseTestResult(res.second));
     }
     return std::move(container);
 }
@@ -67,7 +79,7 @@ ApproximateEntropyTest::test(BoolIterator sequenceIter, size_type size) {
     for (auto & param : getTestParameters().approximateEntropyTest) {
         // (M + 1) - bit block is used to compare
         container.push_back(
-                    isTestSuccessful(
+                    parseTestResult(
                         doApproximateEntropyTest(param, size, sequenceIter)));
     }
     return std::move(container);
@@ -77,47 +89,26 @@ IStatisticalTest::ReturnValueType
 CumulativeSumsTest::test(BoolIterator sequenceIter, size_type size) {
     ReturnValueType container;
     auto res = doCumulativeSums(size, sequenceIter);
-    container.push_back(isTestSuccessful(res.first));
-    container.push_back(isTestSuccessful(res.second));
+    container.push_back(parseTestResult(res.first));
+    container.push_back(parseTestResult(res.second));
     return std::move(container);
 }
 
 IStatisticalTest::ReturnValueType
 RandomExcursionsTest::test(BoolIterator sequenceIter, size_type size) {
-    ReturnValueType container;
-    auto result = doRandomExcursionsTest(size, sequenceIter);
-    double average = 0.;
-    for (auto & elem : result) {
-        average += isTestSuccessful(elem);
-    }
-    size_t resSize = result.size();
-    average /= resSize;
-    // TODO: very complex expression. Need to simplify it
-    container.push_back(resSize == 0 ? -1.
-        : average + resSize * (MEANING_LEVEL - (resSize - 1.) / resSize + 1e-3) * (1. - average));
-    return std::move(container);
+    return { parsePackOfResults(doRandomExcursionsTest(size, sequenceIter)) };
 }
 
 IStatisticalTest::ReturnValueType
 RandomExcursionsVariantTest::test(BoolIterator sequenceIter, size_type size) {
-    ReturnValueType container;
-    auto result = doRandomExcursionsVariantTest(size, sequenceIter);
-    double average = 0.;
-    for (auto & elem : result) {
-        average += isTestSuccessful(elem);
-    }
-    size_t resSize = result.size();
-    average /= resSize;
-    // TODO: very complex expression. Need to simplify it
-    container.push_back(resSize == 0 ? -1.
-        : average + resSize * (MEANING_LEVEL - (resSize - 1.) / resSize + 1e-3) * (1. - average));
-    return std::move(container);
+    return { parsePackOfResults(doRandomExcursionsVariantTest(size, sequenceIter)) };
 }
 
 IStatisticalTest::ReturnValueType
 BookStackTest::test(BoolIterator sequenceIter, size_type size) {
     ReturnValueType container;
 
+    // TODO: add pid of process to make the file more uniquely
     string inputFile = "bookStackInput" + std::to_string(omp_get_thread_num())
              + "_" + std::to_string(size) + ".dat";
     {
@@ -159,7 +150,7 @@ BookStackTest::test(BoolIterator sequenceIter, size_type size) {
         if (param.upperPart > (1LL << 28))
             continue;
         container.push_back(
-                    isTestSuccessful(
+                    parseTestResult(
                         doBookStackTest(static_cast<int>(arguments.size()), &arguments[0])));
     }
     std::remove(inputFile.c_str());

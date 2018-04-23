@@ -97,7 +97,7 @@ string runUnitTestsForOrderTest() {
         std::advance(iter, i * partSize);
         auto pValue = orderTest.test(iter, partSize);
 
-        counterFailure += !isTestSuccessful(pValue.front());
+        counterFailure += !parseTestResult(pValue.front());
 //        cout << "Order test result: " << isTestSuccessful(pValue.front()) << ", " << pValue.front()
 //             << endl
 //             << "Time elapsed: " << getTimeDifferenceInMillis(startTime, getCurrentClockTime())

@@ -70,7 +70,7 @@ public:
         ReturnValueType retVal;
         for (TestParameters::BookStackPair elem : getTestParameters().orderTest) {
             initialize(elem.dimension, elem.upperPart);
-            retVal.push_back(testSingle(sequenceIterBegin, epsilonSize));
+            retVal.push_back(parseTestResult(testSingle(sequenceIterBegin, epsilonSize)));
         }
         return retVal;
     }
