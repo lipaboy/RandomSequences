@@ -13,7 +13,7 @@
 using namespace statistical_tests_space;
 
 std::pair<double, double>
-statistical_tests_space::CumulativeSums(int n, BoolIterator epsilon)
+statistical_tests_space::doCumulativeSums(int n, BoolIterator epsilon)
 {
 	int		S, sup, inf, z, zrev, k;
 	double	sum1, sum2, p_value;

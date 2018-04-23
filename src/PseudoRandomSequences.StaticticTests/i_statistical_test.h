@@ -16,12 +16,6 @@ using std::vector;
 using std::string;
 using std::shared_ptr;
 
-const double MEANING_LEVEL = 0.05;
-
-inline bool isTestSuccessful(double pValueOfTest) {
-    return (pValueOfTest >= MEANING_LEVEL);
-}
-
 // TODO: make interface of TestParameters
 class TestParameters {
 public:
@@ -45,7 +39,8 @@ public:
 class IStatisticalTest {
 public:
     using PValueType = double;
-    using ReturnValueType = vector<PValueType>;
+    using TestResultType = bool;
+    using ReturnValueType = vector<TestResultType>;
     using size_type = size_t;
     using TestParametersPtr = shared_ptr<TestParameters>;
 

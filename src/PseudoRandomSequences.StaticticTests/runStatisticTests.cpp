@@ -71,7 +71,7 @@ statistical_tests_space::runStatisticalTests(BoolIterator epsilonBegin,
     for (auto & testObj : packOfTests) {
         if (testKey[charPos++] == '1') {
             auto res = testObj->test(epsilonBegin, EPSILON_SIZE);
-            for (auto & elem : res)
+            for (auto elem : res)
                 testResults.push_back(elem);
         }
     }

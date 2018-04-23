@@ -18,7 +18,7 @@ double doBookStackTest(int argc, const char* argv[]);
 
 double	doFrequencyTest(int n, BoolIterator epsilon);
 double	doBlockFrequencyTest(int M, int n, BoolIterator epsilon);
-std::pair<double, double> 	CumulativeSums(int n, BoolIterator epsilon);
+std::pair<double, double> 	doCumulativeSums(int n, BoolIterator epsilon);
 double	doRunsTest(int n, BoolIterator epsilon);
 double	doLongestRunOfOnesTest(int n, BoolIterator epsilon);
 double	doRankTest(int n, BoolIterator epsilon);

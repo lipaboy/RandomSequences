@@ -8,7 +8,7 @@ IStatisticalTest::ReturnValueType
 BlockFrequencyTest::test(BoolIterator sequenceIter, size_type size) {
     ReturnValueType container;
     for (auto & param : getTestParameters().blockFrequencyTest)
-        container.push_back(doBlockFrequencyTest(param, size, sequenceIter));
+        container.push_back(isTestSuccessful(doBlockFrequencyTest(param, size, sequenceIter)));
     return std::move(container);
 }
 
@@ -34,7 +34,9 @@ IStatisticalTest::ReturnValueType
 OverlappingTemplateMatchingsTest::test(BoolIterator sequenceIter, size_type size) {
     ReturnValueType container;
     for (auto & param : getTestParameters().overlappingTemplateMatchingsTest)
-        container.push_back(doOverlappingTemplateMatchingsTest(param, size, sequenceIter));
+        container.push_back(
+                    isTestSuccessful(
+                        doOverlappingTemplateMatchingsTest(param, size, sequenceIter)));
     return std::move(container);
 }
 
@@ -42,7 +44,9 @@ IStatisticalTest::ReturnValueType
 LinearComplexityTest::test(BoolIterator sequenceIter, size_type size) {
     ReturnValueType container;
     for (auto & param : getTestParameters().linearComplexityTest)
-        container.push_back(doLinearComplexityTest(param, size, sequenceIter));
+        container.push_back(
+                    isTestSuccessful(
+                        doLinearComplexityTest(param, size, sequenceIter)));
     return std::move(container);
 }
 
@@ -51,8 +55,8 @@ SerialTest::test(BoolIterator sequenceIter, size_type size) {
     ReturnValueType container;
     for (auto & param : getTestParameters().serialTest) {
         auto res = doSerialTest(param, size, sequenceIter);
-        container.push_back(res.first);
-        container.push_back(res.second);
+        container.push_back(isTestSuccessful(res.first));
+        container.push_back(isTestSuccessful(res.second));
     }
     return std::move(container);
 }
@@ -62,7 +66,9 @@ ApproximateEntropyTest::test(BoolIterator sequenceIter, size_type size) {
     ReturnValueType container;
     for (auto & param : getTestParameters().approximateEntropyTest) {
         // (M + 1) - bit block is used to compare
-        container.push_back(doApproximateEntropyTest(param, size, sequenceIter));
+        container.push_back(
+                    isTestSuccessful(
+                        doApproximateEntropyTest(param, size, sequenceIter)));
     }
     return std::move(container);
 }
@@ -70,9 +76,9 @@ ApproximateEntropyTest::test(BoolIterator sequenceIter, size_type size) {
 IStatisticalTest::ReturnValueType
 CumulativeSumsTest::test(BoolIterator sequenceIter, size_type size) {
     ReturnValueType container;
-    auto res = CumulativeSums(size, sequenceIter);
-    container.push_back(res.first);
-    container.push_back(res.second);
+    auto res = doCumulativeSums(size, sequenceIter);
+    container.push_back(isTestSuccessful(res.first));
+    container.push_back(isTestSuccessful(res.second));
     return std::move(container);
 }
 
@@ -152,7 +158,9 @@ BookStackTest::test(BoolIterator sequenceIter, size_type size) {
         };
         if (param.upperPart > (1LL << 28))
             continue;
-        container.push_back(doBookStackTest(static_cast<int>(arguments.size()), &arguments[0]));
+        container.push_back(
+                    isTestSuccessful(
+                        doBookStackTest(static_cast<int>(arguments.size()), &arguments[0])));
     }
     std::remove(inputFile.c_str());
 
