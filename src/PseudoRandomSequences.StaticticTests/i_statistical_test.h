@@ -36,7 +36,7 @@ public:
 };
 
 // TODO: test must have the additional parameters (except length of sequence)
-class IStatisticalTest {
+class IStatisticalTest {		// it isn't interface
 public:
     using PValueType = double;
     //using TestResultType = bool;
