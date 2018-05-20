@@ -97,8 +97,8 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
 
 		//--------------------Container---------------------//
 
-        uint32_t atom = //1u;
-                1000u;
+        uint32_t atom = 1u;
+               // 1000u;
                 //1024u;
 
         const size_t TRAVERSAL_COUNT_LARGE = TRAVERSAL_COUNT_SMALL;
@@ -401,7 +401,7 @@ Sequence readSequenceByByteFromFile(string const & inputFile, size_t sequenceSiz
             for (int i = 0; i < static_cast<int>(epsilon.size()); i++) {
                 char symbol;
                 inFile >> symbol;
-                epsilon[i] = (symbol == isZero);      //for others
+                epsilon[i] = (symbol != isZero);      //for others
             }
         }
         inFile.close();

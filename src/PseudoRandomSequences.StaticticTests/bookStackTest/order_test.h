@@ -4,6 +4,7 @@
 #include <vector>
 #include <unordered_map>
 #include <map>
+#include <queue>
 
 #include "statisticChiSquared.h"
 #include "i_statistical_test.h"
@@ -81,9 +82,17 @@ private:
         int bitpos = 0;
         size_type i = 0u;
 
+        size_type directionChangingCount = 0u;
+        int direction = 1;
+
+        std::queue<int> kek;
+        for (int i = 0; i < 10; i++)
+            kek.push(0);
         for (auto iter = sequenceIterBegin; i < epsilonSize; iter++, i++)
         {
             bool bit = *iter;
+            kek.push(bit);
+            kek.pop();
             word |= (1 << (bitpos++)) * bit;
             if (bitpos >= static_cast<int>(dimension()))
             {
@@ -131,12 +140,21 @@ private:
                 for (FrequencyType j = 0; j < upperPartBorder_; j++) {
                     ++encounterFreqInUpperPart_[ orderContainer_[j].word ];
                 }
+                auto getDirection = [] (size_type a, size_type b) -> int {
+                    return (a == b) ? 0 : (int(a) - int(b)) / std::abs((int)a - int(b));
+                };
+                int newDirection = getDirection(encounterFreqInUpperPart_[0],
+                        encounterFreqInUpperPart_[1]);
+                if (newDirection && newDirection != direction) {
+                    direction = newDirection;
+                    ++directionChangingCount;
+                }
 
                 bitpos = 0;
                 word = 0;
             }
         }
-
+cout << "Direction changing count = " << directionChangingCount << endl;
         // Calculate P-value
         auto statisticX2 = statisticChiSquared(encounterFreqInUpperPart_.begin(), encounterFreqInUpperPart_.end(),
                                                double(upperPartBorder_) / containerSize() * (double(epsilonSize) / dimension()));
@@ -156,7 +174,7 @@ private:
     OrderContainerType orderContainer_; // saves property of order
     WordMapType wordMap_;
     // border position refers to next elem after last one of set that has such border
-    BorderContainerType borders_;
+    BorderContainerType borders_;   // ADVICE: you can replace ordered_map on array with size of alphabet because borders count can't be more than words
 
     FrequencyType upperPartBorder_;
     UpperPartContainerType encounterFreqInUpperPart_;
