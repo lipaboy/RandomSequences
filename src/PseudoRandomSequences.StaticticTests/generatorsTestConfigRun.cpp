@@ -53,24 +53,24 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
 
     //-----------------------------Input data-----------------------------//
 
-    int sizesStartIndex = 5;
+    int sizesStartIndex = 4;
     size_t len = (argc > 1) ? strlen(argv[1]) : 0;
     size_t countSizes = (argc >= sizesStartIndex + 1) ? std::atoi(argv[sizesStartIndex]) : 0;
     if (countSizes <= 0 || argc < int(sizesStartIndex + 1 + countSizes) || len < TEST_COUNT) {
 		cout << "Not enough parameters ( testKey ("
 			<< TEST_COUNT << ", current = " << len << "), "
-            << "input possibility, "
+//            << "input possibility, "
             << "traversal count, generator name, count of seq. sizes (N = "
             << countSizes << "), size 1, size 2, .., size N)"
 			<< endl;
 		return -1;
 	}
-    int inputOppositePossibility = static_cast<int>(
-        std::round(1.0 / boost::lexical_cast<double>(argv[2]))
-    );
+    int inputOppositePossibility = 2;   //static_cast<int>(
+        //std::round(1.0 / boost::lexical_cast<double>(argv[2]))
+    //);
 
    // std::vector<string> generatorNames { argv[4] };
-    const int TRAVERSAL_COUNT_SMALL = std::atoi(argv[3]);
+    const int TRAVERSAL_COUNT_SMALL = std::atoi(argv[2]);
     string testKey(argv[1]);
     vector<size_t> seqSizes;
     for (int i = sizesStartIndex + 1; i < argc; i++)
@@ -93,7 +93,7 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
 
     auto wholeTimeExpend = getCurrentClockTime();
 //	for (int iGen = 0; iGen < generatorNames.size(); iGen++) {
-        std::string genName = argv[4];
+        std::string genName = argv[3];
 
 		//--------------------Container---------------------//
 
@@ -130,11 +130,6 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
             outFilename += "_" + std::to_string(iSize);
         resFile.open(outFilename + ".dat", std::ios::out | std::ios::trunc);
         cout << outFilename << endl;
-        // Extra data (p_values)
-//        std::ofstream extraFile;
-//        extraFile.open("extraStdGenerators_" + genName + "_" + std::to_string(firstSize)
-//                       + "-" + std::to_string(lastSize) + ".dat",
-//            std::ios::out | std::ios::trunc);
 
         if ("file" == genName) {
             // TODO: add checking the data of input
@@ -316,23 +311,11 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
                 std::copy(testResults.begin(), testResults.end(), std::ostream_iterator<double>(cout, "\t"));
                 cout << endl;
             }
-			//----------------Extra infos-----------------//
-//            {
-//                //if (iSize <= firstSize) {
-//                    std::copy(testNames.begin(), testNames.end(), std::ostream_iterator<string>(extraFile, "\t"));
-//                    extraFile << endl;
-//                //}
-//                extraFile << iSize << "_Kbits\t";
-//                std::copy(currResults.begin(), currResults.end(), std::ostream_iterator<double>(extraFile, "\t"));
-//                extraFile << endl;
-//            }
 
             resFile.flush();
-//            extraFile.flush();
 			testNames.clear();
 		}
         resFile.close();
-//        extraFile.close();
 //	}
 
     cout << endl << "Whole time expend: "

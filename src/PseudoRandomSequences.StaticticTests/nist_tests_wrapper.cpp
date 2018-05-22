@@ -199,7 +199,8 @@ TestParameters::TestParameters()
 //    uint64_t logSize2 = uint64_t(std::floor(std::log2(EPSILON_SIZE)) - 5);
     approximateEntropyTest = { 1, 2, //logSize2 / 2, logSize2
                              4, 8};
-    orderTest = { {1, 1} };
+    // upper part - dimension
+    orderTest = { {8, 4} };
 }
 
 }

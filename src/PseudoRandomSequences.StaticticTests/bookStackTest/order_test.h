@@ -81,11 +81,12 @@ private:
         WordStorageType word = 0;
         int bitpos = 0;
         size_type i = 0u;
+        size_type upperPartCounter = 0u;
 
         size_type directionChangingCount = 0u;
         int direction = 1;
 
-        std::queue<int> kek;
+        std::queue<int> kek;    // for debugging
         for (int i = 0; i < 10; i++)
             kek.push(0);
         for (auto iter = sequenceIterBegin; i < epsilonSize; iter++, i++)
@@ -138,29 +139,37 @@ private:
 
                 // update information about element encountering in upper part
                 for (FrequencyType j = 0; j < upperPartBorder_; j++) {
-                    ++encounterFreqInUpperPart_[ orderContainer_[j].word ];
+                    if (word == orderContainer_[j].word) {
+                        ++upperPartCounter;
+                        break;
+                    }
                 }
-                auto getDirection = [] (size_type a, size_type b) -> int {
-                    return (a == b) ? 0 : (int(a) - int(b)) / std::abs((int)a - int(b));
-                };
-                int newDirection = getDirection(encounterFreqInUpperPart_[0],
-                        encounterFreqInUpperPart_[1]);
-                if (newDirection && newDirection != direction) {
-                    direction = newDirection;
-                    ++directionChangingCount;
-                }
+//                auto getDirection = [] (size_type a, size_type b) -> int {
+//                    return (a == b) ? 0 : (int(a) - int(b)) / std::abs((int)a - int(b));
+//                };
+//                int newDirection = getDirection(encounterFreqInUpperPart_[0],
+//                        encounterFreqInUpperPart_[1]);
+//                if (newDirection && newDirection != direction) {
+//                    direction = newDirection;
+//                    ++directionChangingCount;
+//                }
 
                 bitpos = 0;
                 word = 0;
             }
         }
-cout << "Direction changing count = " << directionChangingCount << endl;
+//cout << "Direction changing count = " << directionChangingCount << endl;
+
         // Calculate P-value
-        auto statisticX2 = statisticChiSquared(encounterFreqInUpperPart_.begin(), encounterFreqInUpperPart_.end(),
-                                               double(upperPartBorder_) / containerSize() * (double(epsilonSize) / dimension()));
+//        auto statisticX2 = statisticChiSquared(encounterFreqInUpperPart_.begin(), encounterFreqInUpperPart_.end(),
+//                                               double(upperPartBorder_) / containerSize() * (double(epsilonSize) / dimension()));
+
         PValueType pValue = 1 -
             boost::math::cdf(boost::math::chi_squared_distribution<double>(1),
-                statisticX2);
+                //statisticX2);
+                statisticChiSquared(upperPartCounter,
+                                    double(upperPartBorder_) / containerSize()
+                                        * (double(epsilonSize) / dimension())));
         return pValue;
     }
 
