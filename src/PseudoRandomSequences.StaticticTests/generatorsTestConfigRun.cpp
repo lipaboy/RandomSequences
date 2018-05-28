@@ -267,12 +267,16 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
 					}
 				}
 
+                // logging
                 {
-                    auto iterEnd = epsilonRange.begin();
-                    std::advance(iterEnd, 20);
-                    std::copy(epsilonRange.begin(), iterEnd,
-                        std::ostream_iterator<bool>(cout, ""));
-                    std::cout << std::endl;
+                    if (jTraver % 10 == 0)
+                    {
+                        auto iterEnd = epsilonRange.begin();
+                        std::advance(iterEnd, 20);
+                        std::copy(epsilonRange.begin(), iterEnd,
+                            std::ostream_iterator<bool>(cout, ""));
+                        std::cout << std::endl;
+                    }
                 }
 
 				//----------------Tests-----------------//
