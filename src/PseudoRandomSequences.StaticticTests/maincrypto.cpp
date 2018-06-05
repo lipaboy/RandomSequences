@@ -16,6 +16,10 @@ using std::endl;
 using AnyRange = boost::any_range<int, boost::forward_traversal_tag, int, std::ptrdiff_t>;
 
 int main(int argc, char *argv[]) {
+
+    auto res = sha256("0");
+    cout << res << endl;
+
     cout << "Tests the tests: ";
     cout << runUnitTests() << endl;
     cout << "Run tests: " << endl;
