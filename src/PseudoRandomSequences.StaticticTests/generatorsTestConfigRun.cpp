@@ -116,7 +116,7 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
 
         auto genTimeExpend = getCurrentClockTime();
         std::normal_distribution<double> distribution(4.5, 2.0);		//doesn't failure with random_device generator
-        //std::chi_squared_distribution<double> distribution(3.0);		//failure with random_device (number of freedoms = 3.0)
+        //std::chi_squared_distribution<double> distribution(3.0);		//failure with random_device (number of freedoms = 3.0) it is logical (you need 3.5 instead of 3.0 because even/odd-ness)
 
         char genNameStr[80];
         strcpy(genNameStr, genName.c_str());
