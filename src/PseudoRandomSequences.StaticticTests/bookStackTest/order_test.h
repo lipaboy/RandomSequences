@@ -83,8 +83,8 @@ private:
         size_type i = 0u;
         size_type upperPartCounter = 0u;
 
-        size_type directionChangingCount = 0u;
-        int direction = 1;
+//        size_type directionChangingCount = 0u;
+//        int direction = 1;
 
         std::queue<int> kek;    // for debugging
         for (int i = 0; i < 10; i++)

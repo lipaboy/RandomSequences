@@ -45,7 +45,7 @@ statistical_tests_space::runStatisticalTests(BoolIterator epsilonBegin,
     IStatisticalTest::TestParametersPtr pTestParams)
 {
     IStatisticalTest::ReturnValueType testResults;
-    const int EPSILON_SIZE = static_cast<int>(std::distance(epsilonBegin, epsilonEnd));
+    const auto EPSILON_SIZE = std::distance(epsilonBegin, epsilonEnd);
     TestsContainerType packOfTests;
 
     packOfTests.emplace_back(make_unique<BookStackTest>(pTestParams));
@@ -67,16 +67,16 @@ statistical_tests_space::runStatisticalTests(BoolIterator epsilonBegin,
     // TODO: check on discreditation (maybe only parameter 8 doesn't work)
     packOfTests.emplace_back(make_unique<LinearComplexityTest>());    // test doesn't work again
 
-    int charPos = 0;
+    size_t charPos = 0;
     for (auto & testObj : packOfTests) {
         if (testKey[charPos++] == '1') {
-            auto res = testObj->test(epsilonBegin, EPSILON_SIZE);
+            auto res = testObj->test(epsilonBegin, static_cast<size_t>(EPSILON_SIZE));
             for (auto elem : res)
                 testResults.push_back(elem);
         }
     }
 
-    return std::move(testResults);
+    return testResults;
 }
 
 // TODO: join TestWrappers with their names
@@ -86,7 +86,7 @@ vector<string> statistical_tests_space::getStatisticTestNames(string testKey, si
     vector<string> testNames;
     TestParameters testParameters;
 
-    int ind = 0;
+    size_t ind = 0;
     if (testKey[ind++] == '1')
         for (auto param : testParameters.bookStackTest)
             testNames.push_back("BookStackTest_" + std::to_string(param.dimension)
@@ -133,11 +133,11 @@ vector<string> statistical_tests_space::getStatisticTestNames(string testKey, si
         for (auto param : testParameters.orderTest)
             testNames.push_back("OrderTest_" + std::to_string(param.dimension)
                                 + "_dim_" + std::to_string(param.upperPart) + "_up");
-        if (testKey[ind++] == '1')
-            for (auto param : testParameters.linearComplexityTest)
-                testNames.push_back("LinearComplexity_" + std::to_string(param));
+    if (testKey[ind++] == '1')
+        for (auto param : testParameters.linearComplexityTest)
+            testNames.push_back("LinearComplexity_" + std::to_string(param));
 
-    return std::move(testNames);
+    return testNames;
 }
 
 
@@ -159,7 +159,7 @@ using std::chrono::time_point;
 
 int statistical_tests_space::getTimeDifferenceInMillis(TimeType const & from, TimeType const & to) {
 #ifdef __linux__
-   return std::chrono::duration_cast<std::chrono::milliseconds>(to - from).count();
+   return static_cast<int>(std::chrono::duration_cast<std::chrono::milliseconds>(to - from).count());
 #elif _WIN32   //Windows
    return to - from;
 #endif

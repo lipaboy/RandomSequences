@@ -2,6 +2,8 @@
 
 #include <cstring>
 
+#include <omp.h>
+
 #include <iterator>
 #include <bitset>
 #include <string.h>
@@ -51,14 +53,15 @@ namespace {
 
 int generatorsTestConfigRun(int argc, char * argv[]) {
 	time_t t;
-    std::srand((unsigned int)(std::time(&t)));
+    std::srand(static_cast<unsigned int>(std::time(&t)));
 
     //-----------------------------Input data-----------------------------//
 
     int sizesStartIndex = 4;
     size_t len = (argc > 1) ? strlen(argv[1]) : 0;
-    size_t countSizes = (argc >= sizesStartIndex + 1) ? std::atoi(argv[sizesStartIndex]) : 0;
-    if (countSizes <= 0 || argc < int(sizesStartIndex + 1 + countSizes) || len < TEST_COUNT) {
+    size_t countSizes = (argc < sizesStartIndex + 1)
+            ? 0 : std::stoul(argv[sizesStartIndex]);
+    if (countSizes <= 0 || argc < sizesStartIndex + 1 + int(countSizes) || len < TEST_COUNT) {
 		cout << "Not enough parameters ( testKey ("
 			<< TEST_COUNT << ", current = " << len << "), "
 //            << "input possibility, "
@@ -72,11 +75,11 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
     //);
 
    // std::vector<string> generatorNames { argv[4] };
-    const int TRAVERSAL_COUNT_SMALL = std::atoi(argv[2]);
+    const size_t TRAVERSAL_COUNT_SMALL = std::stoul(argv[2]);
     string testKey(argv[1]);
     vector<size_t> seqSizes;
     for (int i = sizesStartIndex + 1; i < argc; i++)
-        seqSizes.push_back(std::atoi(argv[i]));
+        seqSizes.push_back(std::stoul(argv[i]));
 
 
     // TODO: add test performance for conversation(?) and tests
@@ -108,9 +111,9 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
         Sequence epsilon;
         // TODO: Remove this crutch
 		tp.n = 0;
-        tp.numOfBitStreams = TRAVERSAL_COUNT_LARGE;
+        tp.numOfBitStreams = static_cast<int>(TRAVERSAL_COUNT_LARGE);
         tp.n = seqSizes[0] * atom;
-        const size_t seqSize = tp.n * tp.numOfBitStreams;
+        const size_t seqSize = tp.n * size_t(tp.numOfBitStreams);
 //        for (auto jSize : seqSizes) {
 //			tp.n += jSize * atom * ((jSize < TRAVERSAL_THRESHOLD) ? TRAVERSAL_COUNT_LARGE
 //				: TRAVERSAL_COUNT_SMALL);
@@ -135,8 +138,8 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
 
         if ("file" == genName) {
             // TODO: add checking the data of input
-            char * isBitRead = strtok(NULL, "=");
-            inputFilename = strtok(NULL, "=");
+            char * isBitRead = strtok(nullptr, "=");
+            inputFilename = strtok(nullptr, "=");
             if (strcmp(isBitRead, "2") == 0)
                 epsilon = readSequenceByBitFromFile(inputFilename, seqSize);
             else if (strcmp(isBitRead, "special") == 0)
@@ -147,20 +150,20 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
         else if ("minstd_rand" == genName) {
             std::generate_n(std::back_inserter(epsilon), seqSize,
                 [&inputOppositePossibility, &generatorMinstdRand, &distribution]() -> bool {
-                return (int(std::round(distribution(generatorMinstdRand))) % inputOppositePossibility == 0);
-            });
+                    return (int(std::round(distribution(generatorMinstdRand))) % inputOppositePossibility == 0);
+                });
         }
         else if ("minstd_rand0" == genName) {
             std::generate_n(std::back_inserter(epsilon), seqSize,
                 [&inputOppositePossibility, &generatorMinstdRand0, &distribution]() -> bool {
-                return (int(std::round(distribution(generatorMinstdRand0))) % inputOppositePossibility == 0);
-            });
+                    return (int(std::round(distribution(generatorMinstdRand0))) % inputOppositePossibility == 0);
+                });
         }
         else if ("knuth_b" == genName) {
             std::generate_n(std::back_inserter(epsilon), seqSize,
                 [&inputOppositePossibility, &generatorKnuthB, &distribution]() -> bool {
-                return (int(std::round(distribution(generatorKnuthB))) % inputOppositePossibility == 0);
-            });
+                    return (int(std::round(distribution(generatorKnuthB))) % inputOppositePossibility == 0);
+                });
         }
         else if ("ranlux24" == genName) {
             std::generate_n(std::back_inserter(epsilon), seqSize,
@@ -171,33 +174,33 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
         else if ("ranlux48" == genName) {
             std::generate_n(std::back_inserter(epsilon), seqSize,
                 [&inputOppositePossibility, &generatorRanlux48, &distribution]() -> bool {
-                return (int(std::round(distribution(generatorRanlux48))) % inputOppositePossibility == 0);
-            });
+                    return (int(std::round(distribution(generatorRanlux48))) % inputOppositePossibility == 0);
+                });
         }
         else if ("random_device" == genName) {
             std::generate_n(std::back_inserter(epsilon), seqSize,
                 [&inputOppositePossibility, &generatorRandomDevice, &distribution]() -> bool {
-                return (int(std::round(distribution(generatorRandomDevice))) % inputOppositePossibility == 0);
-            });
+                    return (int(std::round(distribution(generatorRandomDevice))) % inputOppositePossibility == 0);
+                });
         }
         else if ("rand" == genName) {
             std::generate_n(std::back_inserter(epsilon), seqSize,
-                [&inputOppositePossibility, &generatorDefaultRandomEngine, &distribution]() -> bool {
-                return ((std::rand() % 2) == 0);
-            });
+                []() -> bool {
+                    return ((std::rand() % 2) == 0);
+                });
         }
         else if ("mersenne" == genName) {
             std::generate_n(std::back_inserter(epsilon), seqSize,
                 [&inputOppositePossibility, &generatorMt19937_64, &distribution]() -> bool {
-                return (int(std::round(distribution(generatorMt19937_64))) % inputOppositePossibility == 0);
-            });
+                    return (int(std::round(distribution(generatorMt19937_64))) % inputOppositePossibility == 0);
+                });
         }
         else if ("bad" == genName) {
             std::generate_n(std::back_inserter(epsilon), seqSize,
-                [&inputOppositePossibility, &distribution]() -> bool {
-                static int i = 0;
-                return (i++ < int(tp.n));
-            });
+                []() -> bool {
+                    static int i = 0;
+                    return (i++ < int(tp.n));
+                });
         }
         else if ("lcg" == genName)
 			epsilon = lcg();
@@ -228,19 +231,21 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
                  << getTimeDifferenceInMillis(genTimeExpend, getCurrentClockTime()) / 1000
                  << " secs." << endl;
 
-            // sha-256
-            Sequence epsilonSha(epsilon.size());
-            string str = "d7a8fbb307d7809469ca9abcb0082e4f8d5651e46d3cdb762d02d0bf37c9e592";
-            constexpr size_t DIGEST_SIZE = 64;
-            for (int i = 0; i < epsilon.size(); ) {
-                str[i % DIGEST_SIZE] = '0' + epsilon[i];
-                if ((++i) % DIGEST_SIZE == 0) {
-                    auto shaStr = sha256(str);
-                    for (int j = 0; j < DIGEST_SIZE; j++)
-                        epsilonSha[i - DIGEST_SIZE + j] = (shaStr[j] % 2 == 0);
-                }
-            }
-            epsilon = std::move(epsilonSha);
+//            // sha-256
+//            Sequence epsilonSha(epsilon.size());
+//            string str = "d7a8fbb307d7809469ca9abcb0082e4f8d5651e46d3cdb762d02d0bf37c9e592";
+//            constexpr size_t DIGEST_SIZE = 64;
+//            for (size_t i = 0; i < epsilon.size(); ) {
+//                str[i % DIGEST_SIZE] = '0' + epsilon[i];
+//                if ((++i) % DIGEST_SIZE == 0) {
+//                    auto shaStr = sha256(str);
+//                    for (size_t j = 0; j < DIGEST_SIZE; j++) {
+//                        // DANGER: unsigned arithmetic but must work
+//                        epsilonSha[i - DIGEST_SIZE + j] = (shaStr[j] % 2 == 0);
+//                    }
+//                }
+//            }
+//            epsilon = std::move(epsilonSha);
         }
 
 		size_t accumulatorSize = 0u;
@@ -257,11 +262,11 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
                     getStatisticTestNames(testKey, inputSize);
             vector<double> testResults(testNames.size());
 
-            int traversalCount = TRAVERSAL_COUNT_LARGE;
+            size_t traversalCount = TRAVERSAL_COUNT_LARGE;
 
 // TODO: create define for DEBUG to remove omp parallelism
 #pragma omp parallel for shared(genName, traversalCount, testKey, testResults)
-			for (int jTraver = 0; jTraver < traversalCount; jTraver++) 
+            for (size_t jTraver = 0; jTraver < traversalCount; jTraver++)
             {
                 {
                     if (jTraver % 10 == 0)
@@ -366,7 +371,7 @@ Sequence readSequenceByBitFromFile(string const & inputFile, size_t sequenceSize
             char symbol;
             inFile >> symbol;
             buffer = static_cast<BlockReadType>(symbol);
-            for (int bit = 0; bit < static_cast<int>(8 * sizeof(BlockReadType)); bit++) {
+            for (size_t bit = 0; bit < 8 * sizeof(BlockReadType); bit++) {
                 epsilon[i * 8 + bit] = static_cast<BitSequence>((buffer & (1 << bit)) >> bit);
             }
         }
@@ -378,7 +383,7 @@ Sequence readSequenceByBitFromFile(string const & inputFile, size_t sequenceSize
         std::cerr << "Exception opening/reading/closing file " << inputFile << endl;
     }
 
-    return std::move(epsilon);
+    return epsilon;
 }
 
 Sequence readSequenceByByteFromFile(string const & inputFile, size_t sequenceSize,
@@ -534,12 +539,12 @@ std::string sha256(std::string input)
 
     SHA256 ctx = SHA256();
     ctx.init();
-    ctx.update( (unsigned char*)input.c_str(), input.length());
+    ctx.update( reinterpret_cast<const unsigned char*>(input.c_str()), input.length());
     ctx.final(digest);
 
     char buf[2*SHA256::DIGEST_SIZE+1];
     buf[2*SHA256::DIGEST_SIZE] = 0;
-    for (int i = 0; i < SHA256::DIGEST_SIZE; i++)
+    for (int i = 0; i < int(SHA256::DIGEST_SIZE); i++)
         sprintf(buf+i*2, "%02x", digest[i]);
     return std::string(buf);
 }

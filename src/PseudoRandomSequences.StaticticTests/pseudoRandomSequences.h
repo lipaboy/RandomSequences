@@ -69,8 +69,12 @@ std::string sha256(std::string input);
 
 
 // LOCAL PLAN
+// --------------
 // TODO: write wrapper around BitWords
 // TODO: test generators by OrderTest
+// TODO: context around ISTests
+// TODO: write tests for parser: generatorsTestConfigRun
+//       - connect gtest
 
 using std::vector;
 using std::pair;

@@ -52,12 +52,13 @@ public:
 public:
     IStatisticalTest(TestParametersPtr pTestParams = std::make_shared<TestParameters>())
         : pTestParams_(pTestParams) {}
+    virtual ~IStatisticalTest() {}
 
     // TODO: Make methods more common (template for example) (Big refactoring task)
     virtual ReturnValueType test(BoolIterator sequenceIterBegin, size_type size) = 0;
 
     ReturnValueType test(BoolIterator sequenceIterBegin, BoolIterator sequenceIterEnd) {
-        return test(sequenceIterBegin, std::distance(sequenceIterBegin, sequenceIterEnd));
+        return test(sequenceIterBegin, static_cast<size_t>(std::distance(sequenceIterBegin, sequenceIterEnd)));
     }
 
     const TestParameters& getTestParameters() const { return *pTestParams_; }
