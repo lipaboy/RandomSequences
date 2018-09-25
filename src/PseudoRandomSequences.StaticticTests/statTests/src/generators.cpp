@@ -68,7 +68,7 @@ lcg()
 		num_1s = 0;
 		bitsRead = 0;
 		SEED = lcg_rand(static_cast<int>(tp.n), SEED, DUNIF, static_cast<int>(tp.n));
-		for ( i=0; i<tp.n; i++ ) {
+		for ( i=0; static_cast<size_t>(i) < tp.n; i++ ) {
 			if ( DUNIF[i] < 0.5 ) {
 				bit = 0;
 				num_0s++;
@@ -226,7 +226,7 @@ exclusiveOR()
 		}
 		bitsRead++;
 	}
-	for ( i=127; i<tp.n*tp.numOfBitStreams; i++ ) {
+	for ( i=127; static_cast<size_t>(i) < tp.n * tp.numOfBitStreams; i++ ) {
 		if ( bit_sequence[(i-1)%127] != bit_sequence[(i-127)%127] ) {
 			bit_sequence[i%127] = 1;
 			epsilon[bitsRead] = 1;
@@ -315,7 +315,7 @@ bbs()
 		num_1s = 0;
 		bitsRead = 0;
 
-        for ( i=0; i<tp.n; i++ ) {
+        for ( i=0; static_cast<size_t>(i) < tp.n; i++ ) {
             ModSqr(x, x, 128, n, 128);
 			memcpy(x, x+128, 128);
 			if ( (x[127] & 0x01) == 0 ) {

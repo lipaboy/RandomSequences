@@ -21,9 +21,10 @@
 #include <chrono>
 
 #include <memory>
-#include <boost/lexical_cast.hpp>
-
+//#include <boost/lexical_cast.hpp>
+#ifdef __linux__
 #include <openssl/sha.h>
+#endif
 
 #include "lipaboyLibrary/src/maths/fixed_precision_number.h"
 #include "statTests/include/generators.h"
@@ -266,7 +267,7 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
 
 // TODO: create define for DEBUG to remove omp parallelism
 #pragma omp parallel for shared(genName, traversalCount, testKey, testResults)
-            for (size_t jTraver = 0; jTraver < traversalCount; jTraver++)
+            for (int jTraver = 0; static_cast<size_t>(jTraver) < traversalCount; jTraver++)
             {
                 {
                     if (jTraver % 10 == 0)
@@ -354,10 +355,8 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
 //-----------------Extra functions---------------------//
 
 Sequence readSequenceByBitFromFile(string const & inputFile, size_t sequenceSize) {
-    // TODO: write catching exceptions
-
     using std::ifstream;
-    typedef u_char BlockReadType;
+    typedef unsigned char BlockReadType;
 
     Sequence epsilon(sequenceSize);
     try {

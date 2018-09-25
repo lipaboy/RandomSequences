@@ -1,9 +1,8 @@
-#ifndef STATISTIC_CHI_SQUARED
-#define STATISTIC_CHI_SQUARED
+#pragma once
 
 #include <vector>
 #include <cmath>
-#include <boost/math/distributions/chi_squared.hpp>
+//#include <boost/math/distributions/chi_squared.hpp>
 
 namespace statistical_tests_space {
 
@@ -54,8 +53,4 @@ namespace statistical_tests_space {
 //	}
 
 }
-
-#endif //STATISTIC_CHI_SQUARED
-
-
 

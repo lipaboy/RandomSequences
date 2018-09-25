@@ -3,7 +3,6 @@
 
 #include "defs.h"
 #include <vector>
-#include <boost/range/any_range.hpp>
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                    G L O B A L   D A T A  S T R U C T U R E S 

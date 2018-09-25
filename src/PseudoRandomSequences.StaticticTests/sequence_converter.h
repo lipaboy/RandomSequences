@@ -1,5 +1,4 @@
-#ifndef SEQUENCE_GENERATOR_H
-#define SEQUENCE_GENERATOR_H
+#pragma once
 
 #include <iostream>
 #include <vector>
@@ -201,5 +200,3 @@ namespace PseudoRandomSequences {
 	}
 	
 }
-
-#endif //SEQUENCE_GENERATOR_H

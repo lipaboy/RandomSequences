@@ -6,8 +6,9 @@ Written by Alexey Lubkin
 #include <iostream>
 #include <string>
 #include <sstream>
-#include <boost/math/distributions/chi_squared.hpp>
 #include <stdio.h>
+
+//#include <boost/math/distributions/chi_squared.hpp>
 
 namespace statistical_tests_space {
 
@@ -577,8 +578,9 @@ double doBookStackTest(int argc, const char* argv[])
 
 	//cout << "BookStack stat:\t\t\t" << ((p_value >= 0.01) ? "SUCCESS" : "FAILURE") 
 	//<< "\t\tp_value = " << p_value << endl << endl;
-	double p_value = 1 -
-		boost::math::cdf(boost::math::chi_squared_distribution<double>(1), chi);
+	double p_value = 0;
+	//double p_value = 1 -
+		//boost::math::cdf(boost::math::chi_squared_distribution<double>(1), chi);
 	return p_value;
 }
 

@@ -6,6 +6,8 @@
 #include <map>
 #include <queue>
 
+//#include <boost/math/distributions/chi_squared.hpp>
+
 #include "statisticChiSquared.h"
 #include "i_statistical_test.h"
 
@@ -164,12 +166,14 @@ private:
 //        auto statisticX2 = statisticChiSquared(encounterFreqInUpperPart_.begin(), encounterFreqInUpperPart_.end(),
 //                                               double(upperPartBorder_) / containerSize() * (double(epsilonSize) / dimension()));
 
-        PValueType pValue = 1 -
-            boost::math::cdf(boost::math::chi_squared_distribution<double>(1),
-                //statisticX2);
-                statisticChiSquared(upperPartCounter,
-                                    double(upperPartBorder_) / containerSize()
-                                        * (double(epsilonSize) / dimension())));
+		//
+		PValueType pValue = 0;
+        //PValueType pValue = 1 -
+        //    boost::math::cdf(boost::math::chi_squared_distribution<double>(1),
+        //        //statisticX2);
+        //        statisticChiSquared(upperPartCounter,
+        //                            double(upperPartBorder_) / containerSize()
+        //                                * (double(epsilonSize) / dimension())));
         return pValue;
     }
 

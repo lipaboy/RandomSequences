@@ -1,5 +1,4 @@
-#ifndef I_STATISTICAL_TEST_H
-#define I_STATISTICAL_TEST_H
+#pragma once
 
 #include <vector>
 #include <string>
@@ -102,9 +101,4 @@ private:
 };
 
 }
-
-#endif // I_STATISTICAL_TEST_H
-
-
-
 

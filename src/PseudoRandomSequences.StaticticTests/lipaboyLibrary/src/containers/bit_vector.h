@@ -5,18 +5,18 @@
 #include <algorithm>
 #include <initializer_list>
 
-#include <boost\range\any_range.hpp>
+//#include <boost\range\any_range.hpp>
 
 //Unfortunately, I invented the bicycle: std::bitset<size_t N>
 
 namespace LipaboyLib {
 
-	typedef boost::any_range<
-		int,
-		boost::bidirectional_traversal_tag,
-		int,
-		std::ptrdiff_t
-	> IntAnyRange;
+	//typedef boost::any_range<
+	//	int,
+	//	boost::bidirectional_traversal_tag,
+	//	int,
+	//	std::ptrdiff_t
+	//> IntAnyRange;
 
 	//TODO: think about generalizing true and false (etc. #define true BIT, false ZERO, but without define)
 	typedef bool BitType;

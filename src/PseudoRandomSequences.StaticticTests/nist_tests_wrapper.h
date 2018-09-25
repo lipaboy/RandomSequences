@@ -1,5 +1,4 @@
-#ifndef NIST_TESTS_WRAPPER_H
-#define NIST_TESTS_WRAPPER_H
+#pragma once
 
 #include <vector>
 #include <string>
@@ -185,6 +184,4 @@ public:
 
 
 }
-
-#endif // NIST_TESTS_WRAPPER_H
 

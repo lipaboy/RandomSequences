@@ -5,8 +5,9 @@ project(Random_Sequences_App)
 
 include_directories(
         "${CMAKE_SOURCE_DIR}/src/PseudoRandomSequences.StaticticTests"
-        "${source_dir}/googletest/include"
-        "${source_dir}/googlemock/include")
+        #"${source_dir}/googletest/include"
+        #"${source_dir}/googlemock/include"
+		)
 
 include(CheckCXXCompilerFlag)
 
@@ -21,10 +22,11 @@ function(enable_cxx_compiler_flag_if_supported flag)
     endif()
 endfunction()
 
-enable_cxx_compiler_flag_if_supported("-Wall")
-enable_cxx_compiler_flag_if_supported("-Wextra")
-enable_cxx_compiler_flag_if_supported("-pedantic")
+#enable_cxx_compiler_flag_if_supported("-Wall")
+#enable_cxx_compiler_flag_if_supported("-Wextra")
+#enable_cxx_compiler_flag_if_supported("-pedantic")
 #enable_cxx_compiler_flag_if_supported("-std=c++17")
+
 
 #set(CMAKE_C_COMPILER gcc-7)
 #set(CMAKE_CXX_COMPILER g++-7)

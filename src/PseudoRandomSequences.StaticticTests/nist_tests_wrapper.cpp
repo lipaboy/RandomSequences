@@ -1,9 +1,14 @@
 #include "nist_tests_wrapper.h"
 
 #include <omp.h>
+//#include <stdlib.h>
 
 #ifdef __linux__
 #include <unistd.h>
+#elsif(defined _MSC_VER) || (defined __BORLANDC__) || (defined _WIN32)
+#include <lol.h>
+#else
+//#include <WinBase.h>
 #endif
 
 namespace statistical_tests_space {
@@ -112,12 +117,19 @@ IStatisticalTest::ReturnValueType
 BookStackTest::test(BoolIterator sequenceIter, size_type size) {
     ReturnValueType container;
 
+#ifdef __linux__
     auto pid = getpid();
+//#elsif WIN32
+#else
+	//auto pid = GetCurrentProcessId();
+	int pid = std::rand();
+#endif
+	
     // TODO: add pid of process to make the file more uniquely
     string inputFile = "bookStackInput" + std::to_string(omp_get_thread_num())
              + "_" + std::to_string(size) + "_" + std::to_string(pid) + ".dat";
     {
-        typedef u_char BlockReadType;   //when was char instead of u_char nothing to change
+        typedef unsigned char BlockReadType;   //when was char instead of u_char nothing to change
 
         std::ofstream outFile;
         outFile.exceptions ( std::ofstream::failbit | std::ofstream::badbit );

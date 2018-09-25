@@ -2,6 +2,7 @@
 #define STAT_TESTS_GENERATORS_H
 
 #include <vector>
+#include "externs.h"
 
 //#include	"../include/sha.h"
 

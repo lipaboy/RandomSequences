@@ -1,5 +1,4 @@
-#ifndef PSEUDO_RANDOM_SEQUENCES_H
-#define PSEUDO_RANDOM_SEQUENCES_H
+#pragma once
 
 #include <vector>
 #include <bitset>
@@ -117,4 +116,3 @@ std::string runUnitTests();
 
 }
 
-#endif //PSEUDO_RANDOM_SEQUENCES_H
