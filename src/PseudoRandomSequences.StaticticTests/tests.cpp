@@ -4,6 +4,8 @@
 #include <lipaboyLibrary/src/maths/fixed_precision_number.h>
 #include <lipaboyLibrary/src/intervals/segment.h>
 
+#include <fstream>
+
 namespace statistical_tests_space {
 
 // TODO: write unit tests for all the statistical ones
@@ -17,53 +19,62 @@ using LipaboyLib::FixedPrecisionNumber;
 namespace {
 
 string runUnitTestsForStatisticalTests() {
-    using DoubleComparisionType = FixedPrecisionNumber<double, int, 1, -6>;
-    const size_t SIZE = 1000000;
-    auto epsilon = readSequenceByByteFromFile("data/data.e", SIZE, '0', false);
-    string isPassed = "";
-    shared_ptr<TestParameters> parameters = std::make_shared<TestParameters>();
+	string isPassed = "";
 
-    parameters->approximateEntropyTest = {10};
-    parameters->blockFrequencyTest = {128};
-    parameters->nonOverlappingTemplateMatchingsTest = {9};
-    parameters->overlappingTemplateMatchingsTest = {9};
-    parameters->serialTest = {16};
+	try {
+		using DoubleComparisionType = FixedPrecisionNumber<double, int, 1, -6>;
+		// windows operation system is slower than linux (too big size)
+		const size_t SIZE = 1000000;
 
-    std::vector<double> res;
+		auto epsilon = readSequenceByByteFromFile("data/data.e", SIZE, '0', false);
+		
+		shared_ptr<TestParameters> parameters = std::make_shared<TestParameters>();
 
-//    res = BookStackTest(parameters).test(epsilon.begin(), epsilon.size());
-//    isPassed = isPassed && (DoubleComparisionType(res.front()) == 0.953749);
-    res = { doFrequencyTest(epsilon.size(), epsilon.begin()) };
-    isPassed = isPassed + std::to_string(DoubleComparisionType(res.front()) == 0.953749);
-    res = { doBlockFrequencyTest(128, epsilon.size(), epsilon.begin()) };
-    isPassed = isPassed + std::to_string(DoubleComparisionType(res.front()) == 0.211072);
-    res = { doRunsTest(epsilon.size(), epsilon.begin()) };
-    isPassed = isPassed + std::to_string(DoubleComparisionType(res.front()) == 0.561917);
-    res = { doLongestRunOfOnesTest(epsilon.size(), epsilon.begin()) };
-    isPassed = isPassed + std::to_string(DoubleComparisionType(res.front()) == 0.718945);
-    res = { doRankTest(epsilon.size(), epsilon.begin()) };
-    isPassed = isPassed + std::to_string(DoubleComparisionType(res.front()) == 0.306156);
-    res = { doDiscreteFourierTransformTest(epsilon.size(), epsilon.begin()) };
-    isPassed = isPassed + std::to_string(DoubleComparisionType(res.front()) == 0.847187);
-//    res = { doNonOverlappingTemplateMatchingsTest(9, epsilon.size(), epsilon.begin()) };
-//    isPassed = isPassed && (DoubleComparisionType(res.front()) == 0.953749);
-    res = { doOverlappingTemplateMatchingsTest(9, epsilon.size(), epsilon.begin()) };
-    isPassed = isPassed + std::to_string (DoubleComparisionType(res.front()) == 0.110434);
-    res = { doUniversalTest(epsilon.size(), epsilon.begin()) };
-    isPassed = isPassed + std::to_string (DoubleComparisionType(res.front()) == 0.282568);
-    auto pair = doSerialTest(16, epsilon.size(), epsilon.begin());
-    isPassed = isPassed + std::to_string (DoubleComparisionType(pair.first) == 0.766182
-                                          && DoubleComparisionType(pair.second) == 0.462921 );
-    res = { doApproximateEntropyTest(10, epsilon.size(), epsilon.begin()) };
-    isPassed = isPassed + std::to_string (DoubleComparisionType(res.front()) == 0.700073);
-    pair = doCumulativeSums(epsilon.size(), epsilon.begin());
-    isPassed = isPassed + std::to_string (DoubleComparisionType(pair.first) == 0.669886
-                                          && DoubleComparisionType(pair.second) == 0.724265 );
-//    res = { doRandomExcursionsTest(epsilon.size(), epsilon.begin()) };
-//    isPassed = isPassed + std::to_string (DoubleComparisionType(res.front()) == 0.953749);
-//    res = { doRandomExcursionsVariantTest(epsilon.size(), epsilon.begin()) };
-//    isPassed = isPassed + std::to_string (DoubleComparisionType(res.front()) == 0.953749);
+		parameters->approximateEntropyTest = { 10 };
+		parameters->blockFrequencyTest = { 128 };
+		parameters->nonOverlappingTemplateMatchingsTest = { 9 };
+		parameters->overlappingTemplateMatchingsTest = { 9 };
+		parameters->serialTest = { 16 };
 
+		std::vector<double> res;
+
+		//    res = BookStackTest(parameters).test(epsilon.begin(), epsilon.size());
+		//    isPassed = isPassed && (DoubleComparisionType(res.front()) == 0.953749);
+		res = { doFrequencyTest(epsilon.size(), epsilon.begin()) };
+		isPassed = isPassed + std::to_string(DoubleComparisionType(res.front()) == 0.953749);
+		res = { doBlockFrequencyTest(128, epsilon.size(), epsilon.begin()) };
+		isPassed = isPassed + std::to_string(DoubleComparisionType(res.front()) == 0.211072);
+		res = { doRunsTest(epsilon.size(), epsilon.begin()) };
+		isPassed = isPassed + std::to_string(DoubleComparisionType(res.front()) == 0.561917);
+		res = { doLongestRunOfOnesTest(epsilon.size(), epsilon.begin()) };
+		isPassed = isPassed + std::to_string(DoubleComparisionType(res.front()) == 0.718945);
+		res = { doRankTest(epsilon.size(), epsilon.begin()) };
+		isPassed = isPassed + std::to_string(DoubleComparisionType(res.front()) == 0.306156);
+		res = { doDiscreteFourierTransformTest(epsilon.size(), epsilon.begin()) };
+		isPassed = isPassed + std::to_string(DoubleComparisionType(res.front()) == 0.847187);
+		//    res = { doNonOverlappingTemplateMatchingsTest(9, epsilon.size(), epsilon.begin()) };
+		//    isPassed = isPassed && (DoubleComparisionType(res.front()) == 0.953749);
+		res = { doOverlappingTemplateMatchingsTest(9, epsilon.size(), epsilon.begin()) };
+		isPassed = isPassed + std::to_string(DoubleComparisionType(res.front()) == 0.110434);
+		res = { doUniversalTest(epsilon.size(), epsilon.begin()) };
+		isPassed = isPassed + std::to_string(DoubleComparisionType(res.front()) == 0.282568);
+		auto pair = doSerialTest(16, epsilon.size(), epsilon.begin());
+		isPassed = isPassed + std::to_string(DoubleComparisionType(pair.first) == 0.766182
+			&& DoubleComparisionType(pair.second) == 0.462921);
+		res = { doApproximateEntropyTest(10, epsilon.size(), epsilon.begin()) };
+		isPassed = isPassed + std::to_string(DoubleComparisionType(res.front()) == 0.700073);
+		pair = doCumulativeSums(epsilon.size(), epsilon.begin());
+		isPassed = isPassed + std::to_string(DoubleComparisionType(pair.first) == 0.669886
+			&& DoubleComparisionType(pair.second) == 0.724265);
+		//    res = { doRandomExcursionsTest(epsilon.size(), epsilon.begin()) };
+		//    isPassed = isPassed + std::to_string (DoubleComparisionType(res.front()) == 0.953749);
+		//    res = { doRandomExcursionsVariantTest(epsilon.size(), epsilon.begin()) };
+		//    isPassed = isPassed + std::to_string (DoubleComparisionType(res.front()) == 0.953749);
+
+	}
+	catch (std::ifstream::failure e) {
+		return "";
+	}
     return isPassed;
 }
 

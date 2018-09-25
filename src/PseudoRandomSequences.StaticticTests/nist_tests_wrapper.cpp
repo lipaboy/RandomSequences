@@ -6,8 +6,6 @@
 #ifdef __linux__
 #include <unistd.h>
 #elif(defined _MSC_VER) || (defined __BORLANDC__) || (defined _WIN32)
-#include <lol.h>
-#else
 //#include <WinBase.h>
 #endif
 
@@ -119,8 +117,7 @@ BookStackTest::test(BoolIterator sequenceIter, size_type size) {
 
 #ifdef __linux__
     auto pid = getpid();
-//#elsif WIN32
-#else
+#elif(defined _MSC_VER) || (defined __BORLANDC__) || (defined _WIN32)
 	//auto pid = GetCurrentProcessId();
 	int pid = std::rand();
 #endif

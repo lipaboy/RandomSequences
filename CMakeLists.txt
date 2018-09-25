@@ -9,6 +9,8 @@ include_directories(
         #"${source_dir}/googlemock/include"
 		)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/")
+
 include(CheckCXXCompilerFlag)
 
 function(enable_cxx_compiler_flag_if_supported flag)

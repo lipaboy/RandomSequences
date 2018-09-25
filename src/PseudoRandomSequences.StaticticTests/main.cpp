@@ -11,19 +11,18 @@ using namespace statistical_tests_space;
 using std::cout;
 using std::endl;
 
-//#include <boost/range/any_range.hpp>
-//
-//using AnyRange = boost::any_range<int, boost::forward_traversal_tag, int, std::ptrdiff_t>;
-
 int main(int argc, char *argv[]) {
 
 //    auto res = sha256("0");
 //    cout << res << endl;
 
     cout << "Tests the tests: ";
-    cout << runUnitTests() << endl;
+    //cout << runUnitTests() << endl;
     cout << "Run tests: " << endl;
-    return generatorsTestConfigRun(argc, argv);
-
+    auto res = generatorsTestConfigRun(argc, argv);
+#if(defined _MSC_VER) || (defined __BORLANDC__) || (defined _WIN32)
+	system("pause");
+#endif
+	return res;
 }
 

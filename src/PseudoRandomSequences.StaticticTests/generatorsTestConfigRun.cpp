@@ -415,6 +415,7 @@ Sequence readSequenceByByteFromFile(string const & inputFile, size_t sequenceSiz
         inFile.close();
     } catch(ifstream::failure e) {
         std::cerr << "Exception opening/reading/closing file " << inputFile << endl;
+		throw e;
     }
 
     return std::move(epsilon);
