@@ -5,7 +5,7 @@
 
 #ifdef __linux__
 #include <unistd.h>
-#elsif(defined _MSC_VER) || (defined __BORLANDC__) || (defined _WIN32)
+#elif(defined _MSC_VER) || (defined __BORLANDC__) || (defined _WIN32)
 #include <lol.h>
 #else
 //#include <WinBase.h>

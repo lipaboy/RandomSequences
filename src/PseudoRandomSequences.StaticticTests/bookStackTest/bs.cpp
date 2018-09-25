@@ -7,8 +7,9 @@ Written by Alexey Lubkin
 #include <string>
 #include <sstream>
 #include <stdio.h>
+#include <string.h>
 
-//#include <boost/math/distributions/chi_squared.hpp>
+#include <boost/math/distributions/chi_squared.hpp>
 
 namespace statistical_tests_space {
 
@@ -26,7 +27,9 @@ namespace statistical_tests_space {
 typedef int errno_t;
 errno_t fopen_s(FILE **f, const char *name, const char *mode) {
     errno_t ret = 0;
+#ifdef _WIN32
     assert(f);
+#endif
     *f = fopen(name, mode);
     /* Can't be sure about 1-to-1 mapping of errno and MS' errno_t */
     if (!*f)
@@ -578,9 +581,9 @@ double doBookStackTest(int argc, const char* argv[])
 
 	//cout << "BookStack stat:\t\t\t" << ((p_value >= 0.01) ? "SUCCESS" : "FAILURE") 
 	//<< "\t\tp_value = " << p_value << endl << endl;
-	double p_value = 0;
-	//double p_value = 1 -
-		//boost::math::cdf(boost::math::chi_squared_distribution<double>(1), chi);
+//	double p_value = 0;
+    double p_value = 1 -
+        boost::math::cdf(boost::math::chi_squared_distribution<double>(1), chi);
 	return p_value;
 }
 

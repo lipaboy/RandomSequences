@@ -3,6 +3,7 @@
 
 #include "defs.h"
 #include <vector>
+#include <stdio.h>
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                    G L O B A L   D A T A  S T R U C T U R E S 

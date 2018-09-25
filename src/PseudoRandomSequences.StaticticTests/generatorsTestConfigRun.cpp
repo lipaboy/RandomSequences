@@ -4,6 +4,7 @@
 
 #include <omp.h>
 
+#include <algorithm>
 #include <iterator>
 #include <bitset>
 #include <string.h>
