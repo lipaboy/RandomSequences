@@ -1,6 +1,0 @@
-[submodule "src/PseudoRandomSequences.StaticticTests/str_switch"]
-	path = src/PseudoRandomSequences.StaticticTests/str_switch
-	url = https://github.com/Efrit/str_switch.git
-[submodule "src/PseudoRandomSequences.NISTstatisticTests/nist-sts"]
-	path = src/PseudoRandomSequences.NISTstatisticTests/nist-sts
-	url = https://github.com/kravietz/nist-sts.git

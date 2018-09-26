@@ -1,63 +1,18 @@
-set(MODULE_NAME RandomSequences)
+set(MODULE_NAME PseudoRandomSequncesApp)
 
-find_package(Threads REQUIRED)
-
-include(ExternalProject)
-ExternalProject_Add(
-        gtest
-        GIT_REPOSITORY https://github.com/google/googletest.git
-        GIT_TAG master
-        PREFIX ${CMAKE_CURRENT_BINARY_DIR}/gtest
-        INSTALL_COMMAND ""
-        CMAKE_ARGS -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-)
-
-# Get GTest source and binary directories from CMake project
-ExternalProject_Get_Property(gtest source_dir binary_dir)
-
-# Create a libgtest target to be used as a dependency by test programs
-add_library(libgtest IMPORTED STATIC GLOBAL)
-add_dependencies(libgtest gtest)
-#add_dependencies(libgtest src/PseudoRandomSequences.StaticticTests)
-add_dependencies(libgtest StatTestProject)
-
-# Set libgtest properties
-set_target_properties(libgtest PROPERTIES
-        "IMPORTED_LOCATION" "${binary_dir}/googlemock/gtest/libgtest.a"
-        "IMPORTED_LINK_INTERFACE_LIBRARIES" "${CMAKE_THREAD_LIBS_INIT}"
-        )
-
-# Create a libgmock target to be used as a dependency by test programs
-add_library(libgmock IMPORTED STATIC GLOBAL)
-add_dependencies(libgmock gtest)
-
-# Set libgmock properties
-set_target_properties(libgmock PROPERTIES
-        "IMPORTED_LOCATION" "${binary_dir}/googlemock/libgmock.a"
-        "IMPORTED_LINK_INTERFACE_LIBRARIES" "${CMAKE_THREAD_LIBS_INIT}"
-        )
-
-include_directories(
-#        "${CMAKE_SOURCE_DIR}/src"
-        "${CMAKE_SOURCE_DIR}/src/PseudoRandomSequences.StaticticTests"
-        "${source_dir}/googletest/include"
-        "${source_dir}/googlemock/include")
-
-#find_program( GCOV_PATH gcov )
-#add_library(gcov IMPORTED STATIC GLOBAL)
+include_directories("${CMAKE_SOURCE_DIR}/tests")
+include_directories("${CMAKE_SOURCE_DIR}/src")
+#include_directories("${CMAKE_SOURCE_DIR}/src/statistical_tests")
+#include_directories("${CMAKE_SOURCE_DIR}/src/nist_statistical_tests")
 
 set(TEST_SOURCE
     tests.cpp
     )
-add_executable(${MODULE_NAME}_test ${TEST_SOURCE})
 
-target_link_libraries(
-        ${MODULE_NAME}_test
-        libgmock
-        libgtest
-#        gcov
-)
+add_executable(${MODULE_NAME}_tests ${TEST_SOURCE})
+target_link_libraries(${MODULE_NAME}_tests gtest gmock_main)
 
-install(TARGETS ${MODULE_NAME}_test DESTINATION bin)
+set_property(TARGET ${MODULE_NAME}_tests PROPERTY CXX_STANDARD 14)
+set_property(TARGET ${MODULE_NAME}_tests PROPERTY CXX_STANDARD_REQUIRED ON)
 
-add_test(NAME ${MODULE_NAME}_test COMMAND ${MODULE_NAME}_test)
+add_test(NAME ${MODULE_NAME}_tests COMMAND ${MODULE_NAME}_tests)

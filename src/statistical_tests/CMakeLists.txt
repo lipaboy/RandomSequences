@@ -14,8 +14,8 @@ set(APP_SOURCES
         tests.cpp
 
 #	lipaboyLib
-        lipaboyLibrary/src/maths/fixed_precision_number.h
-        lipaboyLibrary/src/maths/precision_number.h
+        lipaboy_library/src/maths/fixed_precision_number.h
+        lipaboy_library/src/maths/precision_number.h
         pseudo_random_sequences.h
 
 #	IStatTest

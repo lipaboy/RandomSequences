@@ -1,8 +1,8 @@
 #include "pseudo_random_sequences.h"
 #include "statTests/include/generators.h"
 
-#include <lipaboyLibrary/src/maths/fixed_precision_number.h>
-#include <lipaboyLibrary/src/intervals/segment.h>
+#include <lipaboy_library/src/maths/fixed_precision_number.h>
+#include <lipaboy_library/src/intervals/segment.h>
 
 #include <fstream>
 
