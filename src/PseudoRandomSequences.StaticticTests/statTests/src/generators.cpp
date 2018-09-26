@@ -8,7 +8,7 @@
 #include "../include/generators.h"
 #include "../include/genutils.h"
 
-#include "../../pseudoRandomSequences.h"
+//#include "../../pseudo_random_sequences.h"
 
 namespace statistical_tests_space {
 

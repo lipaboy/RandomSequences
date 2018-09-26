@@ -8,7 +8,7 @@
 
 #include <boost/math/distributions/chi_squared.hpp>
 
-#include "statisticChiSquared.h"
+#include "statistic_chi_squared.h"
 #include "i_statistical_test.h"
 
 #include <iostream>
@@ -180,7 +180,7 @@ private:
 public:
 
     size_type dimension() const { return dimension_; }
-    size_type containerSize() const { return 1 << dimension(); }
+    size_type containerSize() const { return static_cast<size_type>(1) << dimension(); }
 
 private:
     size_type dimension_;

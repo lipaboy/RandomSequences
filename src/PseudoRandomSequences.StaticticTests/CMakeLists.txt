@@ -8,20 +8,20 @@ set(CMAKE_CXX_STANDARD 14)
 
 set(APP_SOURCES 
 		main.cpp
-        generatorsTestConfigRun.cpp
-        runStatisticTests.cpp
+        generators_test_config_run.cpp
+        run_statistical_tests.cpp
 
         tests.cpp
 
 #	lipaboyLib
         lipaboyLibrary/src/maths/fixed_precision_number.h
         lipaboyLibrary/src/maths/precision_number.h
-        pseudoRandomSequences.h
+        pseudo_random_sequences.h
 
 #	IStatTest
         i_statistical_test.h
 #	order test
-        statisticChiSquared.h
+        statistic_chi_squared.h
         bookStackTest/order_test.h
 #	book stack test
         bookStackTest/bs.cpp

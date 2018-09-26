@@ -1,4 +1,4 @@
-#include "pseudoRandomSequences.h"
+#include "pseudo_random_sequences.h"
 #include "statTests/include/generators.h"
 
 #include <lipaboyLibrary/src/maths/fixed_precision_number.h>

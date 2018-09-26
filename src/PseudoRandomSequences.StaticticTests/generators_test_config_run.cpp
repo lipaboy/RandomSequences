@@ -1,4 +1,4 @@
-#include "pseudoRandomSequences.h"
+#include "pseudo_random_sequences.h"
 
 #include <cstring>
 
@@ -72,7 +72,7 @@ int generatorsTestConfigRun(vector<string> const & argv) {
 			<< endl;
 		return -1;
 	}
-    int inputOppositePossibility = 2;   //static_cast<int>(
+    int oppositePossibility = 2;   //static_cast<int>(
         //std::round(1.0 / boost::lexical_cast<double>(argv[2]))
     //);
 
@@ -93,7 +93,7 @@ int generatorsTestConfigRun(vector<string> const & argv) {
     std::minstd_rand0 generatorMinstdRand0;
 	std::knuth_b generatorKnuthB;
     std::ranlux24 generatorRanlux24;
-	std::ranlux48 generatorRanlux48;	//failure with normal_distribution and with chi_squared_distribution
+	std::ranlux48 generatorRanlux48;
 	std::random_device generatorRandomDevice;
     std::default_random_engine generatorDefaultRandomEngine;
     std::mt19937_64 generatorMt19937_64;
@@ -151,38 +151,38 @@ int generatorsTestConfigRun(vector<string> const & argv) {
         }
         else if ("minstd_rand" == genName) {
             std::generate_n(std::back_inserter(epsilon), seqSize,
-                [&inputOppositePossibility, &generatorMinstdRand, &distribution]() -> bool {
-                    return (int(std::round(distribution(generatorMinstdRand))) % inputOppositePossibility == 0);
+                [&oppositePossibility, &generatorMinstdRand, &distribution]() -> bool {
+                    return (int(std::round(distribution(generatorMinstdRand))) % oppositePossibility == 0);
                 });
         }
         else if ("minstd_rand0" == genName) {
             std::generate_n(std::back_inserter(epsilon), seqSize,
-                [&inputOppositePossibility, &generatorMinstdRand0, &distribution]() -> bool {
-                    return (int(std::round(distribution(generatorMinstdRand0))) % inputOppositePossibility == 0);
+                [&oppositePossibility, &generatorMinstdRand0, &distribution]() -> bool {
+                    return (int(std::round(distribution(generatorMinstdRand0))) % oppositePossibility == 0);
                 });
         }
         else if ("knuth_b" == genName) {
             std::generate_n(std::back_inserter(epsilon), seqSize,
-                [&inputOppositePossibility, &generatorKnuthB, &distribution]() -> bool {
-                    return (int(std::round(distribution(generatorKnuthB))) % inputOppositePossibility == 0);
+                [&oppositePossibility, &generatorKnuthB, &distribution]() -> bool {
+                    return (int(std::round(distribution(generatorKnuthB))) % oppositePossibility == 0);
                 });
         }
         else if ("ranlux24" == genName) {
             std::generate_n(std::back_inserter(epsilon), seqSize,
-                [&inputOppositePossibility, &generatorRanlux24, &distribution]() -> bool {
-                return (int(std::round(distribution(generatorRanlux24))) % inputOppositePossibility == 0);
+                [&oppositePossibility, &generatorRanlux24, &distribution]() -> bool {
+                return (int(std::round(distribution(generatorRanlux24))) % oppositePossibility == 0);
             });
         }
         else if ("ranlux48" == genName) {
             std::generate_n(std::back_inserter(epsilon), seqSize,
-                [&inputOppositePossibility, &generatorRanlux48, &distribution]() -> bool {
-                    return (int(std::round(distribution(generatorRanlux48))) % inputOppositePossibility == 0);
+                [&oppositePossibility, &generatorRanlux48, &distribution]() -> bool {
+                    return (int(std::round(distribution(generatorRanlux48))) % oppositePossibility == 0);
                 });
         }
         else if ("random_device" == genName) {
             std::generate_n(std::back_inserter(epsilon), seqSize,
-                [&inputOppositePossibility, &generatorRandomDevice, &distribution]() -> bool {
-                    return (int(std::round(distribution(generatorRandomDevice))) % inputOppositePossibility == 0);
+                [&oppositePossibility, &generatorRandomDevice, &distribution]() -> bool {
+                    return (int(std::round(distribution(generatorRandomDevice))) % oppositePossibility == 0);
                 });
         }
         else if ("rand" == genName) {
@@ -193,8 +193,8 @@ int generatorsTestConfigRun(vector<string> const & argv) {
         }
         else if ("mersenne" == genName) {
             std::generate_n(std::back_inserter(epsilon), seqSize,
-                [&inputOppositePossibility, &generatorMt19937_64, &distribution]() -> bool {
-                    return (int(std::round(distribution(generatorMt19937_64))) % inputOppositePossibility == 0);
+                [&oppositePossibility, &generatorMt19937_64, &distribution]() -> bool {
+                    return (int(std::round(distribution(generatorMt19937_64))) % oppositePossibility == 0);
                 });
         }
         else if ("bad" == genName) {
@@ -266,8 +266,9 @@ int generatorsTestConfigRun(vector<string> const & argv) {
 
             size_t traversalCount = TRAVERSAL_COUNT_LARGE;
 
-// TODO: create define for DEBUG to remove omp parallelism
-#pragma omp parallel for shared(genName, traversalCount, testKey, testResults)
+#ifndef NDEBUG
+			#pragma omp parallel for shared(genName, traversalCount, testKey, testResults)
+#endif
             for (int jTraver = 0; static_cast<size_t>(jTraver) < traversalCount; jTraver++)
             {
                 {

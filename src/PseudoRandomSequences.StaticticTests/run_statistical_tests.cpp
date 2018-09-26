@@ -1,4 +1,4 @@
-#include "pseudoRandomSequences.h"
+#include "pseudo_random_sequences.h"
 
 #include <iterator>
 #include <string>
@@ -22,7 +22,6 @@
 #include "lipaboyLibrary/src/maths/fixed_precision_number.h"
 
 using namespace statistical_tests_space;
-
 
 using std::vector;
 using std::pair;
@@ -68,11 +67,18 @@ statistical_tests_space::runStatisticalTests(BoolIterator epsilonBegin,
     packOfTests.emplace_back(make_unique<LinearComplexityTest>());    // test doesn't work again
 
     size_t charPos = 0;
+	auto testNames = getStatisticTestNames(testKey, 0);
     for (auto & testObj : packOfTests) {
         if (testKey[charPos++] == '1') {
+			auto firstTime = statistical_tests_space::getCurrentClockTime();
+
             auto res = testObj->test(epsilonBegin, static_cast<size_t>(EPSILON_SIZE));
             for (auto elem : res)
                 testResults.push_back(elem);
+
+			auto diff = statistical_tests_space::getTimeDifferenceInMillis(firstTime, getCurrentClockTime());
+			if (diff > 800)
+				cout << "\t" << testNames[charPos] << ". Time expanded: " << diff << endl;
         }
     }
 
@@ -97,7 +103,7 @@ vector<string> statistical_tests_space::getStatisticTestNames(string testKey, si
         for (auto blockSize : testParameters.blockFrequencyTest)
             testNames.push_back("BlockFrequency_" + std::to_string(blockSize));
     if (testKey[ind++] == '1')
-        testNames.push_back("Runs");;
+        testNames.push_back("Runs");
     if (testKey[ind++] == '1')
         testNames.push_back("LongestRunOfOnes");
     if (testKey[ind++] == '1')

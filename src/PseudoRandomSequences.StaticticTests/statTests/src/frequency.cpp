@@ -10,15 +10,18 @@ namespace statistical_tests_space {
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 double
-doFrequencyTest(int n, BoolIterator epsilon)
+doFrequencyTest(int n, BoolIterator epsilonBegin)
 {
 	int		i;
 	double	f, s_obs, p_value, sum, sqrt2 = 1.41421356237309504880;
 	
 	sum = 0.0;
-	for ( i=0; i<n; i++ )
-        sum += 2 * ((int)*(epsilon++)) - 1;
-		//sum += 2 * (int)getRand(i) - 1;
+#ifndef NDEBUG
+	#pragma omp parallel for
+#endif
+	for (i = 0; i < n; i++)
+		sum += 2 * static_cast<int>(*std::next(epsilonBegin, i)) - 1;
+
 	s_obs = fabs(sum)/sqrt(n);
 	f = s_obs/sqrt2;
 	p_value = erfc(f);

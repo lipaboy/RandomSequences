@@ -1,4 +1,4 @@
-#include "pseudoRandomSequences.h"
+#include "pseudo_random_sequences.h"
 
 #include <iostream>
 #include <memory>
