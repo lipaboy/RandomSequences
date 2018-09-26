@@ -1,0 +1,3 @@
+[submodule "src/statistical_tests/lipaboyLibrary"]
+	path = src/statistical_tests/lipaboyLibrary
+	url = https://github.com/lipatkin96/lipaboyLibrary.git
