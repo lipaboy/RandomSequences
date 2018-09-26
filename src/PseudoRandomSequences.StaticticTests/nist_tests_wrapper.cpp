@@ -6,7 +6,7 @@
 #ifdef __linux__
 #include <unistd.h>
 #elif(defined _MSC_VER) || (defined __BORLANDC__) || (defined _WIN32)
-//#include <WinBase.h>
+#include <windows.h>
 #endif
 
 namespace statistical_tests_space {
@@ -118,8 +118,7 @@ BookStackTest::test(BoolIterator sequenceIter, size_type size) {
 #ifdef __linux__
     auto pid = getpid();
 #elif(defined _MSC_VER) || (defined __BORLANDC__) || (defined _WIN32)
-	//auto pid = GetCurrentProcessId();
-	int pid = std::rand();
+	auto pid = GetCurrentProcessId();
 #endif
 	
     // TODO: add pid of process to make the file more uniquely
