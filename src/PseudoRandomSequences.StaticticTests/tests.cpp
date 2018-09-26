@@ -9,6 +9,7 @@
 namespace statistical_tests_space {
 
 // TODO: write unit tests for all the statistical ones
+// TODO: write unit tests accomplish for Windows platform (by speed of execution)
 
 using std::cout;
 using std::endl;

@@ -108,7 +108,7 @@ runStatisticalTests(BoolIterator epsilonBegin,
     std::string const & testKey,
     IStatisticalTest::TestParametersPtr pTestParams);
 
-int generatorsTestConfigRun(int argc, char * argv[]);
+int generatorsTestConfigRun(vector<string> const &);
 
 //----------------Tests------------------//
 

@@ -53,17 +53,17 @@ namespace {
 }
 
 
-int generatorsTestConfigRun(int argc, char * argv[]) {
+int generatorsTestConfigRun(vector<string> const & argv) {
 	time_t t;
     std::srand(static_cast<unsigned int>(std::time(&t)));
 
     //-----------------------------Input data-----------------------------//
 
     int sizesStartIndex = 4;
-    size_t len = (argc > 1) ? strlen(argv[1]) : 0;
-    size_t countSizes = (argc < sizesStartIndex + 1)
+    size_t len = (argv.size() > 1) ? argv[1].length() : 0;
+    size_t countSizes = (argv.size() < sizesStartIndex + 1)
             ? 0 : std::stoul(argv[sizesStartIndex]);
-    if (countSizes <= 0 || argc < sizesStartIndex + 1 + int(countSizes) || len < TEST_COUNT) {
+    if (countSizes <= 0 || argv.size() < sizesStartIndex + 1 + int(countSizes) || len < TEST_COUNT) {
 		cout << "Not enough parameters ( testKey ("
 			<< TEST_COUNT << ", current = " << len << "), "
 //            << "input possibility, "
@@ -80,7 +80,7 @@ int generatorsTestConfigRun(int argc, char * argv[]) {
     const size_t TRAVERSAL_COUNT_SMALL = std::stoul(argv[2]);
     string testKey(argv[1]);
     vector<size_t> seqSizes;
-    for (int i = sizesStartIndex + 1; i < argc; i++)
+    for (int i = sizesStartIndex + 1; i < argv.size(); i++)
         seqSizes.push_back(std::stoul(argv[i]));
 
 
