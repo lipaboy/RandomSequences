@@ -60,6 +60,8 @@ endfunction()
 #set(CMAKE_C_COMPILER gcc-7)
 #set(CMAKE_CXX_COMPILER g++-7)
 
-add_subdirectory(tests)
 add_subdirectory(src/statistical_tests)
+add_subdirectory(src/nist_statistical_tests/statTests)
+add_subdirectory(tests)
+
 

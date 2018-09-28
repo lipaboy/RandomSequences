@@ -1,7 +1,4 @@
-
-
-#ifndef STAT_TESTS_DEFS_H
-#define STAT_TESTS_DEFS_H
+#pragma once
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                        D E B U G G I N G  A I D E S
@@ -70,5 +67,3 @@ typedef struct _testParameters {
 } TP;
 
 }
-
-#endif //STAT_TESTS_DEFS_H

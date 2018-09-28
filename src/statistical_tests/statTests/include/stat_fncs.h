@@ -1,6 +1,4 @@
-
-#ifndef STAT_FNCS_H
-#define STAT_FNCS_H
+#pragma once
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
      S T A T I S T I C A L  T E S T  F U N C T I O N  P R O T O T Y P E S 
@@ -34,4 +32,3 @@ std::pair<double, double>	doSerialTest(int m, int n, BoolIterator epsilon);
 
 }
 
-#endif //STAT_FNCS_H

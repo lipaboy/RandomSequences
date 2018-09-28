@@ -1,5 +1,4 @@
-#ifndef ORDERTEST_H
-#define ORDERTEST_H
+#pragma once
 
 #include <vector>
 #include <unordered_map>
@@ -195,4 +194,4 @@ private:
 
 }
 
-#endif // ORDERTEST_H
+

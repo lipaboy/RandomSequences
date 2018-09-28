@@ -1,6 +1,4 @@
-
-#ifndef _CONFIG_H_
-#define	_CONFIG_H_
+#pragma once
 
 namespace statistical_tests_space {
 
@@ -53,4 +51,3 @@ typedef ULONG WORD64[2];  /* 64-bit word */
 
 }
 
-#endif /* _CONFIG_H_ */

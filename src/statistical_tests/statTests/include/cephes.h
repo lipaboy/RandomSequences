@@ -1,7 +1,4 @@
-
-#ifndef STAT_TESTS_CEPHES_H_
-#define STAT_TESTS_CEPHES_H_
-
+#pragma once
 namespace statistical_tests_space {
 
 double cephes_igamc(double a, double x);
@@ -15,4 +12,3 @@ double cephes_normal(double x);
 
 }
 
-#endif /*  STAT_TESTS_CEPHES_H_  */

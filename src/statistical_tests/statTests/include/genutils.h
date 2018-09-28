@@ -1,6 +1,4 @@
-
-#ifndef _GENUTILS_H_
-#define _GENUTILS_H_
+#pragma once
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -49,4 +47,3 @@ void	ahtopb (char *ascii_hex, BYTE *p_binary, int bin_len);
 
 }
 
-#endif  /* _GENUTILS_H_ */

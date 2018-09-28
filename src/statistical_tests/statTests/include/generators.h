@@ -1,5 +1,4 @@
-#ifndef STAT_TESTS_GENERATORS_H
-#define STAT_TESTS_GENERATORS_H
+#pragma once
 
 #include <vector>
 #include "externs.h"
@@ -95,4 +94,3 @@ Sequence	SHA1();
 
 }
 
-#endif //STAT_TESTS_GENERATORS_H

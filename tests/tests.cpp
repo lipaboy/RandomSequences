@@ -7,10 +7,16 @@
 #include <gtest/gtest.h>
 
 #include "statistical_tests/pseudo_random_sequences.h"
-#include "nist_statistical_tests/statTests/include/stat_fncs.h"
+#include "statistical_tests/statTests/include/externs.h"
 
-#include "statistical_tests/lipaboy_library/src/maths/fixed_precision_number.h"
-#include "statistical_tests/lipaboy_library/src/intervals/segment.h"
+//#include "nist_statistical_tests/statTests/include/stat_fncs.h"
+//#include "nist_statistical_tests/statTests/include/externs.h"
+//#include "nist_statistical_tests/statTests/include/decls.h"
+//#include "nist_statistical_tests/statTests/include/cephes.h"  
+//#include "nist_statistical_tests/statTests/include/utilities.h"
+
+//#include "statistical_tests/lipaboyLibrary/src/maths/fixed_precision_number.h"
+//#include "statistical_tests/lipaboyLibrary/src/intervals/segment.h"
 
 namespace random_sequences_tests {
 
@@ -19,44 +25,30 @@ using std::endl;
 using std::vector;
 using std::string;
 
-using LipaboyLib
-
-
-//extern Sequence readSequenceByByteFromFile(string const & inputFile, size_t sequenceSize,
-//                                           char isZero, bool isSpecialFormat);
+//using lipaboy_lib::FixedPrecisionNumber;
+using statistical_tests_space::doFrequencyTest;
+using statistical_tests_space::Sequence;
+using statistical_tests_space::readSequenceByByteFromFile;
 
 //---------------------------------Tests-------------------------------//
 
 //---------Constructors---------//
 
 TEST(Check, check) {
-	try {
-		using DoubleComparisionType = FixedPrecisionNumber<double, int, 1, -6>;
+		//using DoubleComparisionType = FixedPrecisionNumber<double, int, 1, -6>;
 		// windows operation system is slower than linux (too big size)
-		const size_t SIZE = 1000000;
+		const size_t SIZE = 10000;
 
-		auto epsilon = readSequenceByByteFromFile("data/data.e", SIZE, '0', false);
+		Sequence sequence = readSequenceByByteFromFile("data/data.e", SIZE, '0', false);
 
-		shared_ptr<TestParameters> parameters = std::make_shared<TestParameters>();
+		double res = doFrequencyTest(sequence.size(), sequence.begin());
 
-		parameters->approximateEntropyTest = { 10 };
-		parameters->blockFrequencyTest = { 128 };
-		parameters->nonOverlappingTemplateMatchingsTest = { 9 };
-		parameters->overlappingTemplateMatchingsTest = { 9 };
-		parameters->serialTest = { 16 };
+		/*tp.n = SIZE;
+		tp.numOfBitStreams = 1;
+		
+		auto p_value = Frequency(tp.n);*/
 
-		std::vector<double> res;
-
-		//    res = BookStackTest(parameters).test(epsilon.begin(), epsilon.size());
-		//    isPassed = isPassed && (DoubleComparisionType(res.front()) == 0.953749);
-		res = { doFrequencyTest(epsilon.size(), epsilon.begin()) };
-		Frequency(5);
-
-		ASSERT_EQ(1, 1);
-	}
-	catch (std::ifstream::failure e) {
-
-	}
+		//ASSERT_TRUE(DoubleComparisionType(res) == p_value);
 }
 
 }

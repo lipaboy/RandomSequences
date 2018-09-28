@@ -1,5 +1,4 @@
-#ifndef STAT_TESTS_EXTERNS_H
-#define STAT_TESTS_EXTERNS_H
+#pragma once
 
 #include "defs.h"
 #include <vector>
@@ -23,4 +22,3 @@ extern char	testNames[NUMOFTESTS+1][32];
 
 }
 
-#endif //STAT_TESTS_EXTERNS_H

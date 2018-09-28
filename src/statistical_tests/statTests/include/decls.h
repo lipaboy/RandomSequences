@@ -1,5 +1,4 @@
-#ifndef DECLS_STAT_TEST_H
-#define DECLS_STAT_TEST_H
+#pragma once
 
 #include <stdio.h>
 #include "../include/defs.h"
@@ -23,4 +22,3 @@ char	testNames[NUMOFTESTS+1][32] = { " ", "Frequency", "BlockFrequency", "Cumula
 
 }
 
-#endif //DECLS_STAT_TEST_H

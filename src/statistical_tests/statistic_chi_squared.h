@@ -10,6 +10,7 @@ namespace statistical_tests_space {
     using size_type = size_t;
 
     inline double statisticChiSquared(double observedValue, double expectedValue) {
+		double statisticX2 = 0.;
         return std::pow(std::abs(observedValue - expectedValue)
                         //- 0.5			//Yates correction
                     , 2) / expectedValue;
@@ -17,7 +18,6 @@ namespace statistical_tests_space {
 
     template <class Iterator>
     double statisticChiSquared(Iterator observedSequenceBegin, Iterator observedSequenceEnd, double expectedValue) {
-        double statisticX2 = 0.;
         for (auto it = observedSequenceBegin; it != observedSequenceEnd; it++) {
             statisticX2 += statisticChiSquared(*it, expectedValue);
 		}

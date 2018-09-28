@@ -1,5 +1,4 @@
-#ifndef STAT_TESTS_MATRIX_H
-#define STAT_TESTS_MATRIX_H
+#pragma once
 
 #include "externs.h"
 
@@ -21,4 +20,3 @@ void			delete_matrix(int M, BitSequence **matrix);
 
 }
 
-#endif //STAT_TESTS_MATRIX_H
